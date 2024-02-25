@@ -1,0 +1,102 @@
+/*==========================================================================
+Top Bar
+==========================================================================*/
+.header__area-top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 17px 0;
+    &-left {
+        &-info {
+            margin-right: 80px;
+            span {
+                i {
+                    color: var(--primary-color); 
+                    padding-right: 60px;                   
+                }
+                a {
+                    position: relative;
+                    transition: all 0.4s ease-out 0s;
+                    &:hover {
+                        color: var(--primary-color);
+                    }
+                    &::after {
+                        position: absolute;
+                        content: '';
+                        width: 40px;
+                        height: 2px;
+                        left: 20px;
+                        bottom: 8px; 
+                        background: var(--primary-color);                       
+                    }
+                }
+            }
+        }    
+    }
+    &-right {
+        &-info {
+            display: flex;
+            align-items: center;
+            span {
+                color: var(--heading-color);
+                font-family: var(--heading-font);
+                font-weight: 500;
+                margin-right: 15px;
+                display: inline-block;
+            }
+            ul {
+                padding: 0;
+                margin: 0;
+                li {
+                    list-style: none;
+                    display: inline-block;
+                    margin-right: 25px;
+                    &:last-child {
+                        margin: 0;
+                    }
+                    a {
+                        i {
+                            color: var(--heading-color);
+                            transition: all 0.4s ease-out 0s;     
+                            &:hover {
+                                color: var(--primary-color);
+                            }
+                        }
+                    }
+                }
+            }            
+        }
+    }
+}
+@media (max-width: 784px) {
+    .header__area-top-bar {
+        display: block;
+        text-align: center;
+        &-left-info {
+            margin: 0;
+        }
+        &-right-info {
+            justify-content: center;
+            margin-top: 4px;
+        }
+    }
+}
+@media (max-width: 400px) {
+    .header__area-top-bar {
+        &-left {
+            &-info {
+                span {
+                    i {
+                        padding-right: 0; 
+                        margin-right: 10px;                  
+                    }
+                    a {
+                        &::after {
+                            display: none;                     
+                        }
+                    }
+                }
+            }    
+        }
+    }
+}

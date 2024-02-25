@@ -1,0 +1,161 @@
+/*==========================================================================
+Services
+==========================================================================*/
+.services__area {
+    &-item {
+        &-icon {
+            background: var(--color-4);
+            width: 90px;
+            height: 90px;
+            line-height: 90px;
+            display: block;
+            text-align: center;
+            border-radius: 50%;
+            float: left;
+            margin-right: 30px;
+            img {
+                max-width: 40px;
+            }
+        }
+        &-content {
+            overflow: hidden;
+            h5 {
+                margin-bottom: 5px;
+                a {
+                    transition: all 0.4s ease-in-out;
+                    &:hover {
+                        color: var(--primary-color);
+                    }
+                }
+            }
+            p {
+                margin: 0;
+                max-width: 305px;
+            }
+        }
+    }
+}
+/*==========================================================================
+Services Two
+==========================================================================*/
+.services__two {
+    &-item {
+        border: 1px solid var(--white);
+        box-shadow: var(--box-shadow-1);
+        transition: all 0.4s ease-in-out;
+        padding: 40px;
+        position: relative;
+        span {
+            display: inline-block;
+            font-weight: 700;
+            font-size: 80px;
+            line-height: 90px;
+            -webkit-text-fill-color: transparent;
+            -webkit-text-stroke-width: 1px;
+            opacity: 0;
+            color: var(--heading-color);   
+            position: absolute;
+            top: 35px;
+            right: 35px;
+            transition: all 0.4s ease-in-out;
+            font-family: var(--heading-font);
+        }
+        &-icon {
+            margin-bottom: 25px;
+            img {
+                max-width: 60px;
+            }
+        }      
+        &-content {
+            h4 {
+                margin-bottom: 10px;
+                a {
+                    transition: all 0.4s ease-in-out;
+                    &:hover {
+                        color: var(--primary-color);
+                    }
+                }
+            }
+            p {
+                margin: 0;
+            }
+        }
+        &:hover {
+            border-color: var(--primary-color);
+            span {
+                opacity: 0.06;
+            }
+        }  
+    }
+}
+
+.services__details {
+    &-left {
+        &-content {
+            span {
+                border-left: 3px solid var(--primary-color);
+                font-size: 18px;
+                line-height: 28px;
+                font-family: var(--heading-font);
+                font-weight: 600;
+                display: inline-block;
+                box-shadow: var(--box-shadow-1);
+                padding: 30px;
+                margin: 30px 0;
+            }
+            &-list {
+                p {
+                    margin-bottom: 5px;
+                    i {
+                        color: var(--primary-color);
+                        margin-right: 10px;
+                    }
+                }
+            }
+        }
+    }
+}
+@media (max-width: 1199px) {
+    .services__area-item {
+        &-icon {
+            width: 80px;
+            height: 80px;
+            line-height: 80px;
+            margin-right: 20px;
+            img {
+                max-width: 35px;
+            }
+        }
+    }
+}
+@media (max-width: 767px) {
+    .services__area {
+        &-item {
+            &-icon {
+                width: 90px;
+                height: 90px;
+                line-height: 90px;
+                margin: 0;
+                margin-bottom: 15px;
+                float: initial;
+                img {
+                    max-width: 40px;
+                }
+            }
+        }
+    }
+}
+@media (max-width: 575px) {
+    .services__area {
+        &-item {
+            text-align: center;
+            &-icon {
+                margin: 0 auto;
+                margin-bottom: 15px;
+            }
+            &-content p {
+                margin: 0 auto;
+            }
+        }
+    }
+}

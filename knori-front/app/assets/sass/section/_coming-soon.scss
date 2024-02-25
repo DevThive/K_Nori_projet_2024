@@ -1,0 +1,161 @@
+/*==========================================================================
+Coming Soon
+==========================================================================*/
+.coming__soon {
+    padding-top: 240px;
+    padding-bottom: 260px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    position: relative;
+    z-index: 1;
+    &::after {
+        position: absolute;
+        content: '';
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: var(--heading-color);
+        z-index: -1;
+        opacity: 0.8;
+    } 
+    &-title {
+        max-width: 850px;
+        margin: 0 auto;
+        text-align: center;
+        h1 {
+            font-size: 120px;
+            line-height: 1;
+            font-weight: 600;
+            color: var(--white);
+        }
+        .countdown {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 55px;
+            &-item {
+                display: flex;
+                flex-direction: column;
+                text-align: left;
+                h3 {
+                    color: var(--white);
+                    font-size: 45px;
+                    line-height: 55px;       
+                    margin-bottom: 5px;                                 
+                }
+                span {
+                    color: var(--white);
+                    text-transform: uppercase;
+                    font-family: var(--heading-font);
+                    font-weight: 600;
+                    font-size: 14px;
+                    line-height: 24px;                    
+                }
+            }
+        }
+        .subscribe {
+            margin-top: 30px;
+            padding-top: 50px;
+            position: relative;
+            &::after {
+                position: absolute;
+                left: 0;
+                top: 0;
+                content: '';
+                width: 100%;
+                height: 1px;
+                background: var(--white);
+                opacity: 0.2;
+            }            
+            h6 {
+                color: var(--white);    
+                margin-bottom: 30px;            
+            }
+            form {
+                max-width: 630px;
+                margin: 0 auto;
+                display: flex;
+                button {
+                    font-weight: 600;
+                    font-size: 16px;
+                    line-height: 26px;
+                    font-family: var(--heading-font);                    
+                }
+            }
+        }
+    }
+}
+@media (max-width: 1399px) {
+    .coming__soon {
+        padding-top: 110px;
+        padding-bottom: 125px;
+        &-title {
+            max-width: 600px;
+            h1 {
+                font-size: 90px;
+            }
+            .countdown {
+                margin-top: 40px;
+            }
+            .subscribe {
+                form {
+                    max-width: 550px;
+                }
+            }
+        }
+    }    
+} 
+@media (max-width: 767px) {
+    .coming__soon {
+        &-title {
+            h1 {
+                font-size: 70px;
+            }
+            .countdown {
+                margin-top: 30px;
+            }
+        }
+    }    
+} 
+@media (max-width: 465px) {
+    .coming__soon {
+        &-title {
+            h1 {
+                font-size: 46px;
+            }
+            .countdown {
+                margin-top: 30px;
+                &-item {
+                    h3 {
+                        font-size: 28px;
+                        line-height: 38px;
+                        margin-bottom: 0;
+                    }
+                    span {
+                        font-size: 13px;
+                        line-height: 23px;
+                        font-weight: 500;                    
+                    }
+                }
+            }
+            .subscribe {
+                margin-top: 25px;
+                padding-top: 40px;           
+                h6 {  
+                    font-size: 15px;         
+                    line-height: 25px;
+                }
+                form {
+                    button {
+                        font-weight: 500;
+                        font-size: 14px;
+                        line-height: 24px;
+                        padding: 16px 15px;                
+                    }
+                }
+            }
+        }
+    }    
+} 

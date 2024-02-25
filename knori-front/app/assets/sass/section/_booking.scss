@@ -1,0 +1,95 @@
+/*==========================================================================
+Booking
+==========================================================================*/
+.booking__area {
+    position: relative;
+    z-index: 0;
+    padding-top: 120px;
+    &::after {
+        position: absolute;
+        content: '';
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: var(--heading-color);
+        z-index: -1;
+        opacity: 0.75;
+    }   
+    &-form {
+        background: var(--white);
+        padding: 60px;
+        box-shadow: var(--box-shadow-1);
+        margin-bottom: -35px;
+        &-check {
+            &-item {
+                width: 100%;
+                input {
+                    color: var(--color-1);
+                    background: transparent;
+                    font-family: var(--heading-font);
+                    font-weight: 500;
+                    font-size: 14px;
+                    padding: 0 18px;
+                    cursor: pointer;
+                    &:focus {
+                        color: var(--color-1);
+                    }
+                }
+                &-room {
+                    position: relative;
+                    select {
+                        width: 100%;
+                        background: transparent;
+                        border: 1px solid var(--border-color-2);
+                        padding: 0 18px;
+                        color: var(--color-1);
+                        appearance: none;
+                        font-family: var(--heading-font);
+                        font-weight: 600;
+                        font-size: 14px;
+                        height: 60px;
+                        cursor: pointer;
+                        &:focus {
+                            outline: none;
+                        }
+                    }
+                    &::before {
+                        content: '';
+                        display: block;
+                        position: absolute;
+                        top: 50%;
+                        transform: rotate(45deg);
+                        width: 8px;
+                        height: 8px;
+                        margin-top: -3px;
+                        border-bottom: 2px solid var(--color-1);
+                        border-right: 2px solid var(--color-1);
+                        right: 23px;
+                    }                    
+                }
+            }            
+        }
+    }  
+}
+/*==========================================================================
+Booking Two
+==========================================================================*/
+.booking__two {
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    &-title {
+        text-align: center;
+    }
+}
+@media (max-width: 575px) {
+    .booking__area-form {
+        padding: 50px 30px;
+    }
+}
+@media (max-width: 359px) {
+    .booking__area-form {
+        padding: 45px 25px;
+    }
+}

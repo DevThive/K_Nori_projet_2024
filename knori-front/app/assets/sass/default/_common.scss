@@ -1,0 +1,496 @@
+/*==========================================================================
+Common Css
+==========================================================================*/
+body {
+	font-family: var(--body-font);
+	color: var(--body-color);
+	font-size: 15px;
+	line-height: 26px;
+  	font-weight: 400;
+}
+img {
+	max-width: 100%;
+	height: auto;
+	transition: all 0.4s ease-out 0s;
+}
+a {  
+  outline: none;
+  color: inherit;
+  text-decoration: none;
+}
+a,
+button,
+i {
+	text-decoration: none;
+	color: inherit;
+}
+a:focus,
+a:hover {
+	text-decoration: none;
+	color: inherit;
+}
+.section-padding {
+	padding: 120px 0px;
+}
+@media (max-width: 575px) {
+	.section-padding {
+		padding: 95px 0px;
+	}
+}
+.display-none {
+	display: none;
+}
+.img__full {
+	width: 100%;
+}
+/*==========================================================================
+Form
+==========================================================================*/
+button,
+input[type="button"],
+input[type="reset"],
+input[type="submit"] {
+	border: 1px solid var(--border-color-2);
+	border-color: transparent;
+	border-radius: 0px;
+	background: var(--primary-color);
+	color: var(--white);
+	padding: 16px 43px;
+}
+button:hover,
+input[type="button"]:hover,
+input[type="reset"]:hover,
+input[type="submit"]:hover {
+  	border-color: transparent;
+}
+button:active,
+button:focus,
+input[type="button"]:active,
+input[type="button"]:focus,
+input[type="reset"]:active,
+input[type="reset"]:focus,
+input[type="submit"]:active,
+input[type="submit"]:focus {
+  	border-color: transparent;
+}
+input[type="text"],
+input[type="email"],
+input[type="url"],
+input[type="password"],
+input[type="search"],
+input[type="number"],
+input[type="tel"],
+input[type="range"],
+input[type="date"],
+input[type="month"],
+input[type="week"],
+input[type="time"],
+input[type="datetime"],
+input[type="datetime-local"],
+input[type="color"],
+textarea {
+	color: var(--body-color);
+	border: 1px solid;
+	border-radius: 0px;
+	width: 100%;
+	height: 60px;
+	border: 1px solid var(--border-color-2);
+	padding-left: 20px;  
+}
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="url"]:focus,
+input[type="password"]:focus,
+input[type="search"]:focus,
+input[type="number"]:focus,
+input[type="tel"]:focus,
+input[type="range"]:focus,
+input[type="date"]:focus,
+input[type="month"]:focus,
+input[type="week"]:focus,
+input[type="time"]:focus,
+input[type="datetime"]:focus,
+input[type="datetime-local"]:focus,
+input[type="color"]:focus,
+textarea:focus {
+	color: var(--heading-color);
+	outline: none;
+	box-shadow: none;
+	border-color: var(--primary-color);
+}
+select {
+	border: 1px solid var(--border-color-2);
+}
+textarea {
+	width: 100%;
+	height: 150px;
+	padding-top: 15px;
+}
+button,
+button:hover,
+button:focus {
+	box-shadow: none;
+	border: none;
+	outline: none;
+}
+/*==========================================================================
+Hedging CSS
+==========================================================================*/
+$list: (h1, 80px, 90px, 0, 0, var(--heading-color), var(--heading-font), 700),
+(h2, 45px, 60px, 0, 0, var(--heading-color), var(--heading-font), 500),
+(h3, 30px, 40px, 0, 0, var(--heading-color), var(--heading-font), 500),
+(h4, 24px, 34px, 0, 0, var(--heading-color), var(--heading-font), 500),
+(h5, 20px, 30px, 0, 0, var(--heading-color), var(--heading-font), 500),
+(h6, 18px, 28px, 0, 0, var(--heading-color), var(--heading-font), 500);
+@each $name, $size, $height, $p, $m, $color, $font, $weight in $list {
+    #{$name}{
+      font-size: $size;
+      line-height: $height;
+      padding: $p;
+      margin: $m;
+      color: $color;
+      font-family: $font;
+      font-weight: $weight;
+    }
+}
+$list: left, center, right;
+@each $i in $list {
+    .t-#{$i} {
+        text-align: $i;
+    }
+}
+@media (max-width: 1199px) {
+	h2 {
+		font-size: 40px;
+		line-height: 54px;
+	}
+}
+@media (max-width: 767px) {
+	h2 {
+		font-size: 34px;
+		line-height: 44px;
+	}
+}
+@media (max-width: 440px) {
+	h2 {
+		font-size: 30px;
+		line-height: 40px;
+	}
+	h3 {
+		font-size: 26px;
+		line-height: 36px;
+	}
+	h4 {
+		font-size: 22px;
+		line-height: 32px;
+	}
+}
+/*==========================================================================
+Theme Btn CSS
+==========================================================================*/
+.theme-btn,
+.theme-border-btn {
+	background: var(--primary-color);
+	color: var(--white);
+	display: inline-flex;
+	align-items: center;
+	font-size: 16px;
+	padding: 16px 43px;
+	text-align: center;
+	font-weight: 700;
+	font-family: var(--heading-font);
+	z-index: 3;
+	position: relative;
+	transition: all 0.4s ease-out 0s;
+	text-transform: uppercase;
+	overflow: hidden;
+    &::before {
+        position: absolute;
+        content: '';
+        position: absolute;
+		transition: all 0.5s ease-out 0s;
+        top: 0;
+        left: 0;
+		background: var(--heading-color);
+		width: 0;
+		height: 100%;
+        z-index: -1;
+		opacity: 0;
+    }
+    &::after {
+        position: absolute;
+        content: '';
+        position: absolute;
+		transition: all 0.5s ease-out 0s;
+        bottom: 0;
+        right: 0;
+		background: var(--heading-color);
+		width: 0;
+		height: 100%;
+        z-index: -1;
+		opacity: 0;
+    }
+	i {
+		margin-left: 14px;
+		font-size: 18px;
+		line-height: 28px;
+		position: relative;
+	}
+    &:hover {
+        color: var(--white);
+        &::before {
+			width: 50%;
+			opacity: 1;
+        }
+        &::after {
+			width: 50%;
+			opacity: 1;
+        }
+    }
+	&:focus {
+		color: var(--white);
+	}
+}
+.theme-border-btn {
+	color: var(--primary-color);
+	background: transparent;
+	border: 1px solid var(--primary-color);
+	padding: 15px 42px;
+	&::before {
+		background: var(--primary-color);
+	}
+	&::after {
+		background: var(--primary-color);
+	}
+	&:hover {
+		color: var(--white);
+		border-color: var(--primary-color);
+	}
+	&:focus {
+		color: var(--primary-color);
+	}
+}
+.simple-btn {
+	display: inline-block;
+	color: var(--heading-color);
+	font-weight: 600;
+    font-family: var(--heading-font);	
+	transition: all 0.4s ease-in-out;
+	font-size: 14px;
+	line-height: 24px;
+	text-transform: uppercase;
+	i {
+		display: inline-block;
+		margin-right: 7px;
+		width: 18px;
+		height: 18px;
+		text-align: center;
+		border-radius: 50%;
+		border: 1px solid var(--primary-color);
+		color: var(--primary-color);
+		&::before {
+			font-size: 10px;
+		}
+	}
+	&:hover {
+		color: var(--primary-color);
+	}
+}
+.simple-btn-2 {
+	display: inline-block;
+	color: var(--heading-color);
+    font-family: var(--heading-font);	
+	transition: all 0.4s ease-in-out;
+	font-weight: 500;
+	font-size: 16px;
+	line-height: 26px;
+	text-transform: uppercase;
+	i {
+		margin-left: 7px;
+	}
+	&:hover {
+		color: var(--primary-color);
+	}
+}
+.subtitle__one {
+	display: inline-block;
+	position: relative;
+	font-weight: 600;
+	color: var(--primary-color);
+	text-transform: capitalize;
+	margin-bottom: 5px;
+	font-family: var(--heading-font);
+}
+@keyframes rotate {
+	100% {
+		transform: rotate(90deg);
+	}
+}
+/*==========================================================================
+Scroll Top CSS
+==========================================================================*/
+.scroll-up {
+	cursor: pointer;
+	display: block;
+	border-radius: 50px;
+	box-shadow: inset  0 0 0 2px var(--color-3);
+	z-index: 10000;
+	opacity: 0;
+	visibility: hidden;
+	transform: translateY(15px);
+	position: fixed;
+	right: 20px;
+	bottom: 20px;
+	height: 50px;
+	width: 50px;
+    transition: all 200ms linear;
+	&::after {
+		position: absolute;
+		font-family: 'Font Awesome 5 Pro';
+		content: "\f176";
+		text-align: center;
+		line-height: 50px;
+		font-size: 24px;
+		color: var(--primary-color);
+		left: 0;
+		top: 0;
+		font-size: 20px;
+		height: 50px;
+		width: 50px;
+		cursor: pointer;
+		display: block;
+		z-index: 1;
+		transition: all 200ms linear;
+	}
+	&.active-scroll {
+		opacity: 1;
+		visibility: visible;
+		transform: translateY(0);
+	}
+	svg path { 
+		fill: none; 
+	}
+	svg.scroll-circle path {
+		stroke: var(--primary-color);
+		stroke-width: 4;
+		box-sizing:border-box;
+		transition: all 200ms linear;
+	}
+}
+/*==========================================================================
+Preloader CSS
+========================================================================== */
+.spinner {
+	width: 80px;
+	height: 80px;
+	position: relative;
+	margin: 100px auto;
+}
+.double-bounce1,
+.double-bounce2 {
+	width: 100%;
+	height: 100%;
+	border-radius: 50%;
+	background-color: var(--white);
+	opacity: 0.6;
+	position: absolute;
+	top: 0;
+	left: 0;
+	animation: sk-bounce 2.0s infinite ease-in-out;
+}
+.double-bounce2 {
+	animation-delay: -1.0s;
+}
+@keyframes sk-bounce {
+	0%, 100% {
+		transform: scale(0.0);
+		-webkit-transform: scale(0.0);
+	}
+	50% {
+		transform: scale(1.0);
+		-webkit-transform: scale(1.0);
+	}
+}
+.theme-loader {
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	background: var(--heading-color);
+	z-index: 9999999999;
+}
+.theme-loader .spinner {
+	left: 50%;
+	top: 50%;
+	margin-left: -40px;
+	margin-top: -40px;
+}
+/*==========================================================================
+Video Animation CSS
+==========================================================================*/
+.video__play {
+	span {
+		display: inline-block;
+		width: 100px;
+		height: 100px;
+		line-height: 100px;
+		border-radius: 50%;
+		border: 1px solid var(--color-9);
+		color: var(--white);
+		text-align: center;
+		position: relative;
+		cursor: pointer;
+		i {
+			font-size: 20px;
+			transition: all 0.4s ease-out 0s;
+		}
+		&::after {
+			position: absolute;
+			content: '';
+			width: 100%;
+			height: 100%;
+			border-top: 1.7px solid var(--white);
+			border-radius: 50%;
+			top: 0;
+			left: 0;
+			transition: all 0.4s ease-out 0s;
+			animation: rotation 2s infinite linear;
+			z-index: 2;
+		}
+		&:hover {
+			&::after {
+				border-color: var(--primary-color);
+			}
+			i {
+				color: var(--primary-color);
+			}
+		}
+	}
+}
+		.modal-video-close-btn {
+			padding: 0;
+		}
+.content__roll {
+	animation: roll 10s infinite linear;
+}
+@keyframes roll {
+	from {
+		transform: rotate(0deg);
+	}
+	to {
+		transform: rotate(-359deg);
+	}
+}
+@keyframes rotation {
+	from {
+		transform: rotate(0deg);
+	}
+	to {
+		transform: rotate(359deg);
+	}
+}
+.swiper-button-prev::after {
+	display: none;
+}
+.swiper-button-next::after {
+	display: none;
+}
