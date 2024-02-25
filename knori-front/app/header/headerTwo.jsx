@@ -49,7 +49,8 @@ const HeaderTwo = ({ variant }) => {
             <div className="header__area-menubar-left">
               <div className="header__area-menubar-left-logo">
                 <Link href="/">
-                  <img src="/logo-1.png" alt="logo" />
+                  <img src="/newlogo.png" alt="logo" />
+                  <img src="/logo.png" alt="logo" />
                 </Link>
                 <span
                   className={
