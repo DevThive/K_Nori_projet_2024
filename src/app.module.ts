@@ -10,6 +10,7 @@ import { AuthModule } from './auth/auth.module';
 
 import { NoticeModule } from './notice/notice.module';
 import { ReservationModule } from './reservation/reservation.module';
+import { GalleryModule } from './gallery/gallery.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { ReservationModule } from './reservation/reservation.module';
     AuthModule,
     NoticeModule,
     ReservationModule,
+    GalleryModule,
   ],
   controllers: [AppController],
   providers: [AppService, ConfigService],
