@@ -9,6 +9,7 @@ import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 
 import { NoticeModule } from './notice/notice.module';
+import { ReservationModule } from './reservation/reservation.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { NoticeModule } from './notice/notice.module';
     UsersModule,
     AuthModule,
     NoticeModule,
+    ReservationModule,
   ],
   controllers: [AppController],
   providers: [AppService, ConfigService],
