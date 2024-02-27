@@ -6,7 +6,7 @@ import ScrollToTopButton from '../scroll-to-top/scrollToTop';
 import Gallery from './gallery';
 import Offerarea from './offer-area';
 import Servicestwo from './services-two';
-import Team from './team';
+
 import SEO from '@/components/seo';
 
 const About = () => {
@@ -15,14 +15,14 @@ const About = () => {
       <SEO pageTitle="About Us" />
       <HeaderTwo />
       <BreadCrumb
-        title="About Us"
-        innerTitle="About Us"
+        title="STORY"
+        innerTitle="스토리"
         bgImage="/img/bg/banner-bg.jpg"
       />
       <Offerarea />
       <Servicestwo />
       <Gallery />
-      <Team />
+
       <FooterTwo />
       <ScrollToTopButton />
     </>

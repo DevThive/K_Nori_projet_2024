@@ -87,20 +87,20 @@ const HeaderTwo = ({ variant }) => {
                     </DropDown>
                   </li>
                   <li className="menu-item-has-children">
-                    <a href="#">클래스소개</a>
+                    <a href="#">클래스</a>
                     <DropDown>
                       <ul className="sub-menu">
                         <Room />
                       </ul>
                     </DropDown>
                   </li>
-                  <li className="menu-item-has-children">
-                    <a href="#">갤러리</a>
-                    <DropDown>
+                  <li>
+                    <a href="/blog-grid">갤러리</a>
+                    {/* <DropDown>
                       <ul className="sub-menu">
                         <Blog />
                       </ul>
-                    </DropDown>
+                    </DropDown> */}
                   </li>
                   <li>
                     <Link href="/contact">문의하기</Link>

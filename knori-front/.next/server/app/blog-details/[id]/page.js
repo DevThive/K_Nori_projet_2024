@@ -1,7 +1,7 @@
 (() => {
 var exports = {};
-exports.id = 475;
-exports.ids = [475];
+exports.id = 1475;
+exports.ids = [1475];
 exports.modules = {
 
 /***/ 8038:
@@ -271,15 +271,15 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ 4448:
+/***/ 6036:
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
-Promise.resolve(/* import() eager */).then(__webpack_require__.t.bind(__webpack_require__, 9556, 23));
 Promise.resolve(/* import() eager */).then(__webpack_require__.t.bind(__webpack_require__, 5457, 23));
-Promise.resolve(/* import() eager */).then(__webpack_require__.bind(__webpack_require__, 8591));
+Promise.resolve(/* import() eager */).then(__webpack_require__.t.bind(__webpack_require__, 9556, 23));
 Promise.resolve(/* import() eager */).then(__webpack_require__.bind(__webpack_require__, 619));
-Promise.resolve(/* import() eager */).then(__webpack_require__.bind(__webpack_require__, 4426));
-Promise.resolve(/* import() eager */).then(__webpack_require__.bind(__webpack_require__, 9544))
+Promise.resolve(/* import() eager */).then(__webpack_require__.bind(__webpack_require__, 8591));
+Promise.resolve(/* import() eager */).then(__webpack_require__.bind(__webpack_require__, 9544));
+Promise.resolve(/* import() eager */).then(__webpack_require__.bind(__webpack_require__, 4426))
 
 /***/ }),
 
@@ -667,8 +667,8 @@ __webpack_require__.d(__webpack_exports__, {
 var jsx_runtime_ = __webpack_require__(6786);
 // EXTERNAL MODULE: ./app/breadcrumb/breadcrumb.jsx
 var breadcrumb = __webpack_require__(7199);
-// EXTERNAL MODULE: ./app/footer/footer.jsx + 1 modules
-var footer = __webpack_require__(5731);
+// EXTERNAL MODULE: ./app/footer/footer.jsx
+var footer = __webpack_require__(6007);
 // EXTERNAL MODULE: ./node_modules/next/dist/build/webpack/loaders/next-flight-loader/module-proxy.js
 var module_proxy = __webpack_require__(1913);
 ;// CONCATENATED MODULE: ./app/blog-details/[id]/blog-details-container.jsx
@@ -736,7 +736,7 @@ module.exports = __webpack_require__(4595)
 var __webpack_require__ = require("../../../webpack-runtime.js");
 __webpack_require__.C(exports);
 var __webpack_exec__ = (moduleId) => (__webpack_require__(__webpack_require__.s = moduleId))
-var __webpack_exports__ = __webpack_require__.X(0, [575,88,773,405,898,544,426,982,402,693,172,332], () => (__webpack_exec__(4381)));
+var __webpack_exports__ = __webpack_require__.X(0, [1575,2088,3773,4330,5898,9544,1982,4426,2603,3754,4172,1471], () => (__webpack_exec__(4381)));
 module.exports = __webpack_exports__;
 
 })();

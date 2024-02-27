@@ -1,7 +1,7 @@
 (() => {
 var exports = {};
-exports.id = 301;
-exports.ids = [301];
+exports.id = 7301;
+exports.ids = [7301];
 exports.modules = {
 
 /***/ 8038:
@@ -265,22 +265,11 @@ __webpack_require__.r(__webpack_exports__);
 /***/ 2500:
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
-Promise.resolve(/* import() eager */).then(__webpack_require__.bind(__webpack_require__, 4113))
+Promise.resolve(/* import() eager */).then(__webpack_require__.bind(__webpack_require__, 6154))
 
 /***/ }),
 
-/***/ 7216:
-/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
-
-Promise.resolve(/* import() eager */).then(__webpack_require__.t.bind(__webpack_require__, 7734, 23));
-Promise.resolve(/* import() eager */).then(__webpack_require__.t.bind(__webpack_require__, 2698, 23));
-Promise.resolve(/* import() eager */).then(__webpack_require__.t.bind(__webpack_require__, 7833, 23));
-Promise.resolve(/* import() eager */).then(__webpack_require__.t.bind(__webpack_require__, 8709, 23));
-Promise.resolve(/* import() eager */).then(__webpack_require__.t.bind(__webpack_require__, 9150, 23))
-
-/***/ }),
-
-/***/ 4113:
+/***/ 6154:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -289,7 +278,7 @@ __webpack_require__.r(__webpack_exports__);
 
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
-  "default": () => (/* binding */ about_page)
+  "default": () => (/* binding */ page)
 });
 
 // EXTERNAL MODULE: external "next/dist/compiled/react/jsx-runtime"
@@ -350,8 +339,8 @@ const Gallery = ()=>{
 // EXTERNAL MODULE: ./node_modules/next/image.js
 var next_image = __webpack_require__(8421);
 var image_default = /*#__PURE__*/__webpack_require__.n(next_image);
-;// CONCATENATED MODULE: ./public/img/features/offers.jpg
-/* harmony default export */ const offers = ({"src":"/_next/static/media/offers.9b8b578c.jpg","height":460,"width":1290,"blurDataURL":"data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAoKCgoKCgsMDAsPEA4QDxYUExMUFiIYGhgaGCIzICUgICUgMy03LCksNy1RQDg4QFFeT0pPXnFlZXGPiI+7u/sBCgoKCgoKCwwMCw8QDhAPFhQTExQWIhgaGBoYIjMgJSAgJSAzLTcsKSw3LVFAODhAUV5PSk9ecWVlcY+Ij7u7+//CABEIAAMACAMBIgACEQEDEQH/xAAnAAEBAAAAAAAAAAAAAAAAAAAABgEBAAAAAAAAAAAAAAAAAAAAAP/aAAwDAQACEAMQAAAArgf/xAAWEAEBAQAAAAAAAAAAAAAAAAARACH/2gAIAQEAAT8ANb//xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oACAECAQE/AH//xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oACAEDAQE/AH//2Q==","blurWidth":8,"blurHeight":3});
+;// CONCATENATED MODULE: ./public/testimg/aboutimg2.jpeg
+/* harmony default export */ const aboutimg2 = ({"src":"/_next/static/media/aboutimg2.8a6f1bdb.jpeg","height":460,"width":1290,"blurDataURL":"data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAoKCgoKCgsMDAsPEA4QDxYUExMUFiIYGhgaGCIzICUgICUgMy03LCksNy1RQDg4QFFeT0pPXnFlZXGPiI+7u/sBCgoKCgoKCwwMCw8QDhAPFhQTExQWIhgaGBoYIjMgJSAgJSAzLTcsKSw3LVFAODhAUV5PSk9ecWVlcY+Ij7u7+//CABEIAAMACAMBIgACEQEDEQH/xAAoAAEBAAAAAAAAAAAAAAAAAAAAAgEBAQAAAAAAAAAAAAAAAAAAAwT/2gAMAwEAAhADEAAAAIBU/wD/xAAcEAEAAgEFAAAAAAAAAAAAAAABAgQAAxESIUH/2gAIAQEAAT8AtXrQSTU2ecDqJ6Z//8QAGhEAAgIDAAAAAAAAAAAAAAAAAgMAEiIxUf/aAAgBAgEBPwAWMseZb7P/xAAaEQACAgMAAAAAAAAAAAAAAAACAwASIzFR/9oACAEDAQE/ACUqoYw1yf/Z","blurWidth":8,"blurHeight":3});
 ;// CONCATENATED MODULE: ./app/about/offer-area.jsx
 /* __next_internal_client_entry_do_not_use__ default auto */ 
 
@@ -374,11 +363,15 @@ const Offerarea = ()=>{
                                         className: "subtitle__one",
                                         children: "Company Offers"
                                     }),
-                                    /*#__PURE__*/ jsx_runtime_.jsx("h2", {
-                                        children: "Book now and save up to 35% On hotel rooms"
+                                    /*#__PURE__*/ (0,jsx_runtime_.jsxs)("h2", {
+                                        children: [
+                                            "추억을 빚고 행복을 담는다 ",
+                                            /*#__PURE__*/ jsx_runtime_.jsx("br", {}),
+                                            " 케이놀이 문화재단"
+                                        ]
                                     }),
                                     /*#__PURE__*/ jsx_runtime_.jsx("p", {
-                                        children: "hasellus nisi sapien, rutrum placerat sapien eu, rhoncus tempus felis. Nulla non pulvinar enim, vel viverra nunc. Integer condimentum vulputate justo. Morbi rhoncus elit in tellus viverra, vel fermentum orci dictum. Vestibulum non nisi commodo, tincidunt elit non, consectetur tellus. Fusce in commodo velit. In dapibus dui vitae tortor ullamcorper mollis."
+                                        children: "케이놀이문화재단은 수백년 전통 놀이의 가치를 현대적 감각으로 재해석해 특별한 힐링 공간으로 탈바꿈시킨 곳입니다. 이곳에서는 전통과 현대가 조화를 이룬 환경에서 옛 놀이문화를 경험하고 다양한 교육과 체험 프로그램을 통해 영감을 얻을 수 있습니다. 사회적 배려계층에게도 열린 문화의 장을 제공하여 모든 방문객에게 마음의 안식을 선사합니다. 케이놀이문화재단에서는 자신만의 시간을 갖고 아름다운 전통 속 현대적 감성을 느낄 수 있습니다."
                                     })
                                 ]
                             })
@@ -393,7 +386,7 @@ const Offerarea = ()=>{
                                 children: /*#__PURE__*/ jsx_runtime_.jsx((image_default()), {
                                     alt: "",
                                     layout: "responsive",
-                                    src: offers
+                                    src: aboutimg2
                                 })
                             })
                         })
@@ -446,7 +439,7 @@ const Servicestwo = ()=>{
                                         className: "services__two-item-content",
                                         children: [
                                             /*#__PURE__*/ jsx_runtime_.jsx("h4", {
-                                                children: "Room Cleaning"
+                                                children: "깨끗한 시설"
                                             }),
                                             /*#__PURE__*/ jsx_runtime_.jsx("p", {
                                                 children: "Proin massa augue, lacinia at blandit ac, Fringilla scelerisque tortor. Mauris"
@@ -476,7 +469,7 @@ const Servicestwo = ()=>{
                                         className: "services__two-item-content",
                                         children: [
                                             /*#__PURE__*/ jsx_runtime_.jsx("h4", {
-                                                children: "Car Parking"
+                                                children: "넓은 주차장"
                                             }),
                                             /*#__PURE__*/ jsx_runtime_.jsx("p", {
                                                 children: "Proin massa augue, lacinia at blandit ac, Fringilla scelerisque tortor. Mauris"
@@ -506,7 +499,7 @@ const Servicestwo = ()=>{
                                         className: "services__two-item-content",
                                         children: [
                                             /*#__PURE__*/ jsx_runtime_.jsx("h4", {
-                                                children: "Swimming pool"
+                                                children: "장점 3"
                                             }),
                                             /*#__PURE__*/ jsx_runtime_.jsx("p", {
                                                 children: "Proin massa augue, lacinia at blandit ac, Fringilla scelerisque tortor. Mauris"
@@ -536,7 +529,7 @@ const Servicestwo = ()=>{
                                         className: "services__two-item-content",
                                         children: [
                                             /*#__PURE__*/ jsx_runtime_.jsx("h4", {
-                                                children: "PickUp & Drop"
+                                                children: "장점 4"
                                             }),
                                             /*#__PURE__*/ jsx_runtime_.jsx("p", {
                                                 children: "Proin massa augue, lacinia at blandit ac, Fringilla scelerisque tortor. Mauris"
@@ -554,89 +547,10 @@ const Servicestwo = ()=>{
 };
 /* harmony default export */ const services_two = (Servicestwo);
 
-// EXTERNAL MODULE: ./components/data/team.js + 6 modules
-var team = __webpack_require__(7788);
-// EXTERNAL MODULE: ./app/socials/page.jsx
-var page = __webpack_require__(1838);
-;// CONCATENATED MODULE: ./app/about/team.jsx
-
-
-
-
-const Team = ()=>{
-    const teamItem = team/* default */.Z.slice(0, 3);
-    return /*#__PURE__*/ jsx_runtime_.jsx("div", {
-        className: "team__area section-padding",
-        children: /*#__PURE__*/ (0,jsx_runtime_.jsxs)("div", {
-            className: "container",
-            children: [
-                /*#__PURE__*/ jsx_runtime_.jsx("div", {
-                    className: "row mb-30",
-                    children: /*#__PURE__*/ jsx_runtime_.jsx("div", {
-                        className: "col-xl-12",
-                        children: /*#__PURE__*/ (0,jsx_runtime_.jsxs)("div", {
-                            className: "team__area-title",
-                            children: [
-                                /*#__PURE__*/ jsx_runtime_.jsx("span", {
-                                    className: "subtitle__one",
-                                    children: "Our Exprt Meamber"
-                                }),
-                                /*#__PURE__*/ jsx_runtime_.jsx("h2", {
-                                    children: "Expert Our Services man"
-                                })
-                            ]
-                        })
-                    })
-                }),
-                /*#__PURE__*/ jsx_runtime_.jsx("div", {
-                    className: "row",
-                    children: teamItem?.map((data, id)=>/*#__PURE__*/ jsx_runtime_.jsx("div", {
-                            className: "col-xl-4 col-lg-4 col-md-6 mt-30",
-                            children: /*#__PURE__*/ jsx_runtime_.jsx("div", {
-                                className: "team__area-item",
-                                children: /*#__PURE__*/ (0,jsx_runtime_.jsxs)("div", {
-                                    className: "team__area-item-image",
-                                    children: [
-                                        /*#__PURE__*/ jsx_runtime_.jsx((image_default()), {
-                                            alt: "",
-                                            src: data.img
-                                        }),
-                                        /*#__PURE__*/ (0,jsx_runtime_.jsxs)("div", {
-                                            className: "team__area-item-image-overlay",
-                                            children: [
-                                                /*#__PURE__*/ jsx_runtime_.jsx("div", {
-                                                    className: "team__area-item-image-overlay-social",
-                                                    children: /*#__PURE__*/ jsx_runtime_.jsx(page/* default */.Z, {})
-                                                }),
-                                                /*#__PURE__*/ (0,jsx_runtime_.jsxs)("div", {
-                                                    className: "team__area-item-image-overlay-content",
-                                                    children: [
-                                                        /*#__PURE__*/ jsx_runtime_.jsx("h5", {
-                                                            children: data.name
-                                                        }),
-                                                        /*#__PURE__*/ jsx_runtime_.jsx("span", {
-                                                            children: data.status
-                                                        })
-                                                    ]
-                                                })
-                                            ]
-                                        })
-                                    ]
-                                })
-                            })
-                        }, id))
-                })
-            ]
-        })
-    });
-};
-/* harmony default export */ const about_team = (Team);
-
 // EXTERNAL MODULE: ./components/seo.jsx
 var seo = __webpack_require__(619);
 ;// CONCATENATED MODULE: ./app/about/page.jsx
 /* __next_internal_client_entry_do_not_use__ default auto */ 
-
 
 
 
@@ -651,22 +565,21 @@ const About = ()=>{
             /*#__PURE__*/ jsx_runtime_.jsx(seo["default"], {
                 pageTitle: "About Us"
             }),
-            /*#__PURE__*/ jsx_runtime_.jsx(headerTwo/* default */.Z, {}),
+            /*#__PURE__*/ jsx_runtime_.jsx(headerTwo["default"], {}),
             /*#__PURE__*/ jsx_runtime_.jsx(breadcrumb/* default */.Z, {
-                title: "About Us",
-                innerTitle: "About Us",
+                title: "STORY",
+                innerTitle: "스토리",
                 bgImage: "/img/bg/banner-bg.jpg"
             }),
             /*#__PURE__*/ jsx_runtime_.jsx(offer_area, {}),
             /*#__PURE__*/ jsx_runtime_.jsx(services_two, {}),
             /*#__PURE__*/ jsx_runtime_.jsx(gallery, {}),
-            /*#__PURE__*/ jsx_runtime_.jsx(about_team, {}),
             /*#__PURE__*/ jsx_runtime_.jsx(footerTwo/* default */.Z, {}),
             /*#__PURE__*/ jsx_runtime_.jsx(scrollToTop["default"], {})
         ]
     });
 };
-/* harmony default export */ const about_page = (About);
+/* harmony default export */ const page = (About);
 
 
 /***/ }),
@@ -704,7 +617,7 @@ const __default__ = proxy.default;
 var __webpack_require__ = require("../../webpack-runtime.js");
 __webpack_require__.C(exports);
 var __webpack_exec__ = (moduleId) => (__webpack_require__(__webpack_require__.s = moduleId))
-var __webpack_exports__ = __webpack_require__.X(0, [575,88,421,405,898,544,838,411,240,788,727], () => (__webpack_exec__(6824)));
+var __webpack_exports__ = __webpack_require__.X(0, [1575,2088,8421,4330,5898,9544,1838,4411,9066,3069,727], () => (__webpack_exec__(6824)));
 module.exports = __webpack_exports__;
 
 })();

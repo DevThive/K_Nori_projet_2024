@@ -17,7 +17,7 @@ const Servicestwo = () => {
                   <Image alt="" layout="responsive" src={Locaion1} />
                 </div>
                 <div className="services__two-item-content">
-                  <h4>Room Cleaning</h4>
+                  <h4>깨끗한 시설</h4>
                   <p>
                     Proin massa augue, lacinia at blandit ac, Fringilla
                     scelerisque tortor. Mauris
@@ -32,7 +32,7 @@ const Servicestwo = () => {
                   <Image alt="" layout="responsive" src={CarParking} />
                 </div>
                 <div className="services__two-item-content">
-                  <h4>Car Parking</h4>
+                  <h4>넓은 주차장</h4>
                   <p>
                     Proin massa augue, lacinia at blandit ac, Fringilla
                     scelerisque tortor. Mauris
@@ -47,7 +47,7 @@ const Servicestwo = () => {
                   <Image alt="" layout="responsive" src={SwimmingPool} />
                 </div>
                 <div className="services__two-item-content">
-                  <h4>Swimming pool</h4>
+                  <h4>장점 3</h4>
                   <p>
                     Proin massa augue, lacinia at blandit ac, Fringilla
                     scelerisque tortor. Mauris
@@ -62,7 +62,7 @@ const Servicestwo = () => {
                   <Image alt="" layout="responsive" src={Locaion1} />
                 </div>
                 <div className="services__two-item-content">
-                  <h4>PickUp & Drop</h4>
+                  <h4>장점 4</h4>
                   <p>
                     Proin massa augue, lacinia at blandit ac, Fringilla
                     scelerisque tortor. Mauris

@@ -15,7 +15,7 @@ import Place from './place';
 const Home2 = () => {
   return (
     <>
-      <SEO pageTitle="Home Two" />
+      <SEO pageTitle="K-PLAY" />
       <HeaderTwo />
       <Banner />
       <Companyarea />
