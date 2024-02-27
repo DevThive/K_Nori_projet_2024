@@ -16,10 +16,10 @@ export const Home = () => (
 export const Page = () => (
   <Fragment>
     <li>
-      <Link href="/about">About</Link>
+      <Link href="/about">스토리</Link>
     </li>
     <li>
-      <Link href="/team">Team</Link>
+      <Link href="/findload">찾아오시는길</Link>
     </li>
     <li>
       <Link href="/services-details">Services Details</Link>
@@ -32,13 +32,13 @@ export const Page = () => (
 export const Room = () => (
   <Fragment>
     <li>
-      <Link href="/room-style">Room Style</Link>
+      <Link href="/class-list">클래스 소개</Link>
     </li>
     <li>
-      <Link href="/room-modern">Room Modern</Link>
+      <Link href="/room-modern">클래스 예약</Link>
     </li>
     <li>
-      <Link href="/room-list">Room List</Link>
+      <Link href="/room-list">클래스 리뷰</Link>
     </li>
     <li>
       <Link href="/room-details">Room Details</Link>

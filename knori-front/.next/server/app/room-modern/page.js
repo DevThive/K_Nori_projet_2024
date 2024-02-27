@@ -1,7 +1,7 @@
 (() => {
 var exports = {};
-exports.id = 573;
-exports.ids = [573];
+exports.id = 4573;
+exports.ids = [4573];
 exports.modules = {
 
 /***/ 8038:
@@ -262,23 +262,17 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ 189:
+/***/ 7712:
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
 Promise.resolve(/* import() eager */).then(__webpack_require__.t.bind(__webpack_require__, 9556, 23));
-Promise.resolve(/* import() eager */).then(__webpack_require__.t.bind(__webpack_require__, 5457, 23));
-Promise.resolve(/* import() eager */).then(__webpack_require__.bind(__webpack_require__, 4426));
 Promise.resolve(/* import() eager */).then(__webpack_require__.bind(__webpack_require__, 9544));
+Promise.resolve(/* import() eager */).then(__webpack_require__.t.bind(__webpack_require__, 5457, 23));
+Promise.resolve(/* import() eager */).then(__webpack_require__.bind(__webpack_require__, 619));
+Promise.resolve(/* import() eager */).then(__webpack_require__.bind(__webpack_require__, 4426));
 Promise.resolve(/* import() eager */).then(__webpack_require__.bind(__webpack_require__, 2571));
 Promise.resolve(/* import() eager */).then(__webpack_require__.bind(__webpack_require__, 8032));
-Promise.resolve(/* import() eager */).then(__webpack_require__.bind(__webpack_require__, 4021));
-Promise.resolve(/* import() eager */).then(__webpack_require__.bind(__webpack_require__, 7936));
-Promise.resolve(/* import() eager */).then(__webpack_require__.bind(__webpack_require__, 1880));
-Promise.resolve(/* import() eager */).then(__webpack_require__.bind(__webpack_require__, 3810));
-Promise.resolve(/* import() eager */).then(__webpack_require__.bind(__webpack_require__, 1338));
-Promise.resolve(/* import() eager */).then(__webpack_require__.bind(__webpack_require__, 4373));
-Promise.resolve(/* import() eager */).then(__webpack_require__.bind(__webpack_require__, 6178));
-Promise.resolve(/* import() eager */).then(__webpack_require__.bind(__webpack_require__, 619))
+Promise.resolve(/* import() eager */).then(__webpack_require__.bind(__webpack_require__, 4021))
 
 /***/ }),
 
@@ -294,9 +288,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var next_image__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(7495);
 /* harmony import */ var next_image__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(next_image__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _footer_footer__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5731);
+/* harmony import */ var _footer_footer__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(6007);
 /* harmony import */ var _scroll_to_top_scrollToTop__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(4686);
-/* harmony import */ var _components_data_room_style_all_blogs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(7555);
+/* harmony import */ var _components_data_room_style_all_blogs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(7039);
 /* harmony import */ var _breadcrumb_breadcrumb__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(7199);
 /* harmony import */ var _header_HeaderOne__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(7592);
 /* harmony import */ var _components_seo__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(9474);
@@ -440,7 +434,7 @@ const Roommodern = ()=>{
 var __webpack_require__ = require("../../webpack-runtime.js");
 __webpack_require__.C(exports);
 var __webpack_exec__ = (moduleId) => (__webpack_require__(__webpack_require__.s = moduleId))
-var __webpack_exports__ = __webpack_require__.X(0, [575,88,773,405,898,544,426,982,402,693,570,555], () => (__webpack_exec__(6632)));
+var __webpack_exports__ = __webpack_require__.X(0, [1575,2088,3773,4330,5898,9544,1982,4426,2603,3754,7568,5011], () => (__webpack_exec__(6632)));
 module.exports = __webpack_exports__;
 
 })();
