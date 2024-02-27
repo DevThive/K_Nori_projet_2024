@@ -10,14 +10,14 @@ const Deluxe = () => {
         <div className="row align-items-center mb-30">
           <div className="col-xl-6 col-lg-6 col-md-8">
             <div className="deluxe__three-title">
-              <span className="subtitle__one">Deluxe and Luxury</span>
-              <h2>Luxury Rooms</h2>
+              <span className="subtitle__one">Healing Class</span>
+              <h2>클래스 소개</h2>
             </div>
           </div>
           <div className="col-xl-6 col-lg-6 col-md-4">
             <div className="deluxe__three-right">
               <Link className="theme-btn" href="/about">
-                Read More<i className="fal fa-long-arrow-right"></i>
+                자세히보기<i className="fal fa-long-arrow-right"></i>
               </Link>
             </div>
           </div>
@@ -52,7 +52,7 @@ const Deluxe = () => {
                     </div>
                     <div className="deluxe__three-item-image-content-bottom">
                       <Link className="simple-btn" href="/room-details">
-                        <i className="far fa-chevron-right"></i> Read More
+                        <i className="far fa-chevron-right"></i> 자세히보기
                       </Link>
                       <p>
                         <i className="fas fa-star"></i> <span>4.8</span>2k
