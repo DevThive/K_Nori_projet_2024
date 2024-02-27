@@ -13,7 +13,7 @@ const SideBar = ({ isOpen, setIsOpen }) => {
         </div>
         <div className="header__area-menubar-right-sidebar-popup-logo">
           <Link href="/">
-            <img src="/logo-1.png" alt="logo" />
+            <img src="/playnori.png" alt="logo" />
           </Link>
         </div>
         <p>

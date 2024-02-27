@@ -269,6 +269,17 @@ Promise.resolve(/* import() eager */).then(__webpack_require__.bind(__webpack_re
 
 /***/ }),
 
+/***/ 7216:
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+
+Promise.resolve(/* import() eager */).then(__webpack_require__.t.bind(__webpack_require__, 7734, 23));
+Promise.resolve(/* import() eager */).then(__webpack_require__.t.bind(__webpack_require__, 2698, 23));
+Promise.resolve(/* import() eager */).then(__webpack_require__.t.bind(__webpack_require__, 7833, 23));
+Promise.resolve(/* import() eager */).then(__webpack_require__.t.bind(__webpack_require__, 8709, 23));
+Promise.resolve(/* import() eager */).then(__webpack_require__.t.bind(__webpack_require__, 9150, 23))
+
+/***/ }),
+
 /***/ 4113:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
@@ -285,10 +296,10 @@ __webpack_require__.d(__webpack_exports__, {
 var jsx_runtime_ = __webpack_require__(6786);
 // EXTERNAL MODULE: ./app/breadcrumb/breadcrumb.jsx
 var breadcrumb = __webpack_require__(727);
-// EXTERNAL MODULE: ./app/footer/footer.jsx
-var footer = __webpack_require__(5707);
-// EXTERNAL MODULE: ./app/header/HeaderOne.jsx
-var HeaderOne = __webpack_require__(4426);
+// EXTERNAL MODULE: ./app/footer/footerTwo.jsx
+var footerTwo = __webpack_require__(3069);
+// EXTERNAL MODULE: ./app/header/headerTwo.jsx + 2 modules
+var headerTwo = __webpack_require__(9066);
 // EXTERNAL MODULE: ./app/scroll-to-top/scrollToTop.jsx
 var scrollToTop = __webpack_require__(9544);
 ;// CONCATENATED MODULE: ./app/about/gallery.jsx
@@ -640,17 +651,17 @@ const About = ()=>{
             /*#__PURE__*/ jsx_runtime_.jsx(seo["default"], {
                 pageTitle: "About Us"
             }),
-            /*#__PURE__*/ jsx_runtime_.jsx(HeaderOne["default"], {}),
+            /*#__PURE__*/ jsx_runtime_.jsx(headerTwo/* default */.Z, {}),
             /*#__PURE__*/ jsx_runtime_.jsx(breadcrumb/* default */.Z, {
                 title: "About Us",
                 innerTitle: "About Us",
-                bgImage: "/img/banner/page-banner-1.jpg"
+                bgImage: "/img/bg/banner-bg.jpg"
             }),
             /*#__PURE__*/ jsx_runtime_.jsx(offer_area, {}),
             /*#__PURE__*/ jsx_runtime_.jsx(services_two, {}),
             /*#__PURE__*/ jsx_runtime_.jsx(gallery, {}),
             /*#__PURE__*/ jsx_runtime_.jsx(about_team, {}),
-            /*#__PURE__*/ jsx_runtime_.jsx(footer/* default */.Z, {}),
+            /*#__PURE__*/ jsx_runtime_.jsx(footerTwo/* default */.Z, {}),
             /*#__PURE__*/ jsx_runtime_.jsx(scrollToTop["default"], {})
         ]
     });
@@ -693,7 +704,7 @@ const __default__ = proxy.default;
 var __webpack_require__ = require("../../webpack-runtime.js");
 __webpack_require__.C(exports);
 var __webpack_exec__ = (moduleId) => (__webpack_require__(__webpack_require__.s = moduleId))
-var __webpack_exports__ = __webpack_require__.X(0, [575,88,421,330,898,544,426,838,411,707,788,727], () => (__webpack_exec__(6824)));
+var __webpack_exports__ = __webpack_require__.X(0, [575,88,421,405,898,544,838,411,240,788,727], () => (__webpack_exec__(6824)));
 module.exports = __webpack_exports__;
 
 })();

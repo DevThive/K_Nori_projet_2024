@@ -14,13 +14,15 @@ const FooterTwo = () => {
                 <div className="footer__two-widget-about">
                   <div className="footer__two-widget-about-logo">
                     <Link href="/">
-                      <img src="/logo-1.png" alt="logo" />
+                      <img src="/playnori.png" alt="logo" />
                     </Link>
                   </div>
                   <p>
-                    Nunc at lacus at nibh scelerisque scelerisque id vel metus.
-                    Vivamus mollis diam maximus, consequat nulla sit amet,
-                    ultricies quam. Proin
+                    (주) 케이놀이문화재단 대표이사 : 김봉현 <br />
+                    본사 : 경기도 여주시 북내면 가정 1길 62 <br /> 서울사업본부
+                    : 서울특별시 강남구 청담동 도산대로 445 2층 <br />
+                    Tel : 031-881-5525 Fax : 031-881-2545 <br />
+                    E-mail : yido@yido.kr
                   </p>
                   <div className="footer__two-widget-about-social">
                     <Social />
@@ -30,7 +32,7 @@ const FooterTwo = () => {
             </div>
             <div className="col-xl-2 col-lg-2 col-md-3 col-sm-4 lg-mb-30">
               <div className="footer__two-widget">
-                <h5>Pages Links</h5>
+                <h5>페이지 바로가기</h5>
                 <div className="footer__two-widget-menu">
                   <ul>
                     {footerOne.widgetMenus.map((item, index) => (
@@ -47,7 +49,7 @@ const FooterTwo = () => {
             </div>
             <div className="col-xl-3 col-lg-3 col-md-4 col-sm-6 sm-mb-30">
               <div className="footer__two-widget">
-                <h5>Recent Post</h5>
+                <h5>최근 게시글</h5>
                 <div className="footer__two-widget-post">
                   <div className="footer__two-widget-post-item">
                     <span>
@@ -74,7 +76,7 @@ const FooterTwo = () => {
             </div>
             <div className="col-xl-3 col-lg-3 col-md-7 col-sm-6">
               <div className="footer__two-widget">
-                <h5>Opening Hours</h5>
+                <h5>오픈시간</h5>
                 <div className="footer__two-widget-hours">
                   <p>
                     Sun<span>7 : 00 AM - 2 : 00 PM</span>

@@ -23,14 +23,17 @@ const Place = () => {
           <div className="col-xl-5 col-lg-6">
             <div className="place__two-title">
               <span className="subtitle__one">Awesome Place</span>
-              <h2>We're a unique place to Spend time</h2>
+              <h2>
+                전통과 현대가 <br /> 조화로운 특별한 힐링 공간
+              </h2>
               <p>
-                Phasellus malesuada convallis purus bibendum dictum. Maecenas
-                semper nulla justo, quis pulvinar risus sagittis eget. Sed
-                libero eros, tincidunt eu ante a, ultrices elementum arcu.
+                수백년 전통이 현대와 조화를 이뤄내는 케이놀이문화재단은 단순히
+                문화재단의 테두리를 넘어서, 우리에게 잊혀져 가는 전통 놀이의
+                가치를 재발견하고, 그것을 현대적 감각으로 재해석하여 새롭게
+                빛나는 문화적 공간으로 탈바꿈시키는 곳입니다.
               </p>
               <Link className="theme-btn" href="/about">
-                Read More<i className="fal fa-long-arrow-right"></i>
+                자세히보기<i className="fal fa-long-arrow-right"></i>
               </Link>
             </div>
           </div>

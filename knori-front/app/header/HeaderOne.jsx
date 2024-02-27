@@ -29,7 +29,6 @@ export default function HeaderOne({ variant }) {
               <div className="header__area-menubar-left-logo">
                 <Link href="/">
                   <img src="/logo.png" alt="logo" />
-                  <img src="/logo.png" alt="logo" />
                 </Link>
                 <span
                   className={

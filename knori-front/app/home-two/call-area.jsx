@@ -5,7 +5,7 @@ const Callarea = () => {
         <div className="row align-items-center call__area-bg three">
           <div className="col-xl-8">
             <div className="call__area-bg-left">
-              <h2>Need any Contact with Us</h2>
+              <h3>문의하기 </h3>
             </div>
           </div>
           <div className="col-xl-4">
