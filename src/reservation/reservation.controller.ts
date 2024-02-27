@@ -13,16 +13,21 @@ export class ReservationController {
   //클래스 예약
   @ApiBearerAuth('accessToken')
   @Post(':classId')
-  @UseGuards(accessTokenGuard)
   async classreservation(
     @Body() createReservationDto: CreateReservationDto,
-    @UserId() userId: number,
     @Param('classId') classId: number,
   ) {
     return await this.reservationService.classreservation(
       createReservationDto,
-      userId,
       classId,
     );
   }
+
+  //유저 본인 클래스 예약 조회(유저)
+
+  //클래스별 예약 전체 조회(관리자)
+
+  //클래스 예약수정
+
+  //예약내역 삭제
 }

@@ -22,14 +22,10 @@ export class ReservationService {
   //클래스 예약
   async classreservation(
     createReservationDto: CreateReservationDto,
-    userId: number,
     classId: number,
   ) {
-    const user = await this.userService.findUserById(userId);
-
     const reservation = await this.reservationRepository.save({
       ...createReservationDto,
-      user: user,
       id: classId,
     });
 

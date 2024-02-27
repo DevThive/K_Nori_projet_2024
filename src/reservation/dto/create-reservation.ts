@@ -13,4 +13,20 @@ export class CreateReservationDto {
   @IsNumber()
   @ApiProperty({ description: '총인원' })
   totalPeople: number;
+
+  @IsString()
+  @ApiProperty({ description: '예약자 이름' })
+  client_name: string;
+
+  @IsString()
+  @ApiProperty({ description: '예약자 이메일' })
+  client_email: string;
+
+  @IsNumber()
+  @ApiProperty({ description: '예약자 휴대폰번호' })
+  client_phonenumber: string;
+
+  @IsString()
+  @ApiProperty({ description: '기타사항' })
+  etc: string;
 }

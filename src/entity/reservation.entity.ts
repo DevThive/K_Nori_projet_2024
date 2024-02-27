@@ -25,6 +25,18 @@ export class Reservation {
   @Column()
   totalPeople: number;
 
+  @Column()
+  client_name: string;
+
+  @Column()
+  client_email: string;
+
+  @Column()
+  client_phonenumber: string;
+
+  @Column()
+  etc: string;
+
   @CreateDateColumn({ type: 'timestamp', name: 'created_at' })
   createdAt: Date;
 
