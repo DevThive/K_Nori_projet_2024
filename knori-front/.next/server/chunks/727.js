@@ -20,7 +20,7 @@ exports.modules = {
 
 const BreadCrumb = ({ title, innerTitle, bgImage })=>{
     return /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx("div", {
-        className: "page__banner",
+        className: "banner__three",
         style: {
             backgroundImage: `url(${bgImage})`
         },
@@ -34,6 +34,9 @@ const BreadCrumb = ({ title, innerTitle, bgImage })=>{
                         className: "page__banner-title",
                         children: [
                             /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx("h1", {
+                                style: {
+                                    color: "black"
+                                },
                                 children: title
                             }),
                             /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx("div", {
