@@ -59,10 +59,11 @@ const Contactcontainer = () => {
             <div className="col-xl-7 col-lg-7">
               <div className="contact__area-map section-padding">
                 <iframe
+                  style={{ filter: 'none' }}
                   // width="600"
                   // height="450"
                   // style="border:0"
-                  loading="lazy"
+                  // loading="lazy"
                   // allowfullscreen
                   // referrerpolicy="no-referrer-when-downgrade"
                   src="https://www.google.com/maps/embed/v1/place?key=AIzaSyBAVID0S0bBc8oQgvmdSLb3p2NJSBOZpvk

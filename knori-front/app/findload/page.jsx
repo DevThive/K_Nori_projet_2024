@@ -12,7 +12,7 @@ const Load = () => {
       <HeaderTwo />
       <BreadCrumb
         title="찾아오시는 길"
-        innerTitle="찾아오시는 길"
+        innerTitle="Directions"
         bgImage="/img/bg/banner-bg.jpg"
       />
       <Contactcontainer />

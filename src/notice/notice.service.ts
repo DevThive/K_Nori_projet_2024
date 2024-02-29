@@ -35,7 +35,14 @@ export class NoticeService {
   async noticelist() {
     const notices = await this.noticesRepository.find({
       where: { state: 0 },
-      select: ['content_name', 'content', 'createdAt'],
+    });
+
+    return notices;
+  }
+  async noticedetail(noticeid: number) {
+    const notices = await this.noticesRepository.findOne({
+      where: { id: noticeid },
+      relations: { user: true },
     });
 
     return notices;

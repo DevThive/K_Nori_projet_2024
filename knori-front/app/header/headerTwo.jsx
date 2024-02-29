@@ -50,7 +50,7 @@ const HeaderTwo = ({ variant }) => {
             <div className="header__area-menubar-left">
               <div className="header__area-menubar-left-logo">
                 <Link href="/">
-                  <img src="/playnori.png" alt="logo" height={'300px'} />
+                  <img src="/logo2.png" alt="logo" height={'300px'} />
                 </Link>
                 <span
                   className={
@@ -95,7 +95,7 @@ const HeaderTwo = ({ variant }) => {
                     </DropDown>
                   </li>
                   <li>
-                    <a href="/blog-grid">갤러리</a>
+                    <a href="/gallery">갤러리</a>
                     {/* <DropDown>
                       <ul className="sub-menu">
                         <Blog />

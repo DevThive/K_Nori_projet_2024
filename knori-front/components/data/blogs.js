@@ -1,3 +1,44 @@
+// import axios from 'axios';
+
+// const blogs = async () => {
+//   try {
+//     const response = await axios.get('http://localhost:4001/notices');
+//     const data = response.data;
+
+//     // 데이터 가공
+//     const formattedData = data.map((item) => ({
+//       id: item.id,
+//       img: item.photo,
+//       img1: item.photo,
+//       img2: item.photo,
+//       date: item.createdAt.getDate(),
+//       month: item.createdAt.getMonth() + 1,
+//       year: item.createdAt.getFullYear(),
+//       postby: item.user,
+//       comment: item.content,
+//       title: item.content_name,
+//     }));
+//     console.log(formattedData);
+//     // 가공된 데이터 반환
+//     return formattedData;
+//   } catch (error) {
+//     console.error('데이터를 가져오는 중 오류가 발생했습니다:', error);
+//     // 오류 처리
+//     return null;
+//   }
+// };
+
+// export default blogs;
+
+// axios
+//   .get('http://localhost:4001/notices')
+//   .then((response) => {
+//     console.log(response.data);
+//   })
+//   .catch((error) => {
+//     console.error('Error:', error);
+//   });
+
 const blogs = [
   {
     id: '1',

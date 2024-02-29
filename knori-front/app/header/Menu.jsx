@@ -22,6 +22,9 @@ export const Page = () => (
       <Link href="/findload">찾아오시는길</Link>
     </li>
     <li>
+      <Link href="/notice">공지사항</Link>
+    </li>
+    <li>
       <Link href="/services-details">Services Details</Link>
     </li>
     <li>

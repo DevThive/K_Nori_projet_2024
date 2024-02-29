@@ -9,7 +9,7 @@ const Banner = () => {
   return (
     <div
       className="banner__three"
-      style={{ backgroundImage: `url('/img/bg/banner-bg.jpg')` }}
+      // style={{ backgroundImage: `url('/img/bg/banner-bg.jpg')` }}
     >
       <div className="container custom__container">
         <div className="row align-items-center">
