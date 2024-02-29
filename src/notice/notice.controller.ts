@@ -17,7 +17,7 @@ import { UpdateNoticeDto } from './dto/update-notice';
 import { HideNoticeDto } from './dto/hide-notice';
 
 @ApiTags('게시글&공지사항')
-@Controller('notice')
+@Controller('notices')
 export class NoticeController {
   constructor(private readonly noticeService: NoticeService) {}
 
@@ -36,6 +36,12 @@ export class NoticeController {
   @Get()
   async noticelist() {
     return await this.noticeService.noticelist();
+  }
+
+  //공지사항 자세히보기
+  @Get('/:noticeid')
+  async noticedetail(@Param('noticeid') noticeid: number) {
+    return await this.noticeService.noticedetail(noticeid);
   }
 
   //공지사항 비공개 처리
