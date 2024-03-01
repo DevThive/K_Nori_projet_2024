@@ -2,6 +2,7 @@ import {
   BadRequestException,
   ForbiddenException,
   Injectable,
+  NotFoundException,
 } from '@nestjs/common';
 
 import { InjectRepository } from '@nestjs/typeorm';
@@ -9,6 +10,9 @@ import { Reservation } from 'src/entity/reservation.entity';
 import { Repository } from 'typeorm';
 import { CreateReservationDto } from './dto/create-reservation';
 import { UsersService } from 'src/users/users.service';
+import { DeleteReservationDto } from './dto/delete-reservation';
+import { ConfigService } from '@nestjs/config';
+import * as bcrypt from 'bcrypt';
 import { UpdateReservationDto } from './dto/update-reservation';
 
 @Injectable()
@@ -26,23 +30,25 @@ export class ReservationService {
   ) {
     const reservation = await this.reservationRepository.save({
       ...createReservationDto,
-      id: classId,
+      class_id: classId,
     });
 
     return reservation;
   }
 
   //유저 본인 클래스 예약 조회(유저)
-  async findmyclass(userId: number) {
-    const user = await this.userService.findUserById(userId);
-
-    return await this.reservationRepository.findOne({
-      where: { user },
+  async findclassbyphonenumber(phonenumber: string) {
+    const reservations = await this.reservationRepository.findOne({
+      where: { client_phonenumber: phonenumber },
     });
+    if (!reservations) {
+      throw new NotFoundException('예약내역이 없습니다.');
+    }
+    return reservations;
   }
 
   //클래스 예약 전체 조회(관리자)
-  async findallclass(userId: number) {
+  async findallreservation(userId: number) {
     const user = await this.userService.findUserById(userId);
 
     if (user.role !== 1) {
@@ -50,15 +56,23 @@ export class ReservationService {
     }
 
     const result = await this.reservationRepository.find({
-      select: ['totalPeople', 'date', 'time'],
-      relations: { user: true },
+      select: [
+        'totalPeople',
+        'date',
+        'time',
+        'client_email',
+        'client_name',
+        'client_phonenumber',
+        'etc',
+      ],
+      // relations: { user: true },
     });
 
     return result;
   }
 
   //클래스별 예약 전체 조회(관리자)
-  async findclassreservation(userId: number, classId: number) {
+  async findreservationsbyclass(userId: number, classId: number) {
     const user = await this.userService.findUserById(userId);
 
     if (user.role !== 1) {
@@ -67,8 +81,16 @@ export class ReservationService {
 
     const result = await this.reservationRepository.find({
       where: { id: classId },
-      select: ['totalPeople', 'date', 'time'],
-      relations: { user: true },
+      select: [
+        'totalPeople',
+        'date',
+        'time',
+        'client_email',
+        'client_name',
+        'client_phonenumber',
+        'etc',
+      ],
+      // relations: { user: true },
     });
 
     return result;
@@ -77,11 +99,8 @@ export class ReservationService {
   //클래스 예약수정
   async updatereservation(
     updateReservationDto: UpdateReservationDto,
-    userId: number,
     reservationId: number,
   ) {
-    const user = await this.userService.findUserById(userId);
-
     const reservation = this.findreservationbyid(reservationId);
     if (!reservation) {
       throw new BadRequestException('해당 예약내역이 존재하지 않습니다.');
@@ -102,13 +121,19 @@ export class ReservationService {
   }
 
   //예약내역 삭제
-  async deletenotice(userId: number, reservationId: number) {
-    const user = await this.userService.findUserById(userId);
+  async deletereservation(
+    deleteReservationDto: DeleteReservationDto,
+    reservationId: number,
+  ) {
     const reservation = await this.findreservationbyid(reservationId);
 
-    if (reservation.user.id !== user.id) {
-      throw new ForbiddenException('해당 예약자만 삭제할 수 있습니다.');
+    if (reservation.password !== deleteReservationDto.password) {
+      throw new ForbiddenException('비밀번호가 일치하지 않습니다.');
     }
+
+    // if (reservation.user.id !== user.id) {
+    //   throw new ForbiddenException('해당 예약자만 삭제할 수 있습니다.');
+    // }
 
     const result = await this.reservationRepository.delete({
       id: reservationId,

@@ -11,6 +11,10 @@ import { AuthModule } from './auth/auth.module';
 import { NoticeModule } from './notice/notice.module';
 import { ReservationModule } from './reservation/reservation.module';
 import { GalleryModule } from './gallery/gallery.module';
+import { ClassModule } from './class/class.module';
+import { InstructorModule } from './instructor/instructor.module';
+import { AwsService } from './aws/aws.service';
+import { AwsModule } from './aws/aws.module';
 
 @Module({
   imports: [
@@ -24,9 +28,12 @@ import { GalleryModule } from './gallery/gallery.module';
     NoticeModule,
     ReservationModule,
     GalleryModule,
+    ClassModule,
+    InstructorModule,
+    AwsModule,
   ],
   controllers: [AppController],
-  providers: [AppService, ConfigService],
+  providers: [AppService, ConfigService, AwsService],
   exports: [ConfigService],
 })
 export class AppModule {}
