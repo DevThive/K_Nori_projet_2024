@@ -36,4 +36,6 @@ export class AwsService {
     // 업로드된 이미지의 URL을 반환합니다.
     return `https://s3.${process.env.AWS_REGION}.amazonaws.com/${process.env.AWS_S3_BUCKET_NAME}/${fileName}`;
   }
+
+  
 }

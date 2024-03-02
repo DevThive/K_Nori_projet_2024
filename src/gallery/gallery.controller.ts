@@ -25,6 +25,7 @@ export class GalleryController {
   constructor(private readonly galleryService: GalleryService) {}
   //갤러리 리스트 조회(관리자)
   @ApiBearerAuth('accessToken')
+  @UseGuards(accessTokenGuard)
   @Get('findallgalleries')
   async findallgalleries(@UserId() userId: number) {
     return await this.galleryService.findallgalleries(userId);
@@ -53,11 +54,11 @@ export class GalleryController {
         },
         content: {
           type: 'string',
-          description: 'The name of the menu.',
+          description: 'The content of the gallery.',
         },
         date: {
           type: 'date',
-          description: 'The description of the menu.',
+          description: 'date of the gallery.',
         },
       },
     },
@@ -90,17 +91,18 @@ export class GalleryController {
         },
         content: {
           type: 'string',
-          description: 'The name of the menu.',
+          description: 'The content of the gallery.',
         },
         date: {
           type: 'date',
-          description: 'The description of the menu.',
+          description: 'Date of the gallery.',
         },
       },
     },
   })
   @Put(':galleryId')
   @UseInterceptors(FileInterceptor('file'))
+  @UseGuards(accessTokenGuard)
   async updatereservation(
     @Body() updateGalleryDto: UpdateGalleryDto,
     @UserId() userId: number,
@@ -134,6 +136,7 @@ export class GalleryController {
 
   //갤러리 삭제
   @ApiBearerAuth('accessToken')
+  @UseGuards(accessTokenGuard)
   @Delete(':galleryId')
   async deletegallery(
     @UserId() userId: number,

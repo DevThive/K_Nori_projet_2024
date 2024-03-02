@@ -43,6 +43,7 @@ export class ReservationController {
   //클래스 예약 전체 조회(관리자)
 
   @ApiBearerAuth('accessToken')
+  @UseGuards(accessTokenGuard)
   @Get('')
   async findallreservation(@UserId() userId: number) {
     return await this.reservationService.findallreservation(userId);
@@ -50,6 +51,7 @@ export class ReservationController {
 
   //클래스별 예약 전체 조회(관리자)
   @ApiBearerAuth('accessToken')
+  @UseGuards(accessTokenGuard)
   @Get(':classId')
   async findreservationsbyclass(
     @Param('classId') classId: number,
@@ -78,13 +80,16 @@ export class ReservationController {
   //예약내역 삭제
 
   @ApiBearerAuth('accessToken')
+  @UseGuards(accessTokenGuard)
   @Delete(':reservationId')
   async deletereservation(
     @Body() deleteReservationDto: DeleteReservationDto,
+    @UserId() userId: number,
     @Param('reservationId') reservationId: number,
   ) {
     return await this.reservationService.deletereservation(
       deleteReservationDto,
+      userId,
       reservationId,
     );
   }

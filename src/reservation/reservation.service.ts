@@ -14,6 +14,7 @@ import { DeleteReservationDto } from './dto/delete-reservation';
 import { ConfigService } from '@nestjs/config';
 import * as bcrypt from 'bcrypt';
 import { UpdateReservationDto } from './dto/update-reservation';
+import { Class } from 'src/entity/class.entity';
 
 @Injectable()
 export class ReservationService {
@@ -21,6 +22,8 @@ export class ReservationService {
     private readonly userService: UsersService,
     @InjectRepository(Reservation)
     private reservationRepository: Repository<Reservation>,
+    @InjectRepository(Class)
+    private classRepository: Repository<Class>,
   ) {}
 
   //클래스 예약
@@ -28,9 +31,17 @@ export class ReservationService {
     createReservationDto: CreateReservationDto,
     classId: number,
   ) {
+    // const class = await this.classService.getclassbyid(classId)
+    const Class = await this.classRepository.findOne({
+      where: { id: classId },
+    });
+    // if(!class) {
+    //   throw new NotFoundException('해당 클래스가 없습니다.');
+    // }
+    console.log('classId', classId);
     const reservation = await this.reservationRepository.save({
       ...createReservationDto,
-      class_id: classId,
+      class: Class,
     });
 
     return reservation;
@@ -49,6 +60,7 @@ export class ReservationService {
 
   //클래스 예약 전체 조회(관리자)
   async findallreservation(userId: number) {
+    console.log('userId', userId);
     const user = await this.userService.findUserById(userId);
 
     if (user.role !== 1) {
@@ -72,7 +84,7 @@ export class ReservationService {
   }
 
   //클래스별 예약 전체 조회(관리자)
-  async findreservationsbyclass(userId: number, classId: number) {
+  async findreservationsbyclass(classId: number, userId: number) {
     const user = await this.userService.findUserById(userId);
 
     if (user.role !== 1) {
@@ -120,20 +132,22 @@ export class ReservationService {
     });
   }
 
-  //예약내역 삭제
+  //예약 취소
   async deletereservation(
     deleteReservationDto: DeleteReservationDto,
+    userId: number,
     reservationId: number,
   ) {
+    const user = await this.userService.findUserById(userId);
+
+    if (user.role !== 1) {
+      throw new BadRequestException('관리자만 예약취소가 가능합니다.');
+    }
     const reservation = await this.findreservationbyid(reservationId);
 
     if (reservation.password !== deleteReservationDto.password) {
       throw new ForbiddenException('비밀번호가 일치하지 않습니다.');
     }
-
-    // if (reservation.user.id !== user.id) {
-    //   throw new ForbiddenException('해당 예약자만 삭제할 수 있습니다.');
-    // }
 
     const result = await this.reservationRepository.delete({
       id: reservationId,
