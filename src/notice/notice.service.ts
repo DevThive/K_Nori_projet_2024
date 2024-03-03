@@ -35,7 +35,14 @@ export class NoticeService {
   async noticelist() {
     const notices = await this.noticesRepository.find({
       where: { state: 0 },
-      select: ['content_name', 'content', 'createdAt'],
+    });
+
+    return notices;
+  }
+  async noticedetail(noticeid: number) {
+    const notices = await this.noticesRepository.findOne({
+      where: { id: noticeid },
+      relations: { user: true },
     });
 
     return notices;
@@ -65,7 +72,7 @@ export class NoticeService {
     const user = await this.userService.findUserById(userId);
 
     if (user.role !== 1) {
-      throw new BadRequestException('관리자만 작성이 가능합니다.');
+      throw new BadRequestException('관리자만 삭제가 가능합니다.');
     }
 
     const result = await this.noticesRepository.delete({ id: noticeid });
@@ -106,7 +113,7 @@ export class NoticeService {
     const user = await this.userService.findUserById(userId);
 
     if (user.role !== 1) {
-      throw new BadRequestException('관리자만 수정 및 삭제가 가능합니다.');
+      throw new BadRequestException('관리자만 조회가 가능합니다.');
     }
     const result = await this.noticesRepository.find({
       select: ['content_name', 'content', 'createdAt'],

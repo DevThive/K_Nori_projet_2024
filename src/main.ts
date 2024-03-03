@@ -33,7 +33,7 @@ async function bootstrap() {
 
   const corsOptions = {
     origin: [
-      `${process.env.FRONT_HOST}:${process.env.FRONT_PORT || 3001}`,
+      `${process.env.FRONT_HOST}:${process.env.FRONT_PORT || 3000}`,
       process.env.FRONT_HOST,
     ],
     //origin: `${process.env.FRONT_HOST}:${process.env.FRONT_PORT || 3001}`,
@@ -72,9 +72,9 @@ async function bootstrap() {
   const configService = app.get(ConfigService);
   const port: number = configService.get('SERVER_PORT');
 
-  app.useStaticAssets(join(__dirname, '..', 'public')); // 정적 프론트 파일 (이번 최종 프로젝트에서는 사용할지 고민)
-  app.setBaseViewsDir(join(__dirname, '..', 'src', 'views'));
-  app.setViewEngine('ejs');
+  // app.useStaticAssets(join(__dirname, '..', 'public')); // 정적 프론트 파일 (이번 최종 프로젝트에서는 사용할지 고민)
+  // app.setBaseViewsDir(join(__dirname, '..', 'src', 'views'));
+  // app.setViewEngine('ejs');
 
   console.log(port);
 

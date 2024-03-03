@@ -1,0 +1,106 @@
+/*==========================================================================
+Accommodations
+==========================================================================*/
+.accommodations__area {
+    &-title {
+        h2 {
+            margin-bottom: 14px;
+            max-width: 425px;
+        }
+        p {
+            margin-bottom: 55px;
+            max-width: 445px;
+        }
+    }
+    &-right {
+        &-image {
+            position: relative;
+            margin: 90px 0 0 0;
+            &-two {
+                position: absolute;
+                top: -90px;
+                right: 0;
+            }
+        }
+    }
+}
+/*==========================================================================
+Accommodations Two
+==========================================================================*/
+.accommodations__two {
+    &-left {
+        padding-top: 110px;
+        position: relative;
+        &-roll {
+            position: absolute;
+            top: 0;
+            right: 0;
+            overflow: hidden;
+        }
+    }
+    &-title {
+        margin-left: 110px;
+        h2 {
+            margin-bottom: 14px;
+        }
+        p {
+            margin-bottom: 55px;
+        }
+    }
+    &-right {
+        &-bottom {
+            display: flex;
+            margin-top: 40px;
+            &-signature {
+                img {
+                    max-width: 120px;
+                }
+            }
+            &-author {
+                margin-left: 25px;
+                padding-left: 25px;
+                border-left: 1px solid var(--color-10);
+                h5 {
+                    margin-bottom: 4px;
+                }
+                span {
+                    display: inline-block;
+                    font-weight: 600;
+                    font-size: 12px;
+                    line-height: 22px;
+                    font-family: var(--heading-font);
+                    color: var(--color-1);
+                }
+            }
+        }
+    }
+}
+@media (max-width: 1399px) {
+    .accommodations__two {
+        &-title {
+            margin-left: 50px;
+        }
+    }
+}
+@media (max-width: 1199px) {
+    .accommodations__two {
+        &-title {
+            margin-left: 0;
+        }
+        &-right-bottom-author {
+            margin-left: 15px;
+            padding-left: 15px;
+        }
+    }
+}
+@media (max-width: 460px) {
+    .accommodations__area {
+        &-right {
+            &-image {
+                &-two {
+                    max-width: 270px;
+                }
+            }
+        }
+    }
+}
