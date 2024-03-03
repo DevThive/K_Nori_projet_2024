@@ -1,5 +1,6 @@
 'use client';
 import React, { useEffect, useState } from 'react';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { Blog, Home, Page, Room } from './Menu';
 import DropDown from './DropDown';
 import Link from 'next/link';
@@ -30,8 +31,8 @@ const HeaderTwo = ({ variant }) => {
               <div className="header__area-top-bar-left-info">
                 <span>
                   <Link href="https://www.google.com/maps">
-                    <i className="fal fa-map-marker-alt"></i>869W+P49 Yellow
-                    House, Pennsylvania
+                    <i className="fal fa-map-marker-alt"></i>QWHX+4V 양주시
+                    경기도
                   </Link>
                 </span>
               </div>
@@ -49,7 +50,7 @@ const HeaderTwo = ({ variant }) => {
             <div className="header__area-menubar-left">
               <div className="header__area-menubar-left-logo">
                 <Link href="/">
-                  <img src="/logo-1.png" alt="logo" />
+                  <img src="/logo2.png" alt="logo" height={'300px'} />
                 </Link>
                 <span
                   className={
@@ -69,16 +70,16 @@ const HeaderTwo = ({ variant }) => {
                   className="mobile__menu"
                   style={{ display: `${mobileToggle ? 'block' : 'none'}` }}
                 >
-                  <li className="menu-item-has-children">
+                  {/* <li className="menu-item-has-children">
                     <a href="#">Home</a>
                     <DropDown>
                       <ul className="sub-menu">
                         <Home />
                       </ul>
                     </DropDown>
-                  </li>
+                  </li> */}
                   <li className="menu-item-has-children">
-                    <a href="#">Pages</a>
+                    <a href="#">회사소개</a>
                     <DropDown>
                       <ul className="sub-menu">
                         <Page />
@@ -86,23 +87,23 @@ const HeaderTwo = ({ variant }) => {
                     </DropDown>
                   </li>
                   <li className="menu-item-has-children">
-                    <a href="#">Room</a>
+                    <a href="#">클래스</a>
                     <DropDown>
                       <ul className="sub-menu">
                         <Room />
                       </ul>
                     </DropDown>
                   </li>
-                  <li className="menu-item-has-children">
-                    <a href="#">Blog</a>
-                    <DropDown>
+                  <li>
+                    <a href="/gallery">갤러리</a>
+                    {/* <DropDown>
                       <ul className="sub-menu">
                         <Blog />
                       </ul>
-                    </DropDown>
+                    </DropDown> */}
                   </li>
                   <li>
-                    <Link href="/contact">Contact</Link>
+                    <Link href="/contact">문의하기</Link>
                   </li>
                 </ul>
               </div>

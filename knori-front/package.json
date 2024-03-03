@@ -12,6 +12,7 @@
     "@fortawesome/react-fontawesome": "^0.2.0",
     "@rcaferati/wac": "^1.0.0",
     "@react-icons/all-files": "^4.1.0",
+    "axios": "^1.6.7",
     "bootstrap": "^5.3.0",
     "eslint": "8.44.0",
     "eslint-config-next": "13.4.9",
