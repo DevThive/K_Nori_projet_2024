@@ -25,6 +25,9 @@ export class Gallery {
   @Column()
   state: number;
 
+  @Column()
+  date: Date;
+
   @CreateDateColumn({ type: 'timestamp', name: 'created_at' })
   createdAt: Date;
 

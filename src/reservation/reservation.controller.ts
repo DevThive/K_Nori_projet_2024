@@ -1,9 +1,20 @@
-import { Body, Controller, Param, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { ReservationService } from './reservation.service';
 import { CreateReservationDto } from './dto/create-reservation';
 import { UserId } from 'src/auth/decorators/userId.decorator';
 import { accessTokenGuard } from 'src/auth/guard/access-token.guard';
+import { DeleteReservationDto } from './dto/delete-reservation';
+import { UpdateReservationDto } from './dto/update-reservation';
 
 @ApiTags('클래스 예약')
 @Controller('reservation')
@@ -13,16 +24,73 @@ export class ReservationController {
   //클래스 예약
   @ApiBearerAuth('accessToken')
   @Post(':classId')
-  @UseGuards(accessTokenGuard)
   async classreservation(
     @Body() createReservationDto: CreateReservationDto,
-    @UserId() userId: number,
     @Param('classId') classId: number,
   ) {
     return await this.reservationService.classreservation(
       createReservationDto,
-      userId,
       classId,
+    );
+  }
+
+  //유저 본인 클래스 예약 조회(유저)
+  @ApiBearerAuth('accessToken')
+  @Get('/search/:phonenumber')
+  async findclassbyphonenumber(@Param('phonenumber') phonenumber: string) {
+    return await this.reservationService.findclassbyphonenumber(phonenumber);
+  }
+  //클래스 예약 전체 조회(관리자)
+
+  @ApiBearerAuth('accessToken')
+  @UseGuards(accessTokenGuard)
+  @Get('')
+  async findallreservation(@UserId() userId: number) {
+    return await this.reservationService.findallreservation(userId);
+  }
+
+  //클래스별 예약 전체 조회(관리자)
+  @ApiBearerAuth('accessToken')
+  @UseGuards(accessTokenGuard)
+  @Get(':classId')
+  async findreservationsbyclass(
+    @Param('classId') classId: number,
+    @UserId() userId: number,
+  ) {
+    return await this.reservationService.findreservationsbyclass(
+      classId,
+      userId,
+    );
+  }
+
+  //클래스 예약수정
+
+  @ApiBearerAuth('accessToken')
+  @Put(':reservationId')
+  async updatereservation(
+    @Body() updateReservationDto: UpdateReservationDto,
+    @Param('reservationId') reservationId: number,
+  ) {
+    return await this.reservationService.updatereservation(
+      updateReservationDto,
+      reservationId,
+    );
+  }
+
+  //예약내역 삭제
+
+  @ApiBearerAuth('accessToken')
+  @UseGuards(accessTokenGuard)
+  @Delete(':reservationId')
+  async deletereservation(
+    @Body() deleteReservationDto: DeleteReservationDto,
+    @UserId() userId: number,
+    @Param('reservationId') reservationId: number,
+  ) {
+    return await this.reservationService.deletereservation(
+      deleteReservationDto,
+      userId,
+      reservationId,
     );
   }
 }

@@ -23,7 +23,7 @@ export class Instructor {
   photo: string;
 
   @Column()
-  introduction: number;
+  introduction: string;
 
   @CreateDateColumn({ type: 'timestamp', name: 'created_at' })
   createdAt: Date;

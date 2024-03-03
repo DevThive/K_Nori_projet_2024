@@ -6,8 +6,10 @@ import {
   UpdateDateColumn,
   ManyToOne,
   Relation,
+  OneToMany,
 } from 'typeorm';
 import { Instructor } from './instructor.entity';
+import { Reservation } from './reservation.entity';
 
 @Entity({
   name: 'classes',
@@ -33,4 +35,7 @@ export class Class {
 
   @ManyToOne(() => Instructor, (instructor) => instructor.class_content)
   instructor: Relation<Instructor>;
+
+  @OneToMany(() => Reservation, (reservations) => reservations.class)
+  reservations_content: Relation<Reservation>;
 }
