@@ -11,8 +11,8 @@ const Blogdetails = () => {
       <SEO pageTitle="Blog Details" />
       <HeaderTwo />
       <BreadCrumb
-        title="Blog Details"
-        innerTitle="Blog Details"
+        title="공지사항"
+        innerTitle="Notice"
         bgImage="/img/bg/banner-bg.jpg"
       />
       <Blogdetailscontainer />
