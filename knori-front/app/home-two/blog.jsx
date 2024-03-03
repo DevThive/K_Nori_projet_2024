@@ -12,7 +12,8 @@ const Blog = () => {
     fetchData();
   }, []);
 
-  const blogItem = notices.slice(0, 3);
+  const blogItem = notices.reverse().slice(0, 3);
+
   return (
     <div className="blog__two section-padding pt-0">
       <div className="container">

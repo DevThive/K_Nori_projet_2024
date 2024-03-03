@@ -21,7 +21,7 @@ const Bloggridcontainer = () => {
   const totalPages = Math.ceil(notices.length / ITEMS_PER_PAGE);
   const startIndex = currentPage * ITEMS_PER_PAGE;
   const endIndex = startIndex + ITEMS_PER_PAGE;
-  const currentBlogItems = notices.slice(startIndex, endIndex);
+  const currentBlogItems = notices.slice(startIndex, endIndex).reverse();
 
   const handleNextPage = () => {
     if (currentPage < totalPages - 1) {
