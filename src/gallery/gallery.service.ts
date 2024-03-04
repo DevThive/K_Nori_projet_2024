@@ -26,14 +26,14 @@ export class GalleryService {
     }
 
     return await this.galleryRepository.find({
-      select: ['photo', 'content', 'date'],
+      select: ['photos', 'content', 'date'],
     });
   }
   //갤러리 리스트 조회(유저)
   async findgalleries() {
     const notices = await this.galleryRepository.find({
       where: { state: 0 },
-      select: ['photo', 'content', 'date'],
+      select: ['photos', 'content', 'date'],
     });
 
     return notices;
@@ -43,7 +43,7 @@ export class GalleryService {
   async addgallery(
     createGalleryDto: CreateGalleryDto,
     userId: number,
-    url: string,
+    urls: string[],
   ) {
     const user = await this.userService.findUserById(userId);
     if (user.role !== 1) {
@@ -52,37 +52,37 @@ export class GalleryService {
 
     const gallery = await this.galleryRepository.save({
       ...createGalleryDto,
-      photo: url,
+      photos: JSON.stringify(urls),
       user: user,
     });
     return gallery;
   }
 
   //갤러리 수정
-  async updategallery(
-    updateGalleryDto: UpdateGalleryDto,
-    userId: number,
-    galleryId: number,
-    url: string,
-  ) {
-    const user = await this.userService.findUserById(userId);
-    console.log('user', user);
-    console.log('user.role ', user.role);
-    if (user.role !== 1) {
-      throw new BadRequestException('관리자만 수정이 가능합니다.');
-    }
+  // async updategallery(
+  //   updateGalleryDto: UpdateGalleryDto,
+  //   userId: number,
+  //   galleryId: number,
+  //   url: string,
+  // ) {
+  //   const user = await this.userService.findUserById(userId);
+  //   console.log('user', user);
+  //   console.log('user.role ', user.role);
+  //   if (user.role !== 1) {
+  //     throw new BadRequestException('관리자만 수정이 가능합니다.');
+  //   }
 
-    const gallery = this.findgallerybyid(galleryId);
-    if (!gallery) {
-      throw new BadRequestException('해당 갤러리가 존재하지 않습니다.');
-    }
+  //   const gallery = this.findgallerybyid(galleryId);
+  //   if (!gallery) {
+  //     throw new BadRequestException('해당 갤러리가 존재하지 않습니다.');
+  //   }
 
-    const updatedgallery = await this.galleryRepository.update(
-      { id: galleryId },
-      { ...updateGalleryDto, photo: url },
-    );
-    return updatedgallery;
-  }
+  //   const updatedgallery = await this.galleryRepository.update(
+  //     { id: galleryId },
+  //     { ...updateGalleryDto, photo: url },
+  //   );
+  //   return updatedgallery;
+  // }
   //갤러리 비공개 처리
   async hidegallery(
     hideGalleryDto: HideGalleryDto,

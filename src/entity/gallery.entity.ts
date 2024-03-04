@@ -17,7 +17,7 @@ export class Gallery {
   id: number;
 
   @Column()
-  photo: string;
+  photos: string;
 
   @Column()
   content: string;
