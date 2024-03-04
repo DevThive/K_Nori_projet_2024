@@ -59,30 +59,30 @@ export class GalleryService {
   }
 
   //갤러리 수정
-  // async updategallery(
-  //   updateGalleryDto: UpdateGalleryDto,
-  //   userId: number,
-  //   galleryId: number,
-  //   url: string,
-  // ) {
-  //   const user = await this.userService.findUserById(userId);
-  //   console.log('user', user);
-  //   console.log('user.role ', user.role);
-  //   if (user.role !== 1) {
-  //     throw new BadRequestException('관리자만 수정이 가능합니다.');
-  //   }
+  async updategallery(
+    updateGalleryDto: UpdateGalleryDto,
+    userId: number,
+    galleryId: number,
+    urls: string[],
+  ) {
+    const user = await this.userService.findUserById(userId);
+    console.log('user', user);
+    console.log('user.role ', user.role);
+    if (user.role !== 1) {
+      throw new BadRequestException('관리자만 수정이 가능합니다.');
+    }
 
-  //   const gallery = this.findgallerybyid(galleryId);
-  //   if (!gallery) {
-  //     throw new BadRequestException('해당 갤러리가 존재하지 않습니다.');
-  //   }
+    const gallery = this.findgallerybyid(galleryId);
+    if (!gallery) {
+      throw new BadRequestException('해당 갤러리가 존재하지 않습니다.');
+    }
 
-  //   const updatedgallery = await this.galleryRepository.update(
-  //     { id: galleryId },
-  //     { ...updateGalleryDto, photo: url },
-  //   );
-  //   return updatedgallery;
-  // }
+    const updatedgallery = await this.galleryRepository.update(
+      { id: galleryId },
+      { ...updateGalleryDto, photos: JSON.stringify(urls) },
+    );
+    return updatedgallery;
+  }
   //갤러리 비공개 처리
   async hidegallery(
     hideGalleryDto: HideGalleryDto,

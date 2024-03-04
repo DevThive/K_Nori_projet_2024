@@ -68,7 +68,7 @@ export class GalleryController {
     },
   })
   @Post()
-  @UseInterceptors(FilesInterceptor('files', 5)) //
+  @UseInterceptors(FilesInterceptor('files', 5))
   @UseGuards(accessTokenGuard)
   async addgallery(
     @Body() createGalleryDto: CreateGalleryDto,
@@ -82,47 +82,52 @@ export class GalleryController {
   }
 
   //갤러리 수정
-  // @ApiBearerAuth('accessToken')
-  // @ApiConsumes('multipart/form-data')
-  // @ApiBody({
-  //   description: 'Upload menu with image.',
-  //   type: 'multipart/form-data',
-  //   schema: {
-  //     type: 'object',
-  //     properties: {
-  //       file: {
-  //         type: 'string',
-  //         format: 'binary',
-  //         description: 'The image file to upload..',
-  //       },
-  //       content: {
-  //         type: 'string',
-  //         description: 'The content of the gallery.',
-  //       },
-  //       date: {
-  //         type: 'date',
-  //         description: 'Date of the gallery.',
-  //       },
-  //     },
-  //   },
-  // })
-  // @Put(':galleryId')
-  // @UseInterceptors(FileInterceptor('file'))
-  // @UseGuards(accessTokenGuard)
-  // async updatereservation(
-  //   @Body() updateGalleryDto: UpdateGalleryDto,
-  //   @UserId() userId: number,
-  //   @Param('galleryId') galleryId: number,
-  //   @UploadedFile() file: Express.Multer.File,
-  // ) {
-  //   const url = await this.galleryService.imageUpload(file);
-  //   return await this.galleryService.updategallery(
-  //     updateGalleryDto,
-  //     userId,
-  //     galleryId,
-  //     url,
-  //   );
-  // }
+  @ApiBearerAuth('accessToken')
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    description: 'Upload gallery with image.',
+    type: 'multipart/form-data',
+    schema: {
+      type: 'object',
+      properties: {
+        files: {
+          type: 'array',
+          items: {
+            type: 'string',
+            format: 'binary',
+            description: 'The image files to upload.',
+          },
+        },
+        content: {
+          type: 'string',
+          description: 'The content of the gallery.',
+        },
+        date: {
+          type: 'date',
+          description: 'Date of the gallery.',
+        },
+      },
+    },
+  })
+  @Put(':galleryId')
+  @UseInterceptors(FilesInterceptor('files', 5))
+  @UseGuards(accessTokenGuard)
+  async updatereservation(
+    @Body() updateGalleryDto: UpdateGalleryDto,
+    @UserId() userId: number,
+    @Param('galleryId') galleryId: number,
+    @UploadedFiles() files: Express.Multer.File[],
+  ) {
+    const urls = await Promise.all(
+      files.map(async (file) => await this.galleryService.imageUpload(file)),
+    );
+    return await this.galleryService.updategallery(
+      updateGalleryDto,
+      userId,
+      galleryId,
+      urls,
+    );
+  }
 
   //갤러리 비공개 처리
   @ApiBearerAuth('accessToken')
