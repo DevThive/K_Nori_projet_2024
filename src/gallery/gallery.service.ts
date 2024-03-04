@@ -26,14 +26,14 @@ export class GalleryService {
     }
 
     return await this.galleryRepository.find({
-      select: ['photo', 'content', 'date'],
+      select: ['photos', 'content', 'date'],
     });
   }
   //갤러리 리스트 조회(유저)
   async findgalleries() {
     const notices = await this.galleryRepository.find({
       where: { state: 0 },
-      select: ['photo', 'content', 'date'],
+      select: ['photos', 'content', 'date'],
     });
 
     return notices;
@@ -43,7 +43,7 @@ export class GalleryService {
   async addgallery(
     createGalleryDto: CreateGalleryDto,
     userId: number,
-    url: string,
+    urls: string[],
   ) {
     const user = await this.userService.findUserById(userId);
     if (user.role !== 1) {
@@ -52,7 +52,7 @@ export class GalleryService {
 
     const gallery = await this.galleryRepository.save({
       ...createGalleryDto,
-      photo: url,
+      photos: JSON.stringify(urls),
       user: user,
     });
     return gallery;
@@ -63,7 +63,7 @@ export class GalleryService {
     updateGalleryDto: UpdateGalleryDto,
     userId: number,
     galleryId: number,
-    url: string,
+    urls: string[],
   ) {
     const user = await this.userService.findUserById(userId);
     console.log('user', user);
@@ -79,7 +79,7 @@ export class GalleryService {
 
     const updatedgallery = await this.galleryRepository.update(
       { id: galleryId },
-      { ...updateGalleryDto, photo: url },
+      { ...updateGalleryDto, photos: JSON.stringify(urls) },
     );
     return updatedgallery;
   }
