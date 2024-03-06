@@ -25,6 +25,9 @@ export class Instructor {
   @Column()
   introduction: string;
 
+  @Column()
+  state: number;
+
   @CreateDateColumn({ type: 'timestamp', name: 'created_at' })
   createdAt: Date;
 
