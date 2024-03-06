@@ -10,8 +10,8 @@ on:
 env:
   AWS_REGION: ap-northeast-2
   S3_BUCKET_NAME: knori-github-action-s3-bucket
-  CODE_DEPLOY_APPLICATION_NAME: knori-codedepoly-app
-  CODE_DEPLOY_DEPLOYMENT_GROUP_NAME: knori-codedepoly-depolyment-group
+  CODE_DEPLOY_APPLICATION_NAME: knori-codedeploy-app
+  CODE_DEPLOY_DEPLOYMENT_GROUP_NAME: knori-deploy-group
 
 permissions:
   contents: read
