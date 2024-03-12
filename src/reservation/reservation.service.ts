@@ -31,14 +31,12 @@ export class ReservationService {
     createReservationDto: CreateReservationDto,
     classId: number,
   ) {
-    // const class = await this.classService.getclassbyid(classId)
     const Class = await this.classRepository.findOne({
       where: { id: classId },
     });
-    // if(!class) {
-    //   throw new NotFoundException('해당 클래스가 없습니다.');
-    // }
-    console.log('classId', classId);
+    if (!Class) {
+      throw new NotFoundException('해당 클래스가 없습니다.');
+    }
     const reservation = await this.reservationRepository.save({
       ...createReservationDto,
       class: Class,
