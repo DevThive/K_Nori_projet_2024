@@ -15,6 +15,8 @@ import { ClassModule } from './class/class.module';
 import { InstructorModule } from './instructor/instructor.module';
 import { AwsService } from './aws/aws.service';
 import { AwsModule } from './aws/aws.module';
+import { ContactService } from './contact/contact.service';
+import { ContactModule } from './contact/contact.module';
 
 @Module({
   imports: [
@@ -31,9 +33,10 @@ import { AwsModule } from './aws/aws.module';
     ClassModule,
     InstructorModule,
     AwsModule,
+    ContactModule,
   ],
   controllers: [AppController],
-  providers: [AppService, ConfigService, AwsService],
+  providers: [AppService, ConfigService, AwsService, ContactService],
   exports: [ConfigService],
 })
 export class AppModule {}
