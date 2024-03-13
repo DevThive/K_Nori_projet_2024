@@ -72,6 +72,8 @@ export class ReservationService {
         'client_name',
         'client_phonenumber',
         'etc',
+        'date',
+        'time',
       ],
       // relations: { user: true },
     });
@@ -95,6 +97,8 @@ export class ReservationService {
         'client_name',
         'client_phonenumber',
         'etc',
+        'date',
+        'time',
       ],
       // relations: { user: true },
     });

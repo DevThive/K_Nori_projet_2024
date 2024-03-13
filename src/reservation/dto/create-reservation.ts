@@ -33,4 +33,20 @@ export class CreateReservationDto {
   @IsNumber()
   @ApiProperty({ description: '비밀번호' })
   password: number;
+
+  @IsString()
+  @ApiProperty({
+    description: '시간',
+    format: 'time',
+    type: 'string',
+  })
+  time: string;
+
+  @IsString()
+  @ApiProperty({
+    description: '날짜',
+    format: 'date',
+    type: 'string',
+  })
+  date: string;
 }
