@@ -15,6 +15,7 @@ import { ClassModule } from './class/class.module';
 import { InstructorModule } from './instructor/instructor.module';
 import { AwsService } from './aws/aws.service';
 import { AwsModule } from './aws/aws.module';
+import { ClassReviewModule } from './class-review/class-review.module';
 import { ContactService } from './contact/contact.service';
 import { ContactModule } from './contact/contact.module';
 
@@ -33,6 +34,7 @@ import { ContactModule } from './contact/contact.module';
     ClassModule,
     InstructorModule,
     AwsModule,
+    ClassReviewModule,
     ContactModule,
   ],
   controllers: [AppController],

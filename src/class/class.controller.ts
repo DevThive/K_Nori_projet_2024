@@ -30,7 +30,7 @@ export class ClassController {
   async findallclasses(@UserId() userId: number) {
     return await this.classService.findallclasses(userId);
   }
-  //갤러리 리스트 조회(유저)
+  //클래스 리스트 조회(유저)
   @ApiBearerAuth('accessToken')
   @Get('')
   async findclasses() {
@@ -164,5 +164,12 @@ export class ClassController {
     @Param('classId') classId: number,
   ) {
     return await this.classService.deleteclass(userId, classId);
+  }
+  //클래스 자세히보기
+
+  @ApiBearerAuth('accessToken')
+  @Get(':classId')
+  async classinfo(@Param('classId') classId: number) {
+    return await this.classService.classinfo(classId);
   }
 }

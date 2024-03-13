@@ -142,4 +142,20 @@ export class ClassService {
 
     return imageUrl;
   }
+
+  //클래스 자세히보기
+  async classinfo(classId: number) {
+    const Class = await this.classRepository.findOne({
+      where: { id: classId },
+    });
+    if (!Class) {
+      throw new BadRequestException('해당 클래스가 존재하지 않습니다.');
+    }
+    const classinfo = await this.classRepository.findOne({
+      where: { id: classId },
+      select: ['title', 'photo', 'instructor', 'content', 'time', 'date'],
+    });
+
+    return classinfo;
+  }
 }

@@ -16,11 +16,11 @@ export class Reservation {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  date: Date;
+  // @Column()
+  // date: Date;
 
-  @Column()
-  time: string;
+  // @Column()
+  // time: string;
 
   @Column()
   totalPeople: number;
