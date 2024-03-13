@@ -59,16 +59,16 @@ export class ClassController {
           type: 'string',
           description: 'The content of the class.',
         },
-        time: {
-          type: 'string',
-          format: 'time',
-          description: 'Time of the class.',
-        },
-        date: {
-          type: 'string',
-          format: 'date',
-          description: 'Date of the class.',
-        },
+        // time: {
+        //   type: 'string',
+        //   format: 'time',
+        //   description: 'Time of the class.',
+        // },
+        // date: {
+        //   type: 'string',
+        //   format: 'date',
+        //   description: 'Date of the class.',
+        // },
       },
     },
   })
@@ -112,16 +112,16 @@ export class ClassController {
           type: 'string',
           description: 'The content of the class.',
         },
-        time: {
-          type: 'string',
-          format: 'time',
-          description: 'Time of the class.',
-        },
-        date: {
-          type: 'string',
-          format: 'date',
-          description: 'Date of the class.',
-        },
+        // time: {
+        //   type: 'string',
+        //   format: 'time',
+        //   description: 'Time of the class.',
+        // },
+        // date: {
+        //   type: 'string',
+        //   format: 'date',
+        //   description: 'Date of the class.',
+        // },
       },
     },
   })

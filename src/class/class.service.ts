@@ -32,14 +32,14 @@ export class ClassService {
     }
 
     return await this.classRepository.find({
-      select: ['title', 'photo', 'instructor', 'content', 'time', 'date'],
+      select: ['title', 'photo', 'instructor', 'content'],
     });
   }
   //클래스 리스트 조회(유저)
   async findclasses() {
     const instructors = await this.classRepository.find({
       where: { state: 0 },
-      select: ['id', 'title', 'photo', 'instructor', 'content', 'time', 'date'],
+      select: ['id', 'title', 'photo', 'instructor', 'content'],
     });
 
     return instructors;
@@ -153,7 +153,7 @@ export class ClassService {
     }
     const classinfo = await this.classRepository.findOne({
       where: { id: classId },
-      select: ['title', 'photo', 'instructor', 'content', 'time', 'date'],
+      select: ['title', 'photo', 'instructor', 'content', 'createdAt'],
     });
 
     return classinfo;

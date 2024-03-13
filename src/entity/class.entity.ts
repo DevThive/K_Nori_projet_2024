@@ -31,11 +31,11 @@ export class Class {
   @Column()
   state: number;
 
-  @Column({ type: 'time' })
-  time: Date;
+  // @Column({ type: 'time' })
+  // time: Date;
 
-  @Column({ type: 'date' })
-  date: Date;
+  // @Column({ type: 'date' })
+  // date: Date;
 
   @CreateDateColumn({ type: 'timestamp', name: 'created_at' })
   createdAt: Date;
