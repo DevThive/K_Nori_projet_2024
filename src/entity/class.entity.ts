@@ -10,6 +10,7 @@ import {
 } from 'typeorm';
 import { Instructor } from './instructor.entity';
 import { Reservation } from './reservation.entity';
+import { ClassReview } from './class-review.entity';
 
 @Entity({
   name: 'classes',
@@ -47,4 +48,7 @@ export class Class {
 
   @OneToMany(() => Reservation, (reservations) => reservations.class)
   reservations_content: Relation<Reservation>;
+
+  @OneToMany(() => ClassReview, (classreviews) => classreviews.class)
+  classreview_content: Relation<ClassReview>;
 }

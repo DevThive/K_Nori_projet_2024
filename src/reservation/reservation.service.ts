@@ -68,8 +68,6 @@ export class ReservationService {
     const result = await this.reservationRepository.find({
       select: [
         'totalPeople',
-        'date',
-        'time',
         'client_email',
         'client_name',
         'client_phonenumber',
@@ -93,8 +91,6 @@ export class ReservationService {
       where: { id: classId },
       select: [
         'totalPeople',
-        'date',
-        'time',
         'client_email',
         'client_name',
         'client_phonenumber',

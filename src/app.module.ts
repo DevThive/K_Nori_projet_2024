@@ -15,6 +15,7 @@ import { ClassModule } from './class/class.module';
 import { InstructorModule } from './instructor/instructor.module';
 import { AwsService } from './aws/aws.service';
 import { AwsModule } from './aws/aws.module';
+import { ClassReviewModule } from './class-review/class-review.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { AwsModule } from './aws/aws.module';
     ClassModule,
     InstructorModule,
     AwsModule,
+    ClassReviewModule,
   ],
   controllers: [AppController],
   providers: [AppService, ConfigService, AwsService],
