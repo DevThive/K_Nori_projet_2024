@@ -14,19 +14,19 @@ export class CreateClassDto {
   @ApiProperty({ description: '내용' })
   content: string;
 
-  @IsString()
-  @ApiProperty({
-    description: '시간',
-    format: 'time',
-    type: 'string',
-  })
-  time: string;
+  // @IsString()
+  // @ApiProperty({
+  //   description: '시간',
+  //   format: 'time',
+  //   type: 'string',
+  // })
+  // time: string;
 
-  @IsString()
-  @ApiProperty({
-    description: '날짜',
-    format: 'date',
-    type: 'string',
-  })
-  date: string;
+  // @IsString()
+  // @ApiProperty({
+  //   description: '날짜',
+  //   format: 'date',
+  //   type: 'string',
+  // })
+  // date: string;
 }
