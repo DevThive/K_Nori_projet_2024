@@ -9,9 +9,9 @@ on:
 # 리전, 버킷 이름, CodeDeploy 앱 이름, CodeDeploy 배포 그룹 이름
 env:
   AWS_REGION: ap-northeast-2
-  S3_BUCKET_NAME: knori-github-action-s3-bucket
+  S3_BUCKET_NAME: knori-github-s3-bucket
   CODE_DEPLOY_APPLICATION_NAME: knori-codedepoly-app
-  CODE_DEPLOY_DEPLOYMENT_GROUP_NAME: knori-codedepoly-depolyment-group
+  CODE_DEPLOY_DEPLOYMENT_GROUP_NAME: knori-code-group
 
 permissions:
   contents: read
@@ -39,7 +39,7 @@ jobs:
       - name: Build test
         run: npm run build
 
-      # (4) AWS 인증 (IAM 사용자 Access Key, Secret Key 활용)
+      # (4) AWS 인증 (IAM 사용자 Access Key, Secret Key 활용).....
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:

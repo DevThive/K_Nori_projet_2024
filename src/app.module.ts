@@ -16,6 +16,8 @@ import { InstructorModule } from './instructor/instructor.module';
 import { AwsService } from './aws/aws.service';
 import { AwsModule } from './aws/aws.module';
 import { ClassReviewModule } from './class-review/class-review.module';
+import { ContactService } from './contact/contact.service';
+import { ContactModule } from './contact/contact.module';
 
 @Module({
   imports: [
@@ -33,9 +35,10 @@ import { ClassReviewModule } from './class-review/class-review.module';
     InstructorModule,
     AwsModule,
     ClassReviewModule,
+    ContactModule,
   ],
   controllers: [AppController],
-  providers: [AppService, ConfigService, AwsService],
+  providers: [AppService, ConfigService, AwsService, ContactService],
   exports: [ConfigService],
 })
 export class AppModule {}
