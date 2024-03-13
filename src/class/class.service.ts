@@ -32,14 +32,14 @@ export class ClassService {
     }
 
     return await this.classRepository.find({
-      select: ['title', 'photo', 'instructor', 'content', 'createdAt'],
+      select: ['id', 'title', 'photo', 'instructor', 'content', 'createdAt'],
     });
   }
   //클래스 리스트 조회(유저)
   async findclasses() {
     const instructors = await this.classRepository.find({
       where: { state: 0 },
-      select: ['title', 'photo', 'instructor', 'content', 'createdAt'],
+      select: ['id', 'title', 'photo', 'instructor', 'content', 'createdAt'],
     });
 
     return instructors;
