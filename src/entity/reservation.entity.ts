@@ -40,6 +40,12 @@ export class Reservation {
   @Column()
   password: number;
 
+  @Column({ type: 'time' })
+  time: Date;
+
+  @Column({ type: 'date' })
+  date: Date;
+
   @CreateDateColumn({ type: 'timestamp', name: 'created_at' })
   createdAt: Date;
 
