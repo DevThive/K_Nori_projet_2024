@@ -9,8 +9,6 @@ import {
   Relation,
 } from 'typeorm';
 import { Notice } from './notice.entity';
-import { Reservation } from './reservation.entity';
-import { Gallery } from './gallery.entity';
 
 @Entity({
   name: 'users', // 데이터베이스 테이블의 이름
