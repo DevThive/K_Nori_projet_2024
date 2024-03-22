@@ -68,10 +68,12 @@ export class AuthService {
       currentRefreshToken: refreshToken,
     });
 
-    return {
+    const response = {
       accessToken,
-      refreshToken,
+      userData: { ...user, password: undefined },
     };
+
+    return response;
   }
 
   /// 토큰 재발급
@@ -114,5 +116,11 @@ export class AuthService {
     });
 
     return refreshToken;
+  }
+
+  async authme(userid: number) {
+    const user = await this.userService.findUserById(userid);
+
+    return user;
   }
 }

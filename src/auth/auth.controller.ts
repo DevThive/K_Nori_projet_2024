@@ -1,9 +1,11 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { ConfigService } from '@nestjs/config';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { SignupUserDto } from './dto/signup-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
+import { accessTokenGuard } from './guard/access-token.guard';
+import { UserId } from './decorators/userId.decorator';
 // import { SignupAdminDto } from './dto/signup-admin.dto';
 
 @ApiTags('로그인&회원가입')
@@ -28,5 +30,12 @@ export class AuthController {
   @Post('login')
   login(@Body() loginUserDto: LoginUserDto) {
     return this.authService.login(loginUserDto);
+  }
+
+  @ApiBearerAuth('accessToken')
+  @UseGuards(accessTokenGuard)
+  @Get('me')
+  async authme(@UserId() userId: number) {
+    return await this.authService.authme(userId);
   }
 }
