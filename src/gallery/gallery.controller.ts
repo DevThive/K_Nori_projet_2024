@@ -19,11 +19,15 @@ import { accessTokenGuard } from 'src/auth/guard/access-token.guard';
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { UpdateGalleryDto } from './dto/update-gallery';
 import { HideGalleryDto } from './dto/hide-gallery';
+import { AwsService } from 'src/aws/aws.service';
 
 @ApiTags('갤러리')
 @Controller('gallery')
 export class GalleryController {
-  constructor(private readonly galleryService: GalleryService) {}
+  constructor(
+    private readonly galleryService: GalleryService,
+    private readonly awsService: AwsService,
+  ) {}
   //갤러리 리스트 조회(관리자)
   @ApiBearerAuth('accessToken')
   @UseGuards(accessTokenGuard)
@@ -76,7 +80,7 @@ export class GalleryController {
     @UploadedFiles() files: Express.Multer.File[],
   ) {
     const urls = await Promise.all(
-      files.map(async (file) => await this.galleryService.imageUpload(file)),
+      files.map(async (file) => await this.awsService.imageUpload(file)),
     );
     return await this.galleryService.addgallery(createGalleryDto, userId, urls);
   }
@@ -119,7 +123,7 @@ export class GalleryController {
     @UploadedFiles() files: Express.Multer.File[],
   ) {
     const urls = await Promise.all(
-      files.map(async (file) => await this.galleryService.imageUpload(file)),
+      files.map(async (file) => await this.awsService.imageUpload(file)),
     );
     return await this.galleryService.updategallery(
       updateGalleryDto,

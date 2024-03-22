@@ -17,7 +17,6 @@ import { Instructor } from 'src/entity/instructor.entity';
 export class ClassService {
   constructor(
     private readonly userService: UsersService,
-    private readonly awsService: AwsService,
     @InjectRepository(Class)
     private classRepository: Repository<Class>,
     @InjectRepository(Instructor)
@@ -130,18 +129,18 @@ export class ClassService {
     });
   }
 
-  async imageUpload(file: Express.Multer.File) {
-    const imageName = uuidv4(); // UUID로 이미지 이름 생성
-    const ext = file.originalname.split('.').pop();
+  // async imageUpload(file: Express.Multer.File) {
+  //   const imageName = uuidv4(); // UUID로 이미지 이름 생성
+  //   const ext = file.originalname.split('.').pop();
 
-    const imageUrl = await this.awsService.imageUploadToS3(
-      `${imageName}.${ext}`,
-      file,
-      ext,
-    );
+  //   const imageUrl = await this.awsService.imageUploadToS3(
+  //     `${imageName}.${ext}`,
+  //     file,
+  //     ext,
+  //   );
 
-    return imageUrl;
-  }
+  //   return imageUrl;
+  // }
 
   //클래스 자세히보기
   async classinfo(classId: number) {
