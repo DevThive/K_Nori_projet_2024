@@ -16,7 +16,11 @@ export class NoticeService {
   ) {}
 
   //공지사항 등록
-  async writennotice(createNoticedto: CreateNoticeDto, userId: number) {
+  async writennotice(
+    createNoticedto: CreateNoticeDto,
+    userId: number,
+    urls: string[],
+  ) {
     const user = await this.userService.findUserById(userId);
 
     if (user.role !== 1) {
@@ -25,6 +29,7 @@ export class NoticeService {
 
     const createnotice = await this.noticesRepository.save({
       ...createNoticedto,
+      photo: JSON.stringify(urls),
       user: user,
     });
 
@@ -85,6 +90,7 @@ export class NoticeService {
     userId: number,
     noticeid: number,
     updatenoticedto: UpdateNoticeDto,
+    urls: string[],
   ) {
     const user = await this.userService.findUserById(userId);
 
@@ -104,6 +110,7 @@ export class NoticeService {
       },
       {
         ...updatenoticedto,
+        photo: JSON.stringify(urls),
       },
     );
   }

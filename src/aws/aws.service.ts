@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { ConfigService } from '@nestjs/config';
+import { v4 as uuidv4 } from 'uuid'; // uuid 패키지에서 v4 함수를 사용
 
 @Injectable()
 export class AwsService {
@@ -37,5 +38,16 @@ export class AwsService {
     return `https://s3.${process.env.AWS_REGION}.amazonaws.com/${process.env.AWS_S3_BUCKET_NAME}/${fileName}`;
   }
 
-  
+  async imageUpload(file: Express.Multer.File) {
+    const imageName = uuidv4(); // UUID로 이미지 이름 생성
+    const ext = file.originalname.split('.').pop();
+
+    const imageUrl = await this.imageUploadToS3(
+      `${imageName}.${ext}`,
+      file,
+      ext,
+    );
+
+    return imageUrl;
+  }
 }

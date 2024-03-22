@@ -118,16 +118,16 @@ export class GalleryService {
     });
   }
 
-  async imageUpload(file: Express.Multer.File) {
-    const imageName = uuidv4(); // UUID로 이미지 이름 생성
-    const ext = file.originalname.split('.').pop();
+  // async imageUpload(file: Express.Multer.File) {
+  //   const imageName = uuidv4(); // UUID로 이미지 이름 생성
+  //   const ext = file.originalname.split('.').pop();
 
-    const imageUrl = await this.awsService.imageUploadToS3(
-      `${imageName}.${ext}`,
-      file,
-      ext,
-    );
+  //   const imageUrl = await this.awsService.imageUploadToS3(
+  //     `${imageName}.${ext}`,
+  //     file,
+  //     ext,
+  //   );
 
-    return imageUrl;
-  }
+  //   return imageUrl;
+  // }
 }
