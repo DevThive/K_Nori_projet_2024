@@ -14,6 +14,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { UpdateClassReviewDto } from './dto/update-classreview';
 import { HideClassReviewDto } from './dto/hide-classreview';
 import { Class } from 'src/entity/class.entity';
+import { DeleteClassReviewDto } from './dto/delete-classreview';
 
 @Injectable()
 export class ClassReviewService {
@@ -36,7 +37,7 @@ export class ClassReviewService {
     }
 
     return await this.classReviewRepository.find({
-      select: ['title', 'photo', 'content'],
+      select: ['id', 'title', 'photo', 'content', 'createdAt'],
     });
   }
 
@@ -44,7 +45,7 @@ export class ClassReviewService {
   async findreviews() {
     const classReview = await this.classReviewRepository.find({
       where: { state: 0 },
-      select: ['title', 'photo', 'content'],
+      select: ['id', 'title', 'photo', 'content', 'createdAt'],
     });
 
     return classReview;
@@ -58,8 +59,11 @@ export class ClassReviewService {
   ) {
     //클래스 예약을 핸드폰번호로 조회
     const bookedclass = await this.reservationRepository.findOne({
-      where: { id: classId },
+      where: { class: { id: classId } },
     });
+    if (!bookedclass) {
+      throw new NotFoundException('해당 클래스에 대한 예약이 없습니다.');
+    }
 
     const isbooked = await this.reservationRepository.findOne({
       where: { client_phonenumber: createClassReviewDto.phonenumber },
@@ -84,7 +88,7 @@ export class ClassReviewService {
     return classreview;
   }
 
-  //클래스 수정
+  //클래스 리뷰 수정
   async updateclassreview(
     updateReviewClassDto: UpdateClassReviewDto,
     classReviewId: number,
@@ -128,7 +132,17 @@ export class ClassReviewService {
   }
 
   //클래스 삭제
-  async deleteclassreview(classReviewId: number) {
+  async deleteclassreview(
+    classReviewId: number,
+    deleteClassReviewDto: DeleteClassReviewDto,
+  ) {
+    //클래스 예약을 핸드폰번호로 조회
+    const isbooked = await this.reservationRepository.findOne({
+      where: { client_phonenumber: deleteClassReviewDto.phonenumber },
+    });
+    if (!isbooked) {
+      throw new NotFoundException('리뷰를 삭제할 권한이 없습니다.');
+    }
     const result = await this.classReviewRepository.delete({
       id: classReviewId,
     });

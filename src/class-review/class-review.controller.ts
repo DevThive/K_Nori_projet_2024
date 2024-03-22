@@ -18,6 +18,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { CreateClassReviewDto } from './dto/create-classreview';
 import { UpdateClassReviewDto } from './dto/update-classreview';
 import { HideClassReviewDto } from './dto/hide-classreview';
+import { DeleteClassReviewDto } from './dto/delete-classreview';
 
 @ApiTags('클래스 리뷰')
 @Controller('class-review')
@@ -149,7 +150,13 @@ export class ClassReviewController {
   @ApiBearerAuth('accessToken')
   @UseGuards(accessTokenGuard)
   @Delete(':classReviewId')
-  async deleteclassreview(@Param('classReviewId') classReviewId: number) {
-    return await this.classReviewService.deleteclassreview(classReviewId);
+  async deleteclassreview(
+    @Param('classReviewId') classReviewId: number,
+    @Body() deleteClassReviewDto: DeleteClassReviewDto,
+  ) {
+    return await this.classReviewService.deleteclassreview(
+      classReviewId,
+      deleteClassReviewDto,
+    );
   }
 }
