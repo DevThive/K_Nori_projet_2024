@@ -18,11 +18,15 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { CreateClassDto } from './dto/create-class';
 import { UpdateClassDto } from './dto/update-class';
 import { HideClassDto } from './dto/hide-class';
+import { AwsService } from 'src/aws/aws.service';
 
 @ApiTags('클래스')
 @Controller('class')
 export class ClassController {
-  constructor(private readonly classService: ClassService) {}
+  constructor(
+    private readonly awsService: AwsService,
+    private readonly classService: ClassService,
+  ) {}
   //클래스 리스트 조회(관리자)
   @ApiBearerAuth('accessToken')
   @UseGuards(accessTokenGuard)
@@ -81,7 +85,7 @@ export class ClassController {
     @UserId() userId: number,
     @UploadedFile() file: Express.Multer.File,
   ) {
-    const url = await this.classService.imageUpload(file);
+    const url = await this.awsService.imageUpload(file);
     return await this.classService.addclass(
       createClassDto,
       instructorId,
@@ -134,7 +138,7 @@ export class ClassController {
     @Param('classId') classId: number,
     @UploadedFile() file: Express.Multer.File,
   ) {
-    const url = await this.classService.imageUpload(file);
+    const url = await this.awsService.imageUpload(file);
     return await this.classService.updateclass(
       updateClassDto,
       userId,
