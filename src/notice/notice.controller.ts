@@ -74,6 +74,14 @@ export class NoticeController {
     );
   }
 
+  //공지사항 전체 조회(관리자)
+  @ApiBearerAuth('accessToken')
+  @Get('/admin')
+  @UseGuards(accessTokenGuard)
+  async findallnotice(@UserId() user_id: number) {
+    return await this.noticeService.findall(user_id);
+  }
+
   //공지사항 리스트
   @Get()
   async noticelist() {
@@ -159,14 +167,5 @@ export class NoticeController {
       updatenoticedto,
       urls,
     );
-  }
-
-  //공지사항 전체 조회(관리자)
-  @ApiBearerAuth('accessToken')
-  @Get('/all')
-  @UseGuards(accessTokenGuard)
-  async findallnotice(@UserId() user_id: number) {
-    console.log(user_id);
-    return await this.noticeService.findall(user_id);
   }
 }
