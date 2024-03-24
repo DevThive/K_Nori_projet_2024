@@ -119,13 +119,11 @@ export class NoticeService {
   async findall(userId: number) {
     const user = await this.userService.findUserById(userId);
 
+    console.log(user);
     if (user.role !== 1) {
       throw new BadRequestException('관리자만 조회가 가능합니다.');
     }
-    const result = await this.noticesRepository.find({
-      select: ['content_name', 'content', 'createdAt'],
-      relations: { user: true },
-    });
+    const result = await this.noticesRepository.find();
 
     return result;
   }
