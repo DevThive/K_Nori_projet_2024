@@ -163,9 +163,10 @@ export class NoticeController {
 
   //공지사항 전체 조회(관리자)
   @ApiBearerAuth('accessToken')
-  @Get('all')
+  @Get('/all')
   @UseGuards(accessTokenGuard)
   async findallnotice(@UserId() user_id: number) {
+    console.log(user_id);
     return await this.noticeService.findall(user_id);
   }
 }
