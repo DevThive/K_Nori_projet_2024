@@ -11,6 +11,7 @@ import {
 import { Instructor } from './instructor.entity';
 import { Reservation } from './reservation.entity';
 import { ClassReview } from './class-review.entity';
+import { ClassSchedule } from './class-schedule.entity';
 
 @Entity({
   name: 'classes',
@@ -51,4 +52,7 @@ export class Class {
 
   @OneToMany(() => ClassReview, (classreviews) => classreviews.class)
   classreview_content: Relation<ClassReview>;
+
+  @OneToMany(() => ClassSchedule, (classschedules) => classschedules.class)
+  classschedules_content: Relation<ClassSchedule>;
 }
