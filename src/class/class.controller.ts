@@ -39,7 +39,7 @@ export class ClassController {
   @ApiBearerAuth('accessToken')
   @UseGuards(accessTokenGuard)
   @Get('findallclasses')
-  async findallclasses(@UserId() userId: number) {
+  async adminclasses(@UserId() userId: number) {
     return await this.classService.findallclasses(userId);
   }
 
