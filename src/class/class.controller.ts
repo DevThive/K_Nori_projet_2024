@@ -38,7 +38,7 @@ export class ClassController {
   //클래스 리스트 조회(관리자).
   @ApiBearerAuth('accessToken')
   @UseGuards(accessTokenGuard)
-  @Get('findallclasses')
+  @Get('/admin')
   async adminclasses(@UserId() userId: number) {
     return await this.classService.findallclasses(userId);
   }
