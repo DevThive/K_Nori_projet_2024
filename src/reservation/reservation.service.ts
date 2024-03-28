@@ -15,6 +15,7 @@ import { ConfigService } from '@nestjs/config';
 import * as bcrypt from 'bcrypt';
 import { UpdateReservationDto } from './dto/update-reservation';
 import { Class } from 'src/entity/class.entity';
+import { ClientType } from './types/client-type';
 
 @Injectable()
 export class ReservationService {
@@ -37,9 +38,17 @@ export class ReservationService {
     if (!Class) {
       throw new NotFoundException('해당 클래스가 없습니다.');
     }
+
+    // totalPeople이 20을 넘으면 ClientType을 Group으로 설정
+    const clientType =
+      createReservationDto.totalPeople > 20
+        ? ClientType.Group
+        : ClientType.Individual;
+
     const reservation = await this.reservationRepository.save({
       ...createReservationDto,
       class: Class,
+      client_type: clientType,
     });
 
     return reservation;
@@ -71,6 +80,7 @@ export class ReservationService {
         'client_email',
         'client_name',
         'client_phonenumber',
+        'client_type',
         'etc',
         'date',
         'time',
@@ -96,6 +106,7 @@ export class ReservationService {
         'client_email',
         'client_name',
         'client_phonenumber',
+        'client_type',
         'etc',
         'date',
         'time',
@@ -116,9 +127,15 @@ export class ReservationService {
       throw new BadRequestException('해당 예약내역이 존재하지 않습니다.');
     }
 
+    // totalPeople이 20을 넘으면 ClientType을 Group으로 설정
+    const clientType =
+      updateReservationDto.totalPeople > 20
+        ? ClientType.Group
+        : ClientType.Individual;
+
     const updatedreservation = await this.reservationRepository.update(
       { id: reservationId },
-      { ...updateReservationDto },
+      { ...updateReservationDto, client_type: clientType },
     );
 
     return updatedreservation;
