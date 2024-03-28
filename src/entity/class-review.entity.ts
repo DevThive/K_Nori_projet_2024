@@ -37,6 +37,8 @@ export class ClassReview {
   @UpdateDateColumn({ type: 'timestamp', name: 'updated_at' })
   updatedAt: Date;
 
-  @ManyToOne(() => Class, (data) => data.classreview_content)
+  @ManyToOne(() => Class, (data) => data.classreview_content, {
+    onDelete: 'CASCADE',
+  })
   class: Relation<Class>;
 }

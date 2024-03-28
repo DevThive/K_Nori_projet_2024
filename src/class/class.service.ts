@@ -152,7 +152,7 @@ export class ClassService {
     }
     const classinfo = await this.classRepository.findOne({
       where: { id: classId },
-      select: ['title', 'photo', 'instructor', 'content', 'createdAt'],
+      select: ['title', 'photo', 'instructor', 'content', 'state', 'createdAt'],
     });
 
     return classinfo;

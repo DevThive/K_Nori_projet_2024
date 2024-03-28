@@ -168,4 +168,20 @@ export class ClassReviewService {
 
     return imageUrl;
   }
+
+  //클래스 자세히보기
+  async classReviewinfo(classReviewId: number) {
+    const classReview = await this.classRepository.findOne({
+      where: { id: classReviewId },
+    });
+    if (!classReview) {
+      throw new BadRequestException('해당 리뷰가 존재하지 않습니다.');
+    }
+    const classReviewinfo = await this.classReviewRepository.findOne({
+      where: { id: classReviewId },
+      select: ['title', 'class', 'photo', 'content', 'state', 'createdAt'],
+    });
+
+    return classReviewinfo;
+  }
 }

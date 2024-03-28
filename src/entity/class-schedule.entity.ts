@@ -26,6 +26,8 @@ export class ClassSchedule {
   @UpdateDateColumn({ type: 'timestamp', name: 'updated_at' })
   updatedAt: Date;
 
-  @ManyToOne(() => Class, (classes) => classes.classschedules_content)
+  @ManyToOne(() => Class, (classes) => classes.classschedules_content, {
+    onDelete: 'CASCADE',
+  })
   class: Relation<Class>;
 }

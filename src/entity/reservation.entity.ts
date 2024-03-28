@@ -24,7 +24,7 @@ export class Reservation {
   totalPeople: number;
 
   @Column()
-client_name: string;
+  client_name: string;
 
   @Column()
   client_email: string;
@@ -50,7 +50,9 @@ client_name: string;
   @UpdateDateColumn({ type: 'timestamp', name: 'updated_at' })
   updatedAt: Date;
 
-  @ManyToOne(() => Class, (data) => data.reservations_content)
+  @ManyToOne(() => Class, (data) => data.reservations_content, {
+    onDelete: 'CASCADE',
+  })
   class: Relation<Class>;
 
   // @ManyToOne(() => User, (user) => user.reservations_content)
