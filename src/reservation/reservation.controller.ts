@@ -35,7 +35,6 @@ export class ReservationController {
   }
 
   //유저 본인 클래스 예약 조회(유저)
-  @ApiBearerAuth('accessToken')
   @Get('/search/:phonenumber')
   async findclassbyphonenumber(@Param('phonenumber') phonenumber: string) {
     return await this.reservationService.findclassbyphonenumber(phonenumber);

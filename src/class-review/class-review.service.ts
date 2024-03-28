@@ -41,7 +41,7 @@ export class ClassReviewService {
     });
   }
 
-  //클래스리뷰 조회(유저)
+  //클래스리뷰 조회
   async findreviews() {
     const classReview = await this.classReviewRepository.find({
       where: { state: 0 },

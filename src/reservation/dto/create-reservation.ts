@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsDate, IsNumber, IsString, isNumber } from 'class-validator';
+import { IsDate, IsNumber, IsString, Min, isNumber } from 'class-validator';
 
 export class CreateReservationDto {
   // @IsDate()
@@ -12,6 +12,7 @@ export class CreateReservationDto {
 
   @IsNumber()
   @ApiProperty({ description: '총인원' })
+  @Min(1)
   totalPeople: number;
 
   @IsString()

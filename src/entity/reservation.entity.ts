@@ -8,6 +8,7 @@ import {
 } from 'typeorm';
 import { UpdateDateColumn } from 'typeorm';
 import { Class } from './class.entity';
+import { ClientType } from 'src/reservation/types/client-type';
 
 @Entity({
   name: 'reservation',
@@ -16,17 +17,14 @@ export class Reservation {
   @PrimaryGeneratedColumn()
   id: number;
 
-  // @Column()
-  // date: Date;
-
-  // @Column()
-  // time: string;
+  @Column()
+  client_type: ClientType;
 
   @Column()
   totalPeople: number;
 
   @Column()
-  client_name: string;
+client_name: string;
 
   @Column()
   client_email: string;
