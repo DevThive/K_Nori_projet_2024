@@ -11,7 +11,6 @@ import { CreateClassDto } from './dto/create-class';
 import { UpdateClassDto } from './dto/update-class';
 import { HideClassDto } from './dto/hide-class';
 import { v4 as uuidv4 } from 'uuid';
-import { AwsService } from 'src/aws/aws.service';
 import { Instructor } from 'src/entity/instructor.entity';
 @Injectable()
 export class ClassService {
@@ -30,10 +29,9 @@ export class ClassService {
       throw new BadRequestException('관리자만 조회가 가능합니다.');
     }
 
-    return await this.classRepository.find({
-      select: ['id', 'title', 'photo', 'instructor', 'content', 'createdAt'],
-    });
+    return await this.classRepository.find();
   }
+
   //클래스 리스트 조회(유저)
   async findclasses() {
     const instructors = await this.classRepository.find({
