@@ -18,11 +18,15 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { CreateInstructorDto } from './dto/create-instructor';
 import { UpdateInstructorDto } from './dto/update-instructor';
 import { HideInstructorDto } from './dto/hide-instructor';
+import { AwsService } from 'src/aws/aws.service';
 
 @ApiTags('강사')
 @Controller('instructor')
 export class InstructorController {
-  constructor(private readonly instructorService: InstructorService) {}
+  constructor(
+    private readonly instructorService: InstructorService,
+    private readonly awsService: AwsService,
+  ) {}
   //강사 리스트 조회(관리자)
   @ApiBearerAuth('accessToken')
   @UseGuards(accessTokenGuard)
@@ -71,7 +75,7 @@ export class InstructorController {
     @UserId() userId: number,
     @UploadedFile() file: Express.Multer.File,
   ) {
-    const url = await this.instructorService.imageUpload(file);
+    const url = await this.awsService.imageUpload(file);
     return await this.instructorService.addinstructor(
       createInstructorDto,
       userId,
@@ -113,7 +117,7 @@ export class InstructorController {
     @Param('instructorId') instructorId: number,
     @UploadedFile() file: Express.Multer.File,
   ) {
-    const url = await this.instructorService.imageUpload(file);
+    const url = await this.awsService.imageUpload(file);
     return await this.instructorService.updateinstructor(
       updateInstructorDto,
       userId,
@@ -147,5 +151,12 @@ export class InstructorController {
     @Param('instructorId') instructorId: number,
   ) {
     return await this.instructorService.deleteinstructor(userId, instructorId);
+  }
+
+  //강사 자세히보기
+
+  @Get(':instructorId')
+  async classinfo(@Param('instructorId') instructorId: number) {
+    return await this.instructorService.instructorinfo(instructorId);
   }
 }

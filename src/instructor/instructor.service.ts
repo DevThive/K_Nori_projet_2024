@@ -120,16 +120,39 @@ export class InstructorService {
     });
   }
 
-  async imageUpload(file: Express.Multer.File) {
-    const imageName = uuidv4(); // UUID로 이미지 이름 생성
-    const ext = file.originalname.split('.').pop();
+  //강사 자세히보기
+  async instructorinfo(instructorId: number) {
+    const instructor = await this.instructorRepository.findOne({
+      where: { id: instructorId },
+    });
+    if (!instructor) {
+      throw new BadRequestException('해당 강사가 존재하지 않습니다.');
+    }
+    const instructorinfo = await this.instructorRepository.findOne({
+      where: { id: instructorId },
+      select: [
+        'name',
+        'photo',
+        'introduction',
+        'state',
+        'class_content',
+        'createdAt',
+      ],
+    });
 
-    const imageUrl = await this.awsService.imageUploadToS3(
-      `${imageName}.${ext}`,
-      file,
-      ext,
-    );
-
-    return imageUrl;
+    return instructorinfo;
   }
+
+  // async imageUpload(file: Express.Multer.File) {
+  //   const imageName = uuidv4(); // UUID로 이미지 이름 생성
+  //   const ext = file.originalname.split('.').pop();
+
+  //   const imageUrl = await this.awsService.imageUploadToS3(
+  //     `${imageName}.${ext}`,
+  //     file,
+  //     ext,
+  //   );
+
+  //   return imageUrl;
+  // }
 }
