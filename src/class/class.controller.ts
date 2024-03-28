@@ -27,18 +27,20 @@ export class ClassController {
     private readonly awsService: AwsService,
     private readonly classService: ClassService,
   ) {}
+
+  //클래스 리스트 조회(유저)
+  @ApiBearerAuth('accessToken')
+  @Get('')
+  async findclasses() {
+    return await this.classService.findclasses();
+  }
+
   //클래스 리스트 조회(관리자)
   @ApiBearerAuth('accessToken')
   @UseGuards(accessTokenGuard)
   @Get('findallclasses')
   async findallclasses(@UserId() userId: number) {
     return await this.classService.findallclasses(userId);
-  }
-  //클래스 리스트 조회(유저)
-  @ApiBearerAuth('accessToken')
-  @Get('')
-  async findclasses() {
-    return await this.classService.findclasses();
   }
 
   //클래스 등록
