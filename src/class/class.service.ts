@@ -29,7 +29,9 @@ export class ClassService {
       throw new BadRequestException('관리자만 조회가 가능합니다.');
     }
 
-    return await this.classRepository.find();
+    const answer = await this.classRepository.find();
+
+    return answer;
   }
 
   //클래스 리스트 조회(유저)
