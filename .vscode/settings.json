@@ -1,3 +1,9 @@
 {
-  "cSpell.words": ["adminclasses", "findallclasses", "findallnotice"]
+  "cSpell.words": [
+    "adminclasses",
+    "classdelete",
+    "deleteclass",
+    "findallclasses",
+    "findallnotice"
+  ]
 }

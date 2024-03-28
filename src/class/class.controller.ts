@@ -165,7 +165,7 @@ export class ClassController {
   @ApiBearerAuth('accessToken')
   @UseGuards(accessTokenGuard)
   @Delete(':classId')
-  async deleteclass(
+  async classdelete(
     @UserId() userId: number,
     @Param('classId') classId: number,
   ) {
