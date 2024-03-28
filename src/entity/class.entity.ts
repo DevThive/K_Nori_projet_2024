@@ -47,12 +47,18 @@ export class Class {
   @ManyToOne(() => Instructor, (instructor) => instructor.class_content)
   instructor: Relation<Instructor>;
 
-  @OneToMany(() => Reservation, (reservations) => reservations.class)
+  @OneToMany(() => Reservation, (reservations) => reservations.class, {
+    cascade: true,
+  })
   reservations_content: Relation<Reservation>;
 
-  @OneToMany(() => ClassReview, (classreviews) => classreviews.class)
+  @OneToMany(() => ClassReview, (classreviews) => classreviews.class, {
+    cascade: true,
+  })
   classreview_content: Relation<ClassReview>;
 
-  @OneToMany(() => ClassSchedule, (classschedules) => classschedules.class)
+  @OneToMany(() => ClassSchedule, (classschedules) => classschedules.class, {
+    cascade: true,
+  })
   classschedules_content: Relation<ClassSchedule>;
 }
