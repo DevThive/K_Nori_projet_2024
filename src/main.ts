@@ -35,6 +35,7 @@ async function bootstrap() {
     origin: [
       `${process.env.FRONT_HOST}:${process.env.FRONT_PORT || 3000}`,
       process.env.FRONT_HOST,
+      'https://knori.or.kr',
       'http://localhost:3000',
     ],
     //origin: `${process.env.FRONT_HOST}:${process.env.FRONT_PORT || 3001}`,
