@@ -78,19 +78,17 @@ export class ClassController {
       },
     },
   })
-  @Post(':instructorId')
+  @Post('')
   @UseInterceptors(FileInterceptor('file'))
   @UseGuards(accessTokenGuard)
   async addclass(
     @Body() createClassDto: CreateClassDto,
-    @Param('instructorId') instructorId: number,
     @UserId() userId: number,
     @UploadedFile() file: Express.Multer.File,
   ) {
     const url = await this.awsService.imageUpload(file);
     return await this.classService.addclass(
       createClassDto,
-      instructorId,
       userId,
       url,
     );
