@@ -11,15 +11,12 @@ import { CreateClassDto } from './dto/create-class';
 import { UpdateClassDto } from './dto/update-class';
 import { HideClassDto } from './dto/hide-class';
 import { v4 as uuidv4 } from 'uuid';
-import { Instructor } from 'src/entity/instructor.entity';
 @Injectable()
 export class ClassService {
   constructor(
     private readonly userService: UsersService,
     @InjectRepository(Class)
     private classRepository: Repository<Class>,
-    @InjectRepository(Instructor)
-    private instructorRepository: Repository<Instructor>,
   ) {}
 
   //클래스 리스트 조회(관리자)
@@ -29,25 +26,24 @@ export class ClassService {
       throw new BadRequestException('관리자만 조회가 가능합니다.');
     }
 
-    const answer = await this.classRepository.find();
+    const allClassList = await this.classRepository.find();
 
-    return answer;
+    return allClassList;
   }
 
   //클래스 리스트 조회(유저)
   async findclasses() {
-    const instructors = await this.classRepository.find({
+    const classList = await this.classRepository.find({
       where: { state: 0 },
-      select: ['id', 'title', 'photo', 'instructor', 'content', 'createdAt'],
+      select: ['id', 'title', 'photo',  'content', 'createdAt'],
     });
 
-    return instructors;
+    return classList;
   }
 
   //클래스 등록
   async addclass(
     createClassDto: CreateClassDto,
-    instructorId: number,
     userId: number,
     url: string,
   ) {
@@ -55,16 +51,10 @@ export class ClassService {
     if (user.role !== 1) {
       throw new BadRequestException('관리자만 등록이 가능합니다.');
     }
-    const instructor = await this.instructorRepository.findOne({
-      where: { id: instructorId },
-    });
+    
 
-    if (!instructor) {
-      throw new NotFoundException('해당 강사가 없습니다.');
-    }
     const Class = await this.classRepository.save({
       ...createClassDto,
-      instructor: instructor,
       photo: url,
       user: user,
     });
@@ -90,11 +80,11 @@ export class ClassService {
       throw new BadRequestException('해당 클래스가 존재하지 않습니다.');
     }
 
-    const updatedinstructor = await this.classRepository.update(
+    const updatedClass = await this.classRepository.update(
       { id: classId },
       { ...updateClassDto, photo: url },
     );
-    return updatedinstructor;
+    return updatedClass;
   }
 
   //클래스 비공개 처리
@@ -152,7 +142,7 @@ export class ClassService {
     }
     const classinfo = await this.classRepository.findOne({
       where: { id: classId },
-      select: ['title', 'photo', 'instructor', 'content', 'state', 'createdAt'],
+      select: ['title', 'photo', 'content', 'state', 'createdAt'],
     });
 
     return classinfo;

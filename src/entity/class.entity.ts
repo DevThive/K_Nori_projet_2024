@@ -8,7 +8,7 @@ import {
   Relation,
   OneToMany,
 } from 'typeorm';
-import { Instructor } from './instructor.entity';
+// import { Instructor } from './instructor.entity';
 import { Reservation } from './reservation.entity';
 import { ClassReview } from './class-review.entity';
 import { ClassSchedule } from './class-schedule.entity';
@@ -44,8 +44,8 @@ export class Class {
   @UpdateDateColumn({ type: 'timestamp', name: 'updated_at' })
   updatedAt: Date;
 
-  @ManyToOne(() => Instructor, (instructor) => instructor.class_content)
-  instructor: Relation<Instructor>;
+  // @ManyToOne(() => Instructor, (instructor) => instructor.class_content)
+  // instructor: Relation<Instructor>;
 
   @OneToMany(() => Reservation, (reservations) => reservations.class, {
     cascade: true,

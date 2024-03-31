@@ -12,7 +12,7 @@ import { NoticeModule } from './notice/notice.module';
 import { ReservationModule } from './reservation/reservation.module';
 import { GalleryModule } from './gallery/gallery.module';
 import { ClassModule } from './class/class.module';
-import { InstructorModule } from './instructor/instructor.module';
+// import { InstructorModule } from './instructor/instructor.module';
 import { AwsService } from './aws/aws.service';
 import { AwsModule } from './aws/aws.module';
 import { ClassReviewModule } from './class-review/class-review.module';
@@ -33,7 +33,7 @@ import { ClassScheduleModule } from './class-schedule/class-schedule.module';
     ReservationModule,
     GalleryModule,
     ClassModule,
-    InstructorModule,
+    // InstructorModule,
     AwsModule,
     ClassReviewModule,
     ContactModule,
