@@ -15,7 +15,7 @@ import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { ClassService } from './class.service';
 import { accessTokenGuard } from 'src/auth/guard/access-token.guard';
 import { UserId } from 'src/auth/decorators/userId.decorator';
-import { FileInterceptor } from '@nestjs/platform-express';
+import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { CreateClassDto } from './dto/create-class';
 import { UpdateClassDto } from './dto/update-class';
 import { HideClassDto } from './dto/hide-class';
@@ -80,7 +80,7 @@ export class ClassController {
     },
   })
   @Post('')
-  @UseInterceptors(FileInterceptor('file'))
+  @UseInterceptors(FilesInterceptor('files', 5))
   @UseGuards(accessTokenGuard)
   async addclass(
     @Body() createClassDto: CreateClassDto,
