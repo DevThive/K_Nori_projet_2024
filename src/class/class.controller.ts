@@ -7,6 +7,7 @@ import {
   Post,
   Put,
   UploadedFile,
+  UploadedFiles,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
@@ -84,14 +85,12 @@ export class ClassController {
   async addclass(
     @Body() createClassDto: CreateClassDto,
     @UserId() userId: number,
-    @UploadedFile() file: Express.Multer.File,
+    @UploadedFiles() files: Express.Multer.File[],
   ) {
-    const url = await this.awsService.imageUpload(file);
-    return await this.classService.addclass(
-      createClassDto,
-      userId,
-      url,
+    const urls = await Promise.all(
+      files.map(async (file) => await this.awsService.imageUpload(file)),
     );
+    return await this.classService.addclass(createClassDto, userId, urls);
   }
 
   //클래스 수정
