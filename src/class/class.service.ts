@@ -42,11 +42,7 @@ export class ClassService {
   }
 
   //클래스 등록
-  async addclass(
-    createClassDto: CreateClassDto,
-    userId: number,
-    url: string[],
-  ) {
+  async addclass(createClassDto: CreateClassDto, userId: number, url: string) {
     const user = await this.userService.findUserById(userId);
     if (user.role !== 1) {
       throw new BadRequestException('관리자만 등록이 가능합니다.');
