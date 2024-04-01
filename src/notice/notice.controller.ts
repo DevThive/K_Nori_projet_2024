@@ -18,7 +18,7 @@ import { accessTokenGuard } from 'src/auth/guard/access-token.guard';
 import { UserId } from 'src/auth/decorators/userId.decorator';
 import { UpdateNoticeDto } from './dto/update-notice';
 import { HideNoticeDto } from './dto/hide-notice';
-import { FilesInterceptor } from '@nestjs/platform-express';
+import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { AwsService } from 'src/aws/aws.service';
 
 @ApiTags('게시글&공지사항')
