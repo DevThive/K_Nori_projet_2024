@@ -7,7 +7,6 @@ import {
   Post,
   Put,
   UploadedFile,
-  UploadedFiles,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
@@ -15,7 +14,7 @@ import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { ClassService } from './class.service';
 import { accessTokenGuard } from 'src/auth/guard/access-token.guard';
 import { UserId } from 'src/auth/decorators/userId.decorator';
-import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { CreateClassDto } from './dto/create-class';
 import { UpdateClassDto } from './dto/update-class';
 import { HideClassDto } from './dto/hide-class';
@@ -80,17 +79,15 @@ export class ClassController {
     },
   })
   @Post('')
-  @UseInterceptors(FilesInterceptor('files', 5))
+  @UseInterceptors(FileInterceptor('file'))
   @UseGuards(accessTokenGuard)
   async addclass(
     @Body() createClassDto: CreateClassDto,
     @UserId() userId: number,
-    @UploadedFiles() files: Express.Multer.File[],
+    @UploadedFile() file: Express.Multer.File,
   ) {
-    const urls = await Promise.all(
-      files.map(async (file) => await this.awsService.imageUpload(file)),
-    );
-    return await this.classService.addclass(createClassDto, userId, urls);
+    const url = await this.awsService.imageUpload(file);
+    return await this.classService.addclass(createClassDto, userId, url);
   }
 
   //클래스 수정

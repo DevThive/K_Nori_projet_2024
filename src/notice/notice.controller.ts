@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Post,
+  UploadedFile,
   UploadedFiles,
   UseGuards,
   UseInterceptors,
@@ -57,21 +58,15 @@ export class NoticeController {
     },
   })
   @Post()
-  @UseInterceptors(FilesInterceptor('files', 5))
+  @UseInterceptors(FileInterceptor('file'))
   @UseGuards(accessTokenGuard)
   async writenotice(
     @Body() createNoticedto: CreateNoticeDto,
     @UserId() user_id: number,
-    @UploadedFiles() files: Express.Multer.File[],
+    @UploadedFile() file: Express.Multer.File,
   ) {
-    const urls = await Promise.all(
-      files.map(async (file) => await this.awsService.imageUpload(file)),
-    );
-    return await this.noticeService.writennotice(
-      createNoticedto,
-      user_id,
-      urls,
-    );
+    const url = await this.awsService.imageUpload(file);
+    return await this.noticeService.writennotice(createNoticedto, user_id, url);
   }
 
   //공지사항 전체 조회(관리자)
