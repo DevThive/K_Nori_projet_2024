@@ -19,7 +19,7 @@ export class NoticeService {
   async writennotice(
     createNoticedto: CreateNoticeDto,
     userId: number,
-    urls: string[],
+    url: string,
   ) {
     const user = await this.userService.findUserById(userId);
 
@@ -29,7 +29,7 @@ export class NoticeService {
 
     const createnotice = await this.noticesRepository.save({
       ...createNoticedto,
-      photo: JSON.stringify(urls),
+      photo: JSON.stringify(url),
       user: user,
     });
 
