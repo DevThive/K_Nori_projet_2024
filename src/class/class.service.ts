@@ -64,8 +64,7 @@ export class ClassService {
     url: string,
   ) {
     const user = await this.userService.findUserById(userId);
-    console.log('user', user);
-    console.log('user.role ', user.role);
+
     if (user.role !== 1) {
       throw new BadRequestException('관리자만 수정이 가능합니다.');
     }
@@ -73,13 +72,21 @@ export class ClassService {
     const Class = this.findclassbyid(classId);
     if (!Class) {
       throw new BadRequestException('해당 클래스가 존재하지 않습니다.');
-    }
+    } else {
+      let schedules = (await Class).class_schedules || [];
 
-    const updatedClass = await this.classRepository.update(
-      { id: classId },
-      { ...updateClassDto, photo: url },
-    );
-    return updatedClass;
+      schedules = schedules + ',' + updateClassDto.schedules;
+
+      const updatedClass = await this.classRepository.update(
+        { id: classId },
+        {
+          ...updateClassDto,
+          photo: url,
+          class_schedules: JSON.stringify(schedules),
+        },
+      );
+      return updatedClass;
+    }
   }
 
   //클래스 비공개 처리
