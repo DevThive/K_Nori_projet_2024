@@ -11,7 +11,7 @@ import {
 // import { Instructor } from './instructor.entity';
 import { Reservation } from './reservation.entity';
 import { ClassReview } from './class-review.entity';
-import { ClassSchedule } from './class-schedule.entity';
+// import { ClassSchedule } from './class-schedule.entity';
 
 @Entity({
   name: 'classes',
@@ -31,6 +31,12 @@ export class Class {
 
   @Column()
   state: number;
+
+  @Column({ nullable: true })
+  class_schedules: string;
+
+  @Column()
+  time: string;
 
   // @Column({ type: 'time' })
   // time: Date;
@@ -57,8 +63,8 @@ export class Class {
   })
   classreview_content: Relation<ClassReview>;
 
-  @OneToMany(() => ClassSchedule, (classschedules) => classschedules.class, {
-    cascade: true,
-  })
-  classschedules_content: Relation<ClassSchedule>;
+  // @OneToMany(() => ClassSchedule, (classschedules) => classschedules.class, {
+  //   cascade: true,
+  // })
+  // classschedules_content: Relation<ClassSchedule>;
 }
