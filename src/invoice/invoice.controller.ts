@@ -17,21 +17,21 @@ import { UserId } from 'src/auth/decorators/userId.decorator';
 export class InvoiceController {
   constructor(private readonly invoiceService: InvoiceService) {}
 
-  // @ApiBearerAuth('accessToken')
-  // @UseGuards(accessTokenGuard)
-  // @Get('invoicelist')
-  // async invoicelist(@UserId() userId: number) {
-  //   return await this.invoiceService.invoicelist(userId);
-  // }
+  @ApiBearerAuth('accessToken')
+  @UseGuards(accessTokenGuard)
+  @Get('invoicelist')
+  async invoicelist(@UserId() userId: number) {
+    return await this.invoiceService.invoicelist(userId);
+  }
 
-  // @ApiBearerAuth('accessToken')
-  // @Post('invoice/:invoiceId')
-  // async addinvoice(
-  //   @UserId() userId: number,
-  //   @Param('invoiceId') invoiceId: number,
-  // ) {
-  //   return await this.invoiceService.addinvoice(userId, invoiceId);
-  // }
+  //   @ApiBearerAuth('accessToken')
+  //   @Post('invoice/:invoiceId')
+  //   async addinvoice(
+  //     @UserId() userId: number,
+  //     @Param('invoiceId') invoiceId: number,
+  //   ) {
+  //     return await this.invoiceService.addinvoice(userId, invoiceId);
+  //   }
 
   // @ApiBearerAuth('accessToken')
   // @Delete('delete/:invoiceId')
