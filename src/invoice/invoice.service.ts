@@ -20,15 +20,46 @@ export class InvoiceService {
     }
   }
 
-  async invoicelist(userId: number) {
-    const user = await this.userService.findUserById(userId);
+  async getInvoices(
+    userid: number,
+    queryParams: {
+      q: string;
+      status: string;
+      dates: string[];
+    },
+  ): Promise<Invoice[]> {
+    const { q = '', status = '', dates = [] } = queryParams;
+    const queryLowered = q.toLowerCase();
+
+    const queryBuilder = this.InvoiceRepository.createQueryBuilder('invoice');
+
+    const user = await this.userService.findUserById(userid);
 
     if (user.role !== 1) {
       throw new BadRequestException('관리자만 작성이 가능합니다.');
     }
 
-    const invoice = await this.InvoiceRepository.find();
+    if (dates.length) {
+      const [start, end] = dates;
+      queryBuilder.andWhere('invoice.issuedDate BETWEEN :start AND :end', {
+        start,
+        end,
+      });
+    }
 
-    return invoice;
+    if (q) {
+      queryBuilder.andWhere(
+        '(LOWER(invoice.companyEmail) LIKE :queryLowered OR LOWER(invoice.name) LIKE :queryLowered OR CAST(invoice.id AS TEXT) LIKE :queryLowered OR CAST(invoice.total AS TEXT) LIKE :queryLowered OR CAST(invoice.balance AS TEXT) LIKE :queryLowered OR LOWER(invoice.dueDate) LIKE :queryLowered)',
+        { queryLowered: `%${queryLowered}%` },
+      );
+    }
+
+    if (status) {
+      queryBuilder.andWhere('LOWER(invoice.invoiceStatus) = LOWER(:status)', {
+        status,
+      });
+    }
+
+    return queryBuilder.getMany();
   }
 }
