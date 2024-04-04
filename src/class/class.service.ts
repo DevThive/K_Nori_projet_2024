@@ -11,6 +11,7 @@ import { CreateClassDto } from './dto/create-class';
 import { UpdateClassDto } from './dto/update-class';
 import { HideClassDto } from './dto/hide-class';
 import { v4 as uuidv4 } from 'uuid';
+import { UpdateClassScheduleDto } from './dto/update-schedule';
 @Injectable()
 export class ClassService {
   constructor(
@@ -50,7 +51,7 @@ export class ClassService {
 
     const Class = await this.classRepository.save({
       ...createClassDto,
-      photo: JSON.stringify(url),
+      photo: url,
       user: user,
     });
     return Class;
@@ -80,6 +81,36 @@ export class ClassService {
       { ...updateClassDto, photo: url },
     );
     return updatedClass;
+  }
+
+  //클래스 스케줄 수정
+  async updateclassschedules(
+    updateClassScheduleDto: UpdateClassScheduleDto,
+    userId: number,
+  ) {
+    const { classId, class_schedules } = updateClassScheduleDto; // classId와 업데이트할 스케줄 데이터를 추출합니다.
+    const user = await this.userService.findUserById(userId);
+
+    if (user.role !== 1) {
+      throw new BadRequestException('관리자만 수정이 가능합니다.');
+    }
+
+    const classUpdate = await this.findclassbyid(classId); // 업데이트할 클래스 객체를 찾습니다.
+
+    if (!classUpdate) {
+      throw new BadRequestException('해당 클래스가 존재하지 않습니다.');
+    }
+
+    classUpdate.class_schedules = class_schedules.join(',');
+
+    return await this.classRepository.update(
+      {
+        id: updateClassScheduleDto.classId,
+      },
+      {
+        class_schedules: classUpdate.class_schedules,
+      },
+    );
   }
 
   //클래스 비공개 처리
@@ -114,19 +145,6 @@ export class ClassService {
     });
   }
 
-  // async imageUpload(file: Express.Multer.File) {
-  //   const imageName = uuidv4(); // UUID로 이미지 이름 생성
-  //   const ext = file.originalname.split('.').pop();
-
-  //   const imageUrl = await this.awsService.imageUploadToS3(
-  //     `${imageName}.${ext}`,
-  //     file,
-  //     ext,
-  //   );
-
-  //   return imageUrl;
-  // }
-
   //클래스 자세히보기
   async classinfo(classId: number) {
     const Class = await this.classRepository.findOne({
@@ -137,7 +155,6 @@ export class ClassService {
     }
     const classinfo = await this.classRepository.findOne({
       where: { id: classId },
-      select: ['title', 'photo', 'content', 'state', 'createdAt'],
     });
 
     return classinfo;

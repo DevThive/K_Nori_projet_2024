@@ -14,6 +14,10 @@ export class CreateClassDto {
   @ApiProperty({ description: '내용' })
   content: string;
 
+  @IsString()
+  @ApiProperty({ description: '소요시간' })
+  time: string;
+
   // @IsString()
   // @ApiProperty({
   //   description: '시간',

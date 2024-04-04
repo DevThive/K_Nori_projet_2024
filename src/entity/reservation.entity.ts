@@ -5,10 +5,13 @@ import {
   Relation,
   ManyToOne,
   Column,
+  OneToOne,
+  JoinColumn,
 } from 'typeorm';
 import { UpdateDateColumn } from 'typeorm';
 import { Class } from './class.entity';
 import { ClientType } from 'src/reservation/types/client-type';
+import { Invoice } from './invoice.entity';
 
 @Entity({
   name: 'reservation',
@@ -54,6 +57,12 @@ export class Reservation {
     onDelete: 'CASCADE',
   })
   class: Relation<Class>;
+
+  @OneToOne(() => Invoice, (invoice) => invoice.reservation, {
+    // cascade: true,
+  })
+  @JoinColumn()
+  invoice: Relation<Invoice>;
 
   // @ManyToOne(() => User, (user) => user.reservations_content)
   // user: Relation<User>;

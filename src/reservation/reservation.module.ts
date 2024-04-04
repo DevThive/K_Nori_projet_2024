@@ -6,9 +6,10 @@ import { Reservation } from 'src/entity/reservation.entity';
 import { UsersService } from 'src/users/users.service';
 import { Class } from 'src/entity/class.entity';
 import { User } from 'src/entity/user.entity';
+import { Invoice } from 'src/entity/invoice.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Reservation, Class, User])],
+  imports: [TypeOrmModule.forFeature([Reservation, Class, User, Invoice])],
   controllers: [ReservationController],
   providers: [ReservationService, UsersService],
 })
