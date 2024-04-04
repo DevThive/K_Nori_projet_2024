@@ -56,6 +56,7 @@ export class ReservationService {
 
     const invoiceData = {
       issuedDate: new Date(),
+      address: '경기도 양주시 기산로 548',
       company: '(재)케이놀이문화재단',
       companyEmail: 'knori2024@gmail.com',
       contact: createReservationDto.client_phonenumber,
