@@ -64,8 +64,10 @@ export class ReservationService {
       name: createReservationDto.client_name,
       service: Class.title,
     };
-    const invoice = await this.invoiceRepository.create(invoiceData);
-    invoice.reservation = reservation;
+
+    const invoice = this.invoiceRepository.create(invoiceData);
+    invoice.reservation = reservation; // Reservation과의 관계 설정
+
     await this.invoiceRepository.save(invoice);
 
     const calendarData = {
