@@ -19,6 +19,7 @@ import { ClassReviewModule } from './class-review/class-review.module';
 import { ContactService } from './contact/contact.service';
 import { ContactModule } from './contact/contact.module';
 // import { ClassScheduleModule } from './class-schedule/class-schedule.module';
+import { InvoiceModule } from './invoice/invoice.module';
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { ContactModule } from './contact/contact.module';
     AwsModule,
     ClassReviewModule,
     ContactModule,
+    InvoiceModule,
     // ClassScheduleModule,
   ],
   controllers: [AppController],
