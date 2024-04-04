@@ -38,20 +38,11 @@ export class Class {
   @Column()
   time: string;
 
-  // @Column({ type: 'time' })
-  // time: Date;
-
-  // @Column({ type: 'date' })
-  // date: Date;
-
   @CreateDateColumn({ type: 'timestamp', name: 'created_at' })
   createdAt: Date;
 
   @UpdateDateColumn({ type: 'timestamp', name: 'updated_at' })
   updatedAt: Date;
-
-  // @ManyToOne(() => Instructor, (instructor) => instructor.class_content)
-  // instructor: Relation<Instructor>;
 
   @OneToMany(() => Reservation, (reservations) => reservations.class, {
     cascade: true,
@@ -67,4 +58,7 @@ export class Class {
   //   cascade: true,
   // })
   // classschedules_content: Relation<ClassSchedule>;
+
+  // @ManyToOne(() => Instructor, (instructor) => instructor.class_content)
+  // instructor: Relation<Instructor>;
 }
