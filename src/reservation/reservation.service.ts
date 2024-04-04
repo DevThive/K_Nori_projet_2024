@@ -16,6 +16,7 @@ import * as bcrypt from 'bcrypt';
 import { UpdateReservationDto } from './dto/update-reservation';
 import { Class } from 'src/entity/class.entity';
 import { ClientType } from './types/client-type';
+import { Invoice } from 'src/entity/invoice.entity';
 
 @Injectable()
 export class ReservationService {
@@ -25,6 +26,8 @@ export class ReservationService {
     private reservationRepository: Repository<Reservation>,
     @InjectRepository(Class)
     private classRepository: Repository<Class>,
+    @InjectRepository(Invoice)
+    private readonly invoiceRepository: Repository<Invoice>,
   ) {}
 
   //클래스 예약
@@ -50,6 +53,18 @@ export class ReservationService {
       class: Class,
       client_type: clientType,
     });
+
+    const invoiceData = {
+      issuedDate: new Date(),
+      company: '(재)케이놀이문화재단',
+      companyEmail: 'knori2024@gmail.com',
+      contact: createReservationDto.client_phonenumber,
+      name: createReservationDto.client_name,
+      service: Class.title,
+    };
+    const invoice = await this.invoiceRepository.create(invoiceData);
+    invoice.reservation = reservation; // Reservation과의 관계 설정
+    await this.invoiceRepository.save(invoice);
 
     return reservation;
   }
