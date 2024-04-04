@@ -12,6 +12,7 @@ import { UpdateDateColumn } from 'typeorm';
 import { Class } from './class.entity';
 import { ClientType } from 'src/reservation/types/client-type';
 import { Invoice } from './invoice.entity';
+import { Calendar } from './calendar.entity';
 
 @Entity({
   name: 'reservation',
@@ -63,6 +64,12 @@ export class Reservation {
   })
   @JoinColumn()
   invoice: Relation<Invoice>;
+
+  @OneToOne(() => Calendar, (calendar) => calendar.reservation, {
+    // cascade: true,
+  })
+  @JoinColumn()
+  calendar: Relation<Calendar>;
 
   // @ManyToOne(() => User, (user) => user.reservations_content)
   // user: Relation<User>;

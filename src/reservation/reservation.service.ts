@@ -17,6 +17,7 @@ import { UpdateReservationDto } from './dto/update-reservation';
 import { Class } from 'src/entity/class.entity';
 import { ClientType } from './types/client-type';
 import { Invoice } from 'src/entity/invoice.entity';
+import { Calendar } from 'src/entity/calendar.entity';
 
 @Injectable()
 export class ReservationService {
@@ -28,6 +29,8 @@ export class ReservationService {
     private classRepository: Repository<Class>,
     @InjectRepository(Invoice)
     private readonly invoiceRepository: Repository<Invoice>,
+    @InjectRepository(Calendar)
+    private readonly calendarRepository: Repository<Calendar>,
   ) {}
 
   //클래스 예약
@@ -56,16 +59,27 @@ export class ReservationService {
 
     const invoiceData = {
       issuedDate: new Date(),
-      address: '경기도 양주시 기산로 548',
-      company: '(재)케이놀이문화재단',
-      companyEmail: 'knori2024@gmail.com',
+      companyEmail: createReservationDto.client_email,
       contact: createReservationDto.client_phonenumber,
       name: createReservationDto.client_name,
       service: Class.title,
     };
+
     const invoice = this.invoiceRepository.create(invoiceData);
     invoice.reservation = reservation; // Reservation과의 관계 설정
+
     await this.invoiceRepository.save(invoice);
+
+    const calendarData = {
+      title: Class.title,
+      caledartype: 0,
+      startdate: createReservationDto.date,
+      enddate: createReservationDto.date,
+      allday: Class.time === '풀타임' ? true : false,
+    };
+    const calendar = await this.calendarRepository.create(calendarData);
+    calendar.reservation = reservation;
+    await this.calendarRepository.save(calendar);
 
     return reservation;
   }
