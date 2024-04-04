@@ -10,37 +10,32 @@ import {
 } from 'typeorm';
 // import { Instructor } from './instructor.entity';
 import { Reservation } from './reservation.entity';
+import { CalendarType } from 'src/calendar/types/calendar-type';
 
 @Entity({
-  name: 'invoices',
+  name: 'calendars',
 })
-export class Invoice {
+export class Calendar {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  issuedDate: Date;
-
-  @Column()
-  address: string;
-
-  @Column()
-  company: string;
-
-  @Column()
-  companyEmail: string;
-
-  @Column()
-  contact: string;
-
-  @Column()
-  name: string;
-
-  @Column()
-  service: string;
+  @Column({ nullable: true })
+  title: string;
 
   @Column({ nullable: true })
-  dueDate: string;
+  caledartype: CalendarType;
+
+  @Column({ nullable: true })
+  startdate: string;
+
+  @Column({ nullable: true })
+  enddate: string;
+
+  @Column({ nullable: true })
+  content: string;
+
+  @Column({ nullable: true })
+  allday: boolean;
 
   @CreateDateColumn({ type: 'timestamp', name: 'created_at' })
   createdAt: Date;
@@ -48,7 +43,7 @@ export class Invoice {
   @UpdateDateColumn({ type: 'timestamp', name: 'updated_at' })
   updatedAt: Date;
 
-  @OneToOne(() => Reservation, (reservation) => reservation.invoice, {
+  @OneToOne(() => Reservation, (reservation) => reservation.calendar, {
     // onDelete: 'CASCADE',
   })
   reservation: Relation<Reservation>;
