@@ -23,6 +23,12 @@ export class InvoiceController {
   // async invoicelist(@UserId() userId: number) {
   //   return await this.invoiceService.invoicelist(userId);
   // }
+  @ApiBearerAuth('accessToken')
+  @UseGuards(accessTokenGuard)
+  @Get('')
+  async invoicelist(@UserId() userId: number) {
+    return await this.invoiceService.invoicelist(userId);
+  }
 
   // @ApiBearerAuth('accessToken')
   // @Post('invoice/:invoiceId')

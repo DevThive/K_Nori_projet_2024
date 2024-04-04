@@ -20,6 +20,7 @@ import { ContactService } from './contact/contact.service';
 import { ContactModule } from './contact/contact.module';
 // import { ClassScheduleModule } from './class-schedule/class-schedule.module';
 import { InvoiceModule } from './invoice/invoice.module';
+import { InvoiceItemModule } from './invoice-item/invoice-item.module';
 
 @Module({
   imports: [
@@ -39,6 +40,7 @@ import { InvoiceModule } from './invoice/invoice.module';
     ClassReviewModule,
     ContactModule,
     InvoiceModule,
+    InvoiceItemModule,
     // ClassScheduleModule,
   ],
   controllers: [AppController],
