@@ -5,6 +5,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
@@ -20,8 +21,12 @@ export class InvoiceController {
   @ApiBearerAuth('accessToken')
   @UseGuards(accessTokenGuard)
   @Get('invoicelist')
-  async invoicelist(@UserId() userId: number) {
-    return await this.invoiceService.invoicelist(userId);
+  async invoicelist(@UserId() userId: number, @Query() query) {
+    return await this.invoiceService.getInvoices(userId, {
+      q: query.q || '',
+      status: query.status || '',
+      dates: query.dates || [],
+    });
   }
 
   //   @ApiBearerAuth('accessToken')
