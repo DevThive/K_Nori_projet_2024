@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  Patch,
   Post,
   Put,
   UploadedFile,
@@ -19,6 +20,7 @@ import { CreateClassDto } from './dto/create-class';
 import { UpdateClassDto } from './dto/update-class';
 import { HideClassDto } from './dto/hide-class';
 import { AwsService } from 'src/aws/aws.service';
+import { UpdateClassScheduleDto } from './dto/update-schedule';
 
 @ApiTags('클래스')
 @Controller('class')
@@ -64,6 +66,10 @@ export class ClassController {
         content: {
           type: 'string',
           description: 'The content of the class.',
+        },
+        time: {
+          type: 'string',
+          description: 'The time of the class.',
         },
         // time: {
         //   type: 'string',
@@ -112,23 +118,21 @@ export class ClassController {
           type: 'string',
           description: 'The content of the class.',
         },
-        // time: {
-        //   type: 'string',
-        //   format: 'time',
-        //   description: 'Time of the class.',
-        // },
-        // date: {
-        //   type: 'string',
-        //   format: 'date',
-        //   description: 'Date of the class.',
-        // },
+        time: {
+          type: 'string',
+          description: 'The time of the class.',
+        },
+        schedules: {
+          type: 'string',
+          description: 'The schedules of the class.',
+        },
       },
     },
   })
   @Put(':classId')
   @UseInterceptors(FileInterceptor('file'))
   @UseGuards(accessTokenGuard)
-  async updatereservation(
+  async updateclass(
     @Body() updateClassDto: UpdateClassDto,
     @UserId() userId: number,
     @Param('classId') classId: number,
@@ -140,6 +144,43 @@ export class ClassController {
       userId,
       classId,
       url,
+    );
+  }
+
+  //클래스 스케줄 수정
+  @ApiBearerAuth('accessToken')
+  // @ApiBody({
+  //   description: 'Upload class with schedule array.',
+  //   type: 'multipart/form-data',
+  //   schema: {
+  //     type: 'object',
+  //     properties: {
+  //       files: {
+  //         type: 'array',
+  //         items: {
+  //           type: 'string',
+  //           format: 'binary',
+  //           description: '클래스 스케줄 배열',
+  //         },
+  //       },
+  //       classId: {
+  //         type: 'string',
+  //         description: 'The classId of the class.',
+  //       },
+  //     },
+  //   },
+  // })
+  @Patch('updateschedule')
+  @UseInterceptors(FileInterceptor('file'))
+  @UseGuards(accessTokenGuard)
+  async updateclassschedules(
+    @Body() updateClassScheduleDto: UpdateClassScheduleDto,
+
+    @UserId() userId: number,
+  ) {
+    return await this.classService.updateclassschedules(
+      updateClassScheduleDto,
+      userId,
     );
   }
 
