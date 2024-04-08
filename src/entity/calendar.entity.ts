@@ -19,23 +19,26 @@ export class Calendar {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ nullable: true })
+  @Column()
   title: string;
 
-  @Column({ nullable: true })
-  caledartype: CalendarType;
+  @Column()
+  calendartype: CalendarType;
 
-  @Column({ nullable: true })
-  startdate: string;
+  @Column()
+  startdate: Date;
 
-  @Column({ nullable: true })
-  enddate: string;
+  @Column()
+  enddate: Date;
 
-  @Column({ nullable: true })
+  @Column()
   content: string;
 
-  @Column({ nullable: true })
+  @Column()
   allday: boolean;
+
+  @Column()
+  state: number;
 
   @CreateDateColumn({ type: 'timestamp', name: 'created_at' })
   createdAt: Date;
