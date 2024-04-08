@@ -10,6 +10,7 @@ import {
 } from 'typeorm';
 // import { Instructor } from './instructor.entity';
 import { Reservation } from './reservation.entity';
+import { PayMethod } from 'src/invoice/types/pay-method.type';
 
 @Entity({
   name: 'invoices',
@@ -38,6 +39,15 @@ export class Invoice {
 
   @Column()
   service: string;
+
+  @Column()
+  note: string;
+
+  @Column()
+  totalPeople: number;
+
+  @Column({ default: 0 })
+  payMethod: PayMethod;
 
   @Column({ nullable: true })
   dueDate: string;
