@@ -38,8 +38,8 @@ export class InvoiceController {
     };
   }
 
-  @ApiBearerAuth('accessToken')
-  @UseGuards(accessTokenGuard)
+  // @ApiBearerAuth('accessToken')
+  // @UseGuards(accessTokenGuard)
   @Get('/:invoiceId')
   async detailinvoice(
     @UserId() userId: number,
