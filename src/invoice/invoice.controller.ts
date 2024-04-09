@@ -1,4 +1,5 @@
 import {
+  Body,
   Controller,
   Delete,
   Get,
@@ -12,6 +13,8 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { InvoiceService } from './invoice.service';
 import { accessTokenGuard } from 'src/auth/guard/access-token.guard';
 import { UserId } from 'src/auth/decorators/userId.decorator';
+import { CreateInvoiceDto } from './dto/create-invoice';
+import { UpdateInvoiceDto } from './dto/update-invoice';
 
 @ApiTags('송장')
 @Controller('invoice')
@@ -35,8 +38,8 @@ export class InvoiceController {
     };
   }
 
-  // @ApiBearerAuth('accessToken')
-  // @UseGuards(accessTokenGuard)
+  @ApiBearerAuth('accessToken')
+  @UseGuards(accessTokenGuard)
   @Get('/:invoiceId')
   async detailinvoice(
     @UserId() userId: number,
@@ -45,30 +48,38 @@ export class InvoiceController {
     return await this.invoiceService.invoiceDetail(userId, invoiceId);
   }
 
-  //   @ApiBearerAuth('accessToken')
-  //   @Post('/:invoiceId')
-  //   async addinvoice(
-  //     @UserId() userId: number,
-  //     @Param('invoiceId') invoiceId: number,
-  //   ) {
-  //     return await this.invoiceService.addinvoice(userId, invoiceId);
-  //   }
+  @ApiBearerAuth('accessToken')
+  @UseGuards(accessTokenGuard)
+  @Post('')
+  async addinvoice(
+    @Body() createInvoiceDto: CreateInvoiceDto,
+    @UserId() userId: number,
+  ) {
+    return await this.invoiceService.addinvoice(createInvoiceDto, userId);
+  }
 
-  // @ApiBearerAuth('accessToken')
-  // @Delete('delete/:invoiceId')
-  // async deleteinvoice(
-  //   @UserId() userId: number,
-  //   @Param('invoiceId') invoiceId: number,
-  // ) {
-  //   return await this.invoiceService.deleteinvoice(userId, invoiceId);
-  // }
+  @ApiBearerAuth('accessToken')
+  @UseGuards(accessTokenGuard)
+  @Put(':invoiceId')
+  async updateinvoice(
+    @Body() updateInvoiceDto: UpdateInvoiceDto,
+    @UserId() userId: number,
+    @Param('invoiceId') invoiceId: number,
+  ) {
+    return await this.invoiceService.updateinvoice(
+      updateInvoiceDto,
+      userId,
+      invoiceId,
+    );
+  }
 
-  // @ApiBearerAuth('accessToken')
-  // @Put('invoice/:invoiceId')
-  // async updateinvoice(
-  //   @UserId() userId: number,
-  //   @Param('invoiceId') invoiceId: number,
-  // ) {
-  //   return await this.invoiceService.updateinvoice(userId, invoiceId);
-  // }
+  @ApiBearerAuth('accessToken')
+  @UseGuards(accessTokenGuard)
+  @Delete(':invoiceId')
+  async deleteinvoice(
+    @UserId() userId: number,
+    @Param('invoiceId') invoiceId: number,
+  ) {
+    return await this.invoiceService.deleteinvoice(userId, invoiceId);
+  }
 }
