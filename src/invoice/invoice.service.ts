@@ -3,6 +3,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Invoice } from 'src/entity/invoice.entity';
 import { UsersService } from 'src/users/users.service';
 import { Repository } from 'typeorm';
+import { CreateInvoiceDto } from './dto/create-invoice';
+import { UpdateInvoiceDto } from './dto/update-invoice';
 
 @Injectable()
 export class InvoiceService {
@@ -12,12 +14,18 @@ export class InvoiceService {
     private InvoiceRepository: Repository<Invoice>,
   ) {}
   //생성
-  async addinvoice(userId: number) {
+  async addinvoice(createInvoiceDto: CreateInvoiceDto, userId: number) {
     const user = await this.userService.findUserById(userId);
 
     if (user.role !== 1) {
       throw new BadRequestException('관리자만 작성이 가능합니다.');
     }
+
+    const invoice = await this.InvoiceRepository.save({
+      ...createInvoiceDto,
+    });
+
+    return invoice;
   }
 
   async getInvoices(
@@ -71,5 +79,55 @@ export class InvoiceService {
     const data = this.InvoiceRepository.find({ where: { id: invoiceId } });
 
     return data;
+  }
+
+  //인보이스 수정
+  async updateinvoice(
+    updateInvoiceDto: UpdateInvoiceDto,
+    userId: number,
+    invoiceId: number,
+  ) {
+    const user = await this.userService.findUserById(userId);
+
+    if (user.role !== 1) {
+      throw new BadRequestException('관리자만 수정이 가능합니다.');
+    }
+
+    const invoice = this.findinvoicebyid(invoiceId);
+    if (!invoice) {
+      throw new BadRequestException('해당 인보이스가 존재하지 않습니다.');
+    }
+
+    const updatedinvoice = await this.InvoiceRepository.update(
+      { id: invoiceId },
+      { ...updateInvoiceDto },
+    );
+    return updatedinvoice;
+  }
+
+  //인보이스 아이템 삭제
+  async deleteinvoice(userId: number, invoiceId: number) {
+    const user = await this.userService.findUserById(userId);
+
+    if (user.role !== 1) {
+      throw new BadRequestException('관리자만 캘린더 삭제가 가능합니다.');
+    }
+
+    const invoice = this.findinvoicebyid(invoiceId);
+    if (!invoice) {
+      throw new BadRequestException('해당 인보이스가 존재하지 않습니다.');
+    }
+
+    const result = await this.InvoiceRepository.delete({
+      id: invoiceId,
+    });
+
+    return result;
+  }
+
+  async findinvoicebyid(id: number) {
+    return await this.InvoiceRepository.findOne({
+      where: { id: id },
+    });
   }
 }

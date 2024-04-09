@@ -1,23 +1,11 @@
-// <TableCell>클래스명</TableCell>
-// <TableCell>설명</TableCell>
-// <TableCell>가격</TableCell>
-// <TableCell>인원수</TableCell>
-// <TableCell>총액</TableCell>
-
 import {
   Column,
   Entity,
+  ManyToOne,
   PrimaryGeneratedColumn,
-  //   CreateDateColumn,
-  //   UpdateDateColumn,
-  //   ManyToOne,
-  //   Relation,
-  //   OneToMany,
+  Relation,
 } from 'typeorm';
-// import { Instructor } from './instructor.entity';
-// import { Reservation } from './reservation.entity';
-// import { ClassReview } from './class-review.entity';
-// import { ClassSchedule } from './class-schedule.entity';
+import { Invoice } from './invoice.entity';
 
 @Entity({
   name: 'invoice-item',
@@ -43,4 +31,9 @@ export class InvoiceItem {
 
   @Column()
   time: string;
+
+  @ManyToOne(() => Invoice, (invoice) => invoice.invoiceItems, {
+    onDelete: 'CASCADE',
+  })
+  invoice: Relation<Invoice>;
 }
