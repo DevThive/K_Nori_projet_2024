@@ -21,23 +21,23 @@ export class InvoiceService {
   }
 
   async getInvoices(
-    userid: number,
+    userId: number,
     queryParams: {
       q: string;
-      status: string;
+
       dates: string[];
     },
-  ): Promise<Invoice[]> {
-    const { q = '', status = '', dates = [] } = queryParams;
+  ): Promise<{ filteredData: Invoice[]; total: number }> {
+    const { q = '', dates = [] } = queryParams;
     const queryLowered = q.toLowerCase();
 
+    // const user = await this.userService.findUserById(userId);
+
+    // if (user.role !== 1) {
+    //   throw new BadRequestException('관리자만 작성이 가능합니다.');
+    // }
+
     const queryBuilder = this.InvoiceRepository.createQueryBuilder('invoice');
-
-    const user = await this.userService.findUserById(userid);
-
-    if (user.role !== 1) {
-      throw new BadRequestException('관리자만 작성이 가능합니다.');
-    }
 
     if (dates.length) {
       const [start, end] = dates;
@@ -49,17 +49,27 @@ export class InvoiceService {
 
     if (q) {
       queryBuilder.andWhere(
-        '(LOWER(invoice.companyEmail) LIKE :queryLowered OR LOWER(invoice.name) LIKE :queryLowered OR CAST(invoice.id AS TEXT) LIKE :queryLowered OR CAST(invoice.total AS TEXT) LIKE :queryLowered OR CAST(invoice.balance AS TEXT) LIKE :queryLowered OR LOWER(invoice.dueDate) LIKE :queryLowered)',
+        '(LOWER(invoice.companyEmail) LIKE :queryLowered OR LOWER(invoice.name) LIKE :queryLowered OR CAST(invoice.id AS CHAR) LIKE :queryLowered OR LOWER(invoice.dueDate) LIKE :queryLowered)',
+
         { queryLowered: `%${queryLowered}%` },
       );
     }
 
-    if (status) {
-      queryBuilder.andWhere('LOWER(invoice.invoiceStatus) = LOWER(:status)', {
-        status,
-      });
-    }
+    const filteredData = await queryBuilder.getMany();
+    const total = await queryBuilder.getCount();
 
-    return queryBuilder.getMany();
+    return { filteredData, total };
+  }
+
+  async invoiceDetail(userId: number, invoiceId: number) {
+    // const user = await this.userService.findUserById(userId);
+
+    // if (user.role !== 1) {
+    //   throw new BadRequestException('관리자만 작성이 가능합니다.');
+    // }
+
+    const data = this.InvoiceRepository.find({ where: { id: invoiceId } });
+
+    return data;
   }
 }

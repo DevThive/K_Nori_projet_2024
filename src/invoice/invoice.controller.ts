@@ -18,19 +18,35 @@ import { UserId } from 'src/auth/decorators/userId.decorator';
 export class InvoiceController {
   constructor(private readonly invoiceService: InvoiceService) {}
 
-  @ApiBearerAuth('accessToken')
-  @UseGuards(accessTokenGuard)
+  // @ApiBearerAuth('accessToken')
+  // @UseGuards(accessTokenGuard)
   @Get('invoicelist')
   async invoicelist(@UserId() userId: number, @Query() query) {
-    return await this.invoiceService.getInvoices(userId, {
+    const invoicesData = await this.invoiceService.getInvoices(userId, {
       q: query.q || '',
-      status: query.status || '',
       dates: query.dates || [],
     });
+
+    return {
+      success: true,
+      allData: invoicesData.filteredData,
+      invoices: invoicesData.filteredData,
+      total: invoicesData.total,
+    };
+  }
+
+  // @ApiBearerAuth('accessToken')
+  // @UseGuards(accessTokenGuard)
+  @Get('/:invoiceId')
+  async detailinvoice(
+    @UserId() userId: number,
+    @Param('invoiceId') invoiceId: number,
+  ) {
+    return await this.invoiceService.invoiceDetail(userId, invoiceId);
   }
 
   //   @ApiBearerAuth('accessToken')
-  //   @Post('invoice/:invoiceId')
+  //   @Post('/:invoiceId')
   //   async addinvoice(
   //     @UserId() userId: number,
   //     @Param('invoiceId') invoiceId: number,
