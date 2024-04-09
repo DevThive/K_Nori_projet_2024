@@ -106,6 +106,7 @@ export class ReservationService {
 
     const result = await this.reservationRepository.find({
       select: [
+        'id',
         'totalPeople',
         'client_email',
         'client_name',
