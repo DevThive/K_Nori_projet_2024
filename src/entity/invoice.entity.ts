@@ -10,6 +10,8 @@ import {
 } from 'typeorm';
 // import { Instructor } from './instructor.entity';
 import { Reservation } from './reservation.entity';
+import { PayMethod } from 'src/invoice/types/pay-method.type';
+import { InvoiceItem } from './invoice-item.entity';
 
 @Entity({
   name: 'invoices',
@@ -39,6 +41,18 @@ export class Invoice {
   @Column()
   service: string;
 
+  @Column({ default: 25000 })
+  price: number;
+
+  @Column()
+  note: string;
+
+  @Column()
+  totalPeople: number;
+
+  @Column({ default: 0 })
+  payMethod: PayMethod;
+
   @Column({ nullable: true })
   dueDate: string;
 
@@ -52,4 +66,9 @@ export class Invoice {
     // onDelete: 'CASCADE',
   })
   reservation: Relation<Reservation>;
+
+  @OneToMany(() => InvoiceItem, (invoiceItems) => invoiceItems.invoice, {
+    cascade: true,
+  })
+  invoiceItems: Relation<InvoiceItem>;
 }

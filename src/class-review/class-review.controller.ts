@@ -33,13 +33,6 @@ export class ClassReviewController {
     return await this.classReviewService.findallreviews(userId);
   }
 
-  //클래스 리뷰 조회(유저)
-  @ApiBearerAuth('accessToken')
-  @Get('')
-  async findclasses() {
-    return await this.classReviewService.findreviews();
-  }
-
   //클래스 리뷰 등록
   @ApiBearerAuth('accessToken')
   @ApiConsumes('multipart/form-data')
