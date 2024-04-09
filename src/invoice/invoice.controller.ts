@@ -54,14 +54,15 @@ export class InvoiceController {
   //     return await this.invoiceService.addinvoice(userId, invoiceId);
   //   }
 
-  // @ApiBearerAuth('accessToken')
-  // @Delete('delete/:invoiceId')
-  // async deleteinvoice(
-  //   @UserId() userId: number,
-  //   @Param('invoiceId') invoiceId: number,
-  // ) {
-  //   return await this.invoiceService.deleteinvoice(userId, invoiceId);
-  // }
+  @ApiBearerAuth('accessToken')
+  @UseGuards(accessTokenGuard)
+  @Delete('/:invoiceId')
+  async deleteinvoice(
+    @UserId() userId: number,
+    @Param('invoiceId') invoiceId: number,
+  ) {
+    return await this.invoiceService.deleteinvoice(userId, invoiceId);
+  }
 
   // @ApiBearerAuth('accessToken')
   // @Put('invoice/:invoiceId')
