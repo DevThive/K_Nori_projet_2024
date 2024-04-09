@@ -130,4 +130,17 @@ export class InvoiceService {
       where: { id: id },
     });
   }
+  // async deleteinvoice(userid: number, invoicid: number) {
+  //   const user = await this.userService.findUserById(userid);
+
+  //   console.log(user);
+
+  //   if (user.role !== 1) {
+  //     throw new BadRequestException('관리자만 삭제 가능합니다.');
+  //   }
+
+  //   const result = await this.InvoiceRepository.delete({ id: invoicid });
+
+  //   return result;
+  // }
 }
