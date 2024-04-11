@@ -26,10 +26,10 @@ export class Calendar {
   calendartype: CalendarType;
 
   @Column()
-  startdate: Date;
+  start: Date;
 
   @Column()
-  enddate: Date;
+  end: Date;
 
   @Column()
   content: string;

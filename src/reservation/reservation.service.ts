@@ -74,8 +74,8 @@ export class ReservationService {
       title: Class.title,
       name: createReservationDto.client_name,
       caledartype: 0,
-      startdate: createReservationDto.date,
-      enddate: createReservationDto.date,
+      start: createReservationDto.date,
+      end: createReservationDto.date,
       allday: Class.time === '풀타임' ? true : false,
     };
     const calendar = await this.calendarRepository.create(calendarData);

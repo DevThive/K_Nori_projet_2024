@@ -52,14 +52,7 @@ export class CalendarService {
 
     const result = await this.calendarRepository.find({
       where: { id: calendarId },
-      select: [
-        'title',
-        'content',
-        'calendartype',
-        'startdate',
-        'enddate',
-        'allday',
-      ],
+      select: ['title', 'content', 'calendartype', 'start', 'end', 'allday'],
     });
 
     return result;
