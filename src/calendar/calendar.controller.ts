@@ -32,15 +32,23 @@ export class CalendarController {
     return await this.calendarService.createcalendar(createCalendarDto, userId);
   }
 
-  //캘린더 조회
+  //캘린더 상세조회
   @ApiBearerAuth('accessToken')
   @UseGuards(accessTokenGuard)
   @Get(':calendarId')
-  async findallcalendars(
+  async findcalendar(
     @UserId() userId: number,
     @Param('calendarId') calendarId: number,
   ) {
-    return await this.calendarService.findallcalendars(userId, calendarId);
+    return await this.calendarService.findcalendar(userId, calendarId);
+  }
+
+  //캘린더 전체조회
+  @ApiBearerAuth('accessToken')
+  @UseGuards(accessTokenGuard)
+  @Get('')
+  async findallcalendars(@UserId() userId: number) {
+    return await this.calendarService.findallcalendars(userId);
   }
 
   //캘린더 수정
