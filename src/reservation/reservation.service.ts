@@ -72,6 +72,7 @@ export class ReservationService {
 
     const calendarData = {
       title: Class.title,
+      name: createReservationDto.client_name,
       caledartype: 0,
       startdate: createReservationDto.date,
       enddate: createReservationDto.date,

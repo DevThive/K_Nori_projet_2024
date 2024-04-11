@@ -34,6 +34,9 @@ export class Calendar {
   @Column()
   content: string;
 
+  @Column({ nullable: true })
+  name: string;
+
   @Column()
   allday: boolean;
 

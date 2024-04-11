@@ -8,7 +8,6 @@ import { UsersService } from 'src/users/users.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Invoice, User])],
-
   controllers: [InvoiceController],
   providers: [InvoiceService, UsersService],
 })
