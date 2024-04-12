@@ -71,8 +71,8 @@ export class ReservationService {
     await this.invoiceRepository.save(invoice);
 
     const calendarData = {
-      title: Class.title,
-      name: createReservationDto.client_name,
+      title: createReservationDto.client_name,
+      class: Class.title,
       caledartype: 0,
       start: createReservationDto.date,
       end: createReservationDto.date,
