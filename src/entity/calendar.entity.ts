@@ -35,7 +35,7 @@ export class Calendar {
   content: string;
 
   @Column({ nullable: true })
-  name: string;
+  class: string;
 
   @Column()
   allday: boolean;
@@ -50,7 +50,7 @@ export class Calendar {
   updatedAt: Date;
 
   @OneToOne(() => Reservation, (reservation) => reservation.calendar, {
-    // onDelete: 'CASCADE',
+    onDelete: 'CASCADE',
   })
   reservation: Relation<Reservation>;
 }
