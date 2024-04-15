@@ -76,7 +76,10 @@ export class InvoiceService {
     //   throw new BadRequestException('관리자만 작성이 가능합니다.');
     // }
 
-    const data = this.InvoiceRepository.findOne({ where: { id: invoiceId } });
+    const data = this.InvoiceRepository.findOne({
+      where: { id: invoiceId },
+      relations: { invoiceItems: true },
+    });
 
     return data;
   }
