@@ -41,7 +41,7 @@ export class Invoice {
   @Column()
   service: string;
 
-  @Column({ default: 25000 })
+  @Column({ default: 18000 })
   price: number;
 
   @Column()
