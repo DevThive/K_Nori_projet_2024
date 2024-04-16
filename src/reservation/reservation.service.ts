@@ -18,6 +18,7 @@ import { Class } from 'src/entity/class.entity';
 import { ClientType } from './types/client-type';
 import { Invoice } from 'src/entity/invoice.entity';
 import { Calendar } from 'src/entity/calendar.entity';
+import { InvoiceItem } from 'src/entity/invoice-item.entity';
 
 @Injectable()
 export class ReservationService {
@@ -29,6 +30,8 @@ export class ReservationService {
     private classRepository: Repository<Class>,
     @InjectRepository(Invoice)
     private readonly invoiceRepository: Repository<Invoice>,
+    @InjectRepository(InvoiceItem)
+    private readonly invoiceItemRepository: Repository<InvoiceItem>,
     @InjectRepository(Calendar)
     private readonly calendarRepository: Repository<Calendar>,
   ) {}
@@ -81,7 +84,20 @@ export class ReservationService {
     };
     const calendar = await this.calendarRepository.create(calendarData);
     calendar.reservation = reservation;
+
     await this.calendarRepository.save(calendar);
+
+    const invoiceItemData = {
+      className: Class.title,
+      service: Class.title,
+      people: createReservationDto.totalPeople,
+      time: Class.time,
+    };
+    const invoiceItem =
+      await this.invoiceItemRepository.create(invoiceItemData);
+    invoiceItem.invoice = invoice;
+
+    await this.invoiceItemRepository.save(invoiceItem);
 
     return reservation;
   }
