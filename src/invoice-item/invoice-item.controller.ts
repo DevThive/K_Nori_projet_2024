@@ -15,7 +15,7 @@ import { UserId } from 'src/auth/decorators/userId.decorator';
 import { CreateInvoiceItemDto } from './dto/create-invoiceItem';
 import { UpdateInvoiceItemDto } from './dto/update-invoiceItem';
 
-@ApiTags('인보이스 아이템')
+@ApiTags('송장아이템')
 @Controller('invoice-item')
 export class InvoiceItemController {
   constructor(private readonly invoiceitemService: InvoiceItemService) {}
@@ -45,6 +45,25 @@ export class InvoiceItemController {
     @UserId() userId: number,
   ) {
     return await this.invoiceitemService.invoiceiteminfo(invoiceitemId, userId);
+  }
+
+  //인보이스 아이템 전체조회
+  @ApiBearerAuth('accessToken')
+  @UseGuards(accessTokenGuard)
+  @Get('')
+  async getallinvoiceitem(@UserId() userId: number) {
+    return await this.invoiceitemService.getallinvoiceitem(userId);
+  }
+
+  //인보이스 조회
+  @ApiBearerAuth('accessToken')
+  @UseGuards(accessTokenGuard)
+  @Get(':invoiceId')
+  async invoiceinfo(
+    @Param('invoiceId') invoiceId: number,
+    @UserId() userId: number,
+  ) {
+    return await this.invoiceitemService.invoiceinfo(invoiceId, userId);
   }
 
   //인보이스 아이템 수정
