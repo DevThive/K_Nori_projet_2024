@@ -21,7 +21,7 @@ export class InvoiceItem {
   content: string;
 
   @Column()
-  price: string;
+  price: number;
 
   @Column()
   people: number;
