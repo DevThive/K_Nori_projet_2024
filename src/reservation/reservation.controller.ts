@@ -80,12 +80,12 @@ export class ReservationController {
   @UseGuards(accessTokenGuard)
   @Delete(':reservationId')
   async deletereservation(
-    @Body() deleteReservationDto: DeleteReservationDto,
+    // @Body() deleteReservationDto: DeleteReservationDto,
     @UserId() userId: number,
     @Param('reservationId') reservationId: number,
   ) {
     return await this.reservationService.deletereservation(
-      deleteReservationDto,
+      // deleteReservationDto,
       userId,
       reservationId,
     );
