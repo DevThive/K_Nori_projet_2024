@@ -10,10 +10,12 @@ import { Repository } from 'typeorm';
 import { CreateInvoiceItemDto } from './dto/create-invoiceItem';
 import { Invoice } from 'src/entity/invoice.entity';
 import { UpdateInvoiceItemDto } from './dto/update-invoiceItem';
+import { InvoiceService } from 'src/invoice/invoice.service';
 
 @Injectable()
 export class InvoiceItemService {
   constructor(
+    private readonly invoiceService: InvoiceService,
     private readonly userService: UsersService,
     @InjectRepository(InvoiceItem)
     private invoiceItemRepository: Repository<InvoiceItem>,
@@ -66,6 +68,38 @@ export class InvoiceItemService {
       where: { id: invoiceitemId },
     });
 
+    return invoiceiteminfo;
+  }
+
+  //인보이스 전체조회
+  async getallinvoiceitem(userId: number) {
+    const user = await this.userService.findUserById(userId);
+    if (user.role !== 1) {
+      throw new BadRequestException('관리자만 수정이 가능합니다.');
+    }
+
+    const invoiceiteminfo = await this.invoiceItemRepository.find();
+    return invoiceiteminfo;
+  }
+
+  //인보이스 조회
+  async invoiceinfo(invoiceId: number, userId: number) {
+    const user = await this.userService.findUserById(userId);
+    if (user.role !== 1) {
+      throw new BadRequestException('관리자만 수정이 가능합니다.');
+    }
+
+    const invoices = this.invoiceService.findinvoicebyid(invoiceId);
+    if (!invoices) {
+      throw new BadRequestException(
+        '해당 인보이스 아이템이 존재하지 않습니다.',
+      );
+    }
+    console.log('invoices', invoices);
+    const invoiceiteminfo = await this.invoiceItemRepository.findOne({
+      where: { invoice: { id: invoiceId } },
+    });
+    console.log('invoiceiteminfo', invoiceiteminfo);
     return invoiceiteminfo;
   }
 

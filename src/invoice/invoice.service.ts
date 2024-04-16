@@ -35,6 +35,7 @@ export class InvoiceService {
       content: createInvoiceDto.note,
       price: createInvoiceDto.price,
       people: createInvoiceDto.totalPeople,
+      invoice: invoice,
     });
 
     return invoice;
