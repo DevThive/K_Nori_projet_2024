@@ -5,6 +5,7 @@ import { UsersService } from 'src/users/users.service';
 import { Repository } from 'typeorm';
 import { CreateInvoiceDto } from './dto/create-invoice';
 import { UpdateInvoiceDto } from './dto/update-invoice';
+import { InvoiceItem } from 'src/entity/invoice-item.entity';
 
 @Injectable()
 export class InvoiceService {
@@ -12,6 +13,8 @@ export class InvoiceService {
     private readonly userService: UsersService,
     @InjectRepository(Invoice)
     private InvoiceRepository: Repository<Invoice>,
+    @InjectRepository(InvoiceItem)
+    private readonly invoiceItemRepository: Repository<InvoiceItem>,
   ) {}
   //생성
   async addinvoice(createInvoiceDto: CreateInvoiceDto, userId: number) {
@@ -23,6 +26,15 @@ export class InvoiceService {
 
     const invoice = await this.InvoiceRepository.save({
       ...createInvoiceDto,
+    });
+
+    //invoice-items 생성
+    const invoiceItemData = await this.invoiceItemRepository.save({
+      name: createInvoiceDto.name,
+      className: createInvoiceDto.service,
+      content: createInvoiceDto.note,
+      price: createInvoiceDto.price,
+      people: createInvoiceDto.totalPeople,
     });
 
     return invoice;
