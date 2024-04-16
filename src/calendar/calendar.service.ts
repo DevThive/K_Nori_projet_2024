@@ -43,7 +43,7 @@ export class CalendarService {
     return calendar;
   }
   //캘린더 상세조회
-  async findallcalendars(userId: number, calendarId: number) {
+  async findcalendar(userId: number, calendarId: number) {
     const user = await this.userService.findUserById(userId);
 
     if (user.role !== 1) {
@@ -52,15 +52,21 @@ export class CalendarService {
 
     const result = await this.calendarRepository.find({
       where: { id: calendarId },
-      select: [
-        'title',
-        'content',
-        'calendartype',
-        'startdate',
-        'enddate',
-        'allday',
-      ],
+      select: ['title', 'content', 'calendartype', 'start', 'end', 'allday'],
     });
+
+    return result;
+  }
+
+  //캘린더 전체조회
+  async findallcalendars(userId: number) {
+    const user = await this.userService.findUserById(userId);
+
+    if (user.role !== 1) {
+      throw new BadRequestException('관리자만 조회가 가능합니다.');
+    }
+
+    const result = await this.calendarRepository.find();
 
     return result;
   }

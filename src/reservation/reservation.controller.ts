@@ -22,7 +22,6 @@ export class ReservationController {
   constructor(private readonly reservationService: ReservationService) {}
 
   //클래스 예약
-  @ApiBearerAuth('accessToken')
   @Post(':classId')
   async classreservation(
     @Body() createReservationDto: CreateReservationDto,
@@ -78,16 +77,15 @@ export class ReservationController {
 
   //예약내역 삭제
 
-  @ApiBearerAuth('accessToken')
   @UseGuards(accessTokenGuard)
   @Delete(':reservationId')
   async deletereservation(
-    @Body() deleteReservationDto: DeleteReservationDto,
+    // @Body() deleteReservationDto: DeleteReservationDto,
     @UserId() userId: number,
     @Param('reservationId') reservationId: number,
   ) {
     return await this.reservationService.deletereservation(
-      deleteReservationDto,
+      // deleteReservationDto,
       userId,
       reservationId,
     );

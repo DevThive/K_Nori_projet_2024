@@ -71,10 +71,11 @@ export class ReservationService {
     await this.invoiceRepository.save(invoice);
 
     const calendarData = {
-      title: Class.title,
+      title: createReservationDto.client_name,
+      class: Class.title,
       caledartype: 0,
-      startdate: createReservationDto.date,
-      enddate: createReservationDto.date,
+      start: createReservationDto.date,
+      end: createReservationDto.date,
       allday: Class.time === '풀타임' ? true : false,
     };
     const calendar = await this.calendarRepository.create(calendarData);
@@ -180,7 +181,7 @@ export class ReservationService {
 
   //예약 취소
   async deletereservation(
-    deleteReservationDto: DeleteReservationDto,
+    // deleteReservationDto: DeleteReservationDto,
     userId: number,
     reservationId: number,
   ) {
@@ -189,11 +190,11 @@ export class ReservationService {
     if (user.role !== 1) {
       throw new BadRequestException('관리자만 예약취소가 가능합니다.');
     }
-    const reservation = await this.findreservationbyid(reservationId);
+    // const reservation = await this.findreservationbyid(reservationId);
 
-    if (reservation.password !== deleteReservationDto.password) {
-      throw new ForbiddenException('비밀번호가 일치하지 않습니다.');
-    }
+    // if (reservation.password !== deleteReservationDto.password) {
+    //   throw new ForbiddenException('비밀번호가 일치하지 않습니다.');
+    // }
 
     const result = await this.reservationRepository.delete({
       id: reservationId,

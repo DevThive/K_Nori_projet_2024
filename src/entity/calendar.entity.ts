@@ -26,13 +26,16 @@ export class Calendar {
   calendartype: CalendarType;
 
   @Column()
-  startdate: Date;
+  start: Date;
 
   @Column()
-  enddate: Date;
+  end: Date;
 
   @Column()
   content: string;
+
+  @Column({ nullable: true })
+  class: string;
 
   @Column()
   allday: boolean;
@@ -47,7 +50,7 @@ export class Calendar {
   updatedAt: Date;
 
   @OneToOne(() => Reservation, (reservation) => reservation.calendar, {
-    // onDelete: 'CASCADE',
+    onDelete: 'CASCADE',
   })
   reservation: Relation<Reservation>;
 }

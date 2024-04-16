@@ -69,14 +69,17 @@ export class InvoiceService {
     return { filteredData, total };
   }
 
-  async invoiceDetail(userId: number, invoiceId: number) {
+  async invoiceDetail(invoiceId: number) {
     // const user = await this.userService.findUserById(userId);
 
     // if (user.role !== 1) {
     //   throw new BadRequestException('관리자만 작성이 가능합니다.');
     // }
 
-    const data = this.InvoiceRepository.find({ where: { id: invoiceId } });
+    const data = this.InvoiceRepository.findOne({
+      where: { id: invoiceId },
+      relations: { invoiceItems: true },
+    });
 
     return data;
   }

@@ -63,7 +63,7 @@ export class Invoice {
   updatedAt: Date;
 
   @OneToOne(() => Reservation, (reservation) => reservation.invoice, {
-    // onDelete: 'CASCADE',
+    onDelete: 'CASCADE',
   })
   reservation: Relation<Reservation>;
 

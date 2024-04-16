@@ -42,10 +42,10 @@ export class InvoiceController {
   // @UseGuards(accessTokenGuard)
   @Get('/:invoiceId')
   async detailinvoice(
-    @UserId() userId: number,
+    // @UserId() userId: number,
     @Param('invoiceId') invoiceId: number,
   ) {
-    return await this.invoiceService.invoiceDetail(userId, invoiceId);
+    return await this.invoiceService.invoiceDetail(invoiceId);
   }
 
   @ApiBearerAuth('accessToken')
