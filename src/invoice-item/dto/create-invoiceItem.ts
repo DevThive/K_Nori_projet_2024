@@ -10,9 +10,9 @@ export class CreateInvoiceItemDto {
   @ApiProperty({ description: '내용' })
   content: string;
 
-  @IsString()
+  @IsNumber()
   @ApiProperty({ description: '금액' })
-  price: string;
+  price: number;
 
   @IsNumber()
   @ApiProperty({ description: '인원수' })

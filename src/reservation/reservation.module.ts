@@ -8,10 +8,18 @@ import { Class } from 'src/entity/class.entity';
 import { User } from 'src/entity/user.entity';
 import { Invoice } from 'src/entity/invoice.entity';
 import { Calendar } from 'src/entity/calendar.entity';
+import { InvoiceItem } from 'src/entity/invoice-item.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Reservation, Class, User, Invoice, Calendar]),
+    TypeOrmModule.forFeature([
+      Reservation,
+      Class,
+      User,
+      Invoice,
+      Calendar,
+      InvoiceItem,
+    ]),
   ],
   controllers: [ReservationController],
   providers: [ReservationService, UsersService],

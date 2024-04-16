@@ -41,7 +41,7 @@ export class Invoice {
   @Column()
   service: string;
 
-  @Column({ default: 25000 })
+  @Column({ default: 18000 })
   price: number;
 
   @Column()
@@ -63,7 +63,7 @@ export class Invoice {
   updatedAt: Date;
 
   @OneToOne(() => Reservation, (reservation) => reservation.invoice, {
-    onDelete: 'CASCADE',
+    // onDelete: 'CASCADE',
   })
   reservation: Relation<Reservation>;
 

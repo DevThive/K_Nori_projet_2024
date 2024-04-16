@@ -18,16 +18,13 @@ export class InvoiceItem {
   className: string;
 
   @Column()
-  content: string;
+  content: string; //설명
 
-  @Column()
-  price: string;
+  @Column({ default: 18000 })
+  price: number;
 
   @Column()
   people: number;
-
-  @Column({ nullable: true })
-  total: string;
 
   @Column()
   time: string;
