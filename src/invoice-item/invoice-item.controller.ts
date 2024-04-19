@@ -20,6 +20,17 @@ import { UpdateInvoiceItemDto } from './dto/update-invoiceItem';
 export class InvoiceItemController {
   constructor(private readonly invoiceitemService: InvoiceItemService) {}
 
+  //인보이스 조회
+  @ApiBearerAuth('accessToken')
+  @UseGuards(accessTokenGuard)
+  @Get(':invoiceId')
+  async invoiceinfo(
+    @Param('invoiceId') invoiceId: number,
+    @UserId() userId: number,
+  ) {
+    return await this.invoiceitemService.invoiceinfo(invoiceId, userId);
+  }
+
   //인보이스 아이템 생성
   @ApiBearerAuth('accessToken')
   @UseGuards(accessTokenGuard)
@@ -53,17 +64,6 @@ export class InvoiceItemController {
   @Get('')
   async getallinvoiceitem(@UserId() userId: number) {
     return await this.invoiceitemService.getallinvoiceitem(userId);
-  }
-
-  //인보이스 조회
-  @ApiBearerAuth('accessToken')
-  @UseGuards(accessTokenGuard)
-  @Get(':invoiceId')
-  async invoiceinfo(
-    @Param('invoiceId') invoiceId: number,
-    @UserId() userId: number,
-  ) {
-    return await this.invoiceitemService.invoiceinfo(invoiceId, userId);
   }
 
   //인보이스 아이템 수정
