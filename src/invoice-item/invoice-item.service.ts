@@ -89,14 +89,15 @@ export class InvoiceItemService {
       throw new BadRequestException('관리자만 수정이 가능합니다.');
     }
 
-    const invoices = this.invoiceService.findinvoicebyid(invoiceId);
+    const invoices = await this.invoiceService.findinvoicebyid(invoiceId);
     if (!invoices) {
       throw new BadRequestException(
         '해당 인보이스 아이템이 존재하지 않습니다.',
       );
     }
     console.log('invoices', invoices);
-    const invoiceiteminfo = await this.invoiceItemRepository.findOne({
+
+    const invoiceiteminfo = await this.invoiceItemRepository.find({
       where: { invoice: { id: invoiceId } },
     });
     console.log('invoiceiteminfo', invoiceiteminfo);

@@ -3,8 +3,8 @@ import { CreateInvoiceDto } from './create-invoice';
 import { ApiProperty, PickType } from '@nestjs/swagger';
 
 export class UpdateInvoiceDto extends PickType(CreateInvoiceDto, [
-  'issuedDate',
+  'name',
+  'contact',
   'address',
-  'company',
   'note',
 ]) {}
