@@ -1,5 +1,10 @@
 import { IsArray, IsString } from 'class-validator';
 import { CreateInvoiceItemDto } from './create-invoiceItem';
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, PickType } from '@nestjs/swagger';
 
-export class UpdateInvoiceItemDto extends CreateInvoiceItemDto {}
+export class UpdateInvoiceItemDto extends PickType(CreateInvoiceItemDto, [
+  'className',
+  'content',
+  'price',
+  'people',
+]) {}
