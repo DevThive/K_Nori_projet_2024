@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  Patch,
   Post,
   Put,
   Query,
@@ -60,7 +61,7 @@ export class InvoiceController {
 
   @ApiBearerAuth('accessToken')
   @UseGuards(accessTokenGuard)
-  @Put(':invoiceId')
+  @Patch(':invoiceId')
   async updateinvoice(
     @Body() updateInvoiceDto: UpdateInvoiceDto,
     @UserId() userId: number,
