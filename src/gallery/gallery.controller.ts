@@ -37,7 +37,6 @@ export class GalleryController {
   }
 
   //갤러리 리스트 조회(유저)
-  @ApiBearerAuth('accessToken')
   @Get('')
   async findgalleries() {
     return await this.galleryService.findgalleries();
