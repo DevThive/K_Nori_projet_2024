@@ -22,6 +22,9 @@ export class Reservation {
   id: number;
 
   @Column()
+  agency: string;
+
+  @Column()
   client_type: ClientType;
 
   @Column()
@@ -60,7 +63,7 @@ export class Reservation {
   class: Relation<Class>;
 
   @OneToOne(() => Invoice, (invoice) => invoice.reservation, {
-    cascade: true,
+    // cascade: true,
   })
   @JoinColumn()
   invoice: Relation<Invoice>;
