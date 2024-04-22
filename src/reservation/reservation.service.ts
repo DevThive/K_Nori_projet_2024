@@ -67,6 +67,7 @@ export class ReservationService {
       name: createReservationDto.client_name,
       service: Class.title,
       totalPeople: createReservationDto.totalPeople,
+      company: createReservationDto.agency,
     };
 
     const invoice = this.invoiceRepository.create(invoiceData);

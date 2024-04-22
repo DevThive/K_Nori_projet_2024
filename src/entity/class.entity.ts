@@ -26,6 +26,9 @@ export class Class {
   @Column()
   content: string;
 
+  @Column({ default: 18000 })
+  price: number;
+
   @Column()
   photo: string;
 
