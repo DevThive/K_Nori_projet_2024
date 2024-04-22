@@ -20,6 +20,10 @@ export class CreateReservationDto {
   client_name: string;
 
   @IsString()
+  @ApiProperty({ description: '예약기관' })
+  agency: string;
+
+  @IsString()
   @ApiProperty({ description: '예약자 이메일' })
   client_email: string;
 
