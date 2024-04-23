@@ -65,8 +65,7 @@ export class ClassService {
     url: string,
   ) {
     const user = await this.userService.findUserById(userId);
-    console.log('user', user);
-    console.log('user.role ', user.role);
+
     if (user.role !== 1) {
       throw new BadRequestException('관리자만 수정이 가능합니다.');
     }
@@ -101,7 +100,7 @@ export class ClassService {
       throw new BadRequestException('해당 클래스가 존재하지 않습니다.');
     }
 
-    classUpdate.class_schedules = class_schedules.join(',');
+    classUpdate.class_schedules = class_schedules;
 
     return await this.classRepository.update(
       {
