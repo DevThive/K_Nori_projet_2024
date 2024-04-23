@@ -147,42 +147,21 @@ export class ClassController {
     );
   }
 
-  //클래스 스케줄 수정
-  @ApiBearerAuth('accessToken')
-  // @ApiBody({
-  //   description: 'Upload class with schedule array.',
-  //   type: 'multipart/form-data',
-  //   schema: {
-  //     type: 'object',
-  //     properties: {
-  //       files: {
-  //         type: 'array',
-  //         items: {
-  //           type: 'string',
-  //           format: 'binary',
-  //           description: '클래스 스케줄 배열',
-  //         },
-  //       },
-  //       classId: {
-  //         type: 'string',
-  //         description: 'The classId of the class.',
-  //       },
-  //     },
-  //   },
-  // })
-  @Patch('updateschedule')
-  @UseInterceptors(FileInterceptor('file'))
-  @UseGuards(accessTokenGuard)
-  async updateclassschedules(
-    @Body() updateClassScheduleDto: UpdateClassScheduleDto,
-
-    @UserId() userId: number,
-  ) {
-    return await this.classService.updateclassschedules(
-      updateClassScheduleDto,
-      userId,
-    );
-  }
+  // //클래스 스케줄 수정
+  // @ApiBearerAuth('accessToken')
+  // @Patch(':classId')
+  // @UseGuards(accessTokenGuard)
+  // async updateclassschedules(
+  //   @Body() updateClassScheduleDto: UpdateClassScheduleDto,
+  //   @UserId() userId: number,
+  //   @Param('classId') classId: number,
+  // ) {
+  //   return await this.classService.updateclassschedules(
+  //     updateClassScheduleDto,
+  //     userId,
+  //     classId,
+  //   );
+  // }
 
   //클래스 비공개 처리
   @ApiBearerAuth('accessToken')

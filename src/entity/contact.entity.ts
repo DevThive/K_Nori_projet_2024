@@ -11,14 +11,14 @@ import {
 @Entity({
   name: 'contacts', // 데이터베이스 테이블의 이름
 })
-export class Notice {
+export class Contact {
   //아이디
   @PrimaryGeneratedColumn()
   id: number;
 
   // 문의 제목
-  @Column({ unique: true })
-  content_name: string;
+  @Column()
+  content_title: string;
 
   // 문의 내용
   @Column()
@@ -35,6 +35,14 @@ export class Notice {
   //문의자 이메일
   @Column()
   user_email: string;
+
+  //관리자 공개,비공개 처리
+  @Column()
+  state: number;
+
+  //유저 선택사항(공개,비공개)
+  @Column()
+  public: number;
 
   @CreateDateColumn({ type: 'timestamp', name: 'created_at' })
   createdAt: Date;
