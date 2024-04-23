@@ -35,8 +35,8 @@ export class Class {
   @Column()
   state: number;
 
-  @Column({ nullable: true })
-  class_schedules: string;
+  @Column('json')
+  class_schedules: string[];
 
   @Column()
   time: string;
