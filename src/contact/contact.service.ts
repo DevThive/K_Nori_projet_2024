@@ -6,7 +6,7 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Contact } from 'src/entity/contact.entity';
 import { UsersService } from 'src/users/users.service';
-import { Repository } from 'typeorm';
+import { And, Repository } from 'typeorm';
 import { CreateContactDto } from './dto/create-contact';
 import { UpdateContactDto } from './dto/update-contact';
 import { CheckContactDto } from './dto/check-contact';
@@ -14,12 +14,41 @@ import { CheckContactDto } from './dto/check-contact';
 @Injectable()
 export class ContactService {
   constructor(
-    // private readonly userService: UsersService,
+    private readonly userService: UsersService,
     @InjectRepository(Contact)
     private contactRepository: Repository<Contact>,
   ) {}
 
-  //생성
+  //상세조회
+  async contactlist(checkContactDto: CheckContactDto, contactId: number) {
+    const contact = await this.findcontactbyid(contactId);
+    if (!contact) {
+      throw new BadRequestException('해당 문의사항이 존재하지 않습니다.');
+    }
+    if (
+      contact.public === 1 &&
+      checkContactDto.user_phone !== contact.user_phone
+    ) {
+      throw new NotFoundException(
+        '본인의 문의만 조회 또는 수정할 수 있습니다.',
+      );
+    }
+
+    const contactlist = await this.contactRepository.findOne({
+      where: { id: contactId },
+    });
+
+    return contactlist;
+  }
+
+  //조회
+  async contactlists() {
+    const contactlists = await this.contactRepository.find();
+
+    return contactlists;
+  }
+
+  //문의사항 생성
   async addcontact(createContactDto: CreateContactDto) {
     const contact = await this.contactRepository.save({
       ...createContactDto,
@@ -39,7 +68,10 @@ export class ContactService {
       throw new BadRequestException('해당 문의사항이 존재하지 않습니다.');
     }
 
-    if (checkContactDto.user_phone !== contact.user_phone) {
+    if (
+      contact.public === 1 &&
+      checkContactDto.user_phone !== contact.user_phone
+    ) {
       throw new NotFoundException(
         '본인의 문의만 조회 또는 수정할 수 있습니다.',
       );
@@ -50,6 +82,24 @@ export class ContactService {
       { ...updateContactDto },
     );
     return updatedcontact;
+  }
+
+  //삭제
+  async deletecontact(checkContactDto: CheckContactDto, contactId: number) {
+    const contact = await this.findcontactbyid(contactId);
+    if (!contact) {
+      throw new BadRequestException('해당 문의사항이 존재하지 않습니다.');
+    }
+
+    if (
+      contact.public === 1 &&
+      checkContactDto.user_phone !== contact.user_phone
+    ) {
+      throw new NotFoundException('본인의 문의만 삭제 할 수 있습니다.');
+    }
+    return await this.contactRepository.delete({
+      id: contactId,
+    });
   }
 
   async findcontactbyid(id: number) {
