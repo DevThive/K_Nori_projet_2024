@@ -28,21 +28,23 @@ export class ClassScheduleService {
     return classSchedules;
   }
 
-  //클래스 스케줄 조회
+  //클래스 스케줄 상세조회
   async findschedules(classId: number) {
     const Class = await this.classRepository.findOne({
       where: { id: classId },
+      relations: ['classschedules_content'],
     });
 
     if (!Class) {
       throw new NotFoundException('해당 클래스가 없습니다.');
     }
 
-    const classSchedule = await this.classScheduleRepository.find({
-      where: { class: { id: classId } },
-    });
+    // const classSchedule = await this.classScheduleRepository.findOne({
+    //   where: { class: { id: classId } },
+    //   select: ['time'],
+    // });
 
-    return classSchedule;
+    return Class.classschedules_content;
   }
 
   //클래스 스케줄 생성
