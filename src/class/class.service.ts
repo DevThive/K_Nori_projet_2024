@@ -37,6 +37,7 @@ export class ClassService {
     const classList = await this.classRepository.find({
       where: { state: 0 },
       select: ['id', 'title', 'photo', 'content', 'createdAt'],
+      relations: { classschedules_content: true },
     });
 
     return classList;
@@ -65,8 +66,7 @@ export class ClassService {
     url: string,
   ) {
     const user = await this.userService.findUserById(userId);
-    console.log('user', user);
-    console.log('user.role ', user.role);
+
     if (user.role !== 1) {
       throw new BadRequestException('관리자만 수정이 가능합니다.');
     }
@@ -83,35 +83,36 @@ export class ClassService {
     return updatedClass;
   }
 
-  //클래스 스케줄 수정
-  async updateclassschedules(
-    updateClassScheduleDto: UpdateClassScheduleDto,
-    userId: number,
-  ) {
-    const { classId, class_schedules } = updateClassScheduleDto; // classId와 업데이트할 스케줄 데이터를 추출합니다.
-    const user = await this.userService.findUserById(userId);
+  // //클래스 스케줄 수정
+  // async updateclassschedules(
+  //   updateClassScheduleDto: UpdateClassScheduleDto,
+  //   userId: number,
+  //   classId: number,
+  // ) {
+  //   const { class_schedules } = updateClassScheduleDto;
+  //   const user = await this.userService.findUserById(userId);
 
-    if (user.role !== 1) {
-      throw new BadRequestException('관리자만 수정이 가능합니다.');
-    }
+  //   if (user.role !== 1) {
+  //     throw new BadRequestException('관리자만 수정이 가능합니다.');
+  //   }
 
-    const classUpdate = await this.findclassbyid(classId); // 업데이트할 클래스 객체를 찾습니다.
+  //   const classUpdate = await this.findclassbyid(classId); // 업데이트할 클래스 객체를 찾습니다.
 
-    if (!classUpdate) {
-      throw new BadRequestException('해당 클래스가 존재하지 않습니다.');
-    }
+  //   if (!classUpdate) {
+  //     throw new BadRequestException('해당 클래스가 존재하지 않습니다.');
+  //   }
 
-    classUpdate.class_schedules = class_schedules.join(',');
+  //   classUpdate.class_schedules = class_schedules;
 
-    return await this.classRepository.update(
-      {
-        id: updateClassScheduleDto.classId,
-      },
-      {
-        class_schedules: classUpdate.class_schedules,
-      },
-    );
-  }
+  //   return await this.classRepository.update(
+  //     {
+  //       id: classId,
+  //     },
+  //     {
+  //       class_schedules: classUpdate.class_schedules,
+  //     },
+  //   );
+  // }
 
   //클래스 비공개 처리
   async hideclass(hideClassDto: HideClassDto, userId: number, classId: number) {
