@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { ContactService } from './contact.service';
@@ -18,18 +19,19 @@ import { UpdateContactDto } from './dto/update-contact';
 export class ContactController {
   constructor(private readonly contactService: ContactService) {}
 
+  //문의사항 상세조회
+  @Get(':contactId')
+  async contactlist(
+    @Query('user_phone') userPhone: string,
+    @Param('contactId') contactId: number,
+  ) {
+    return await this.contactService.contactlist(userPhone, contactId);
+  }
+
+  //문의사항 전체조회
   @Get('contactlists')
   async contactlists() {
     return await this.contactService.contactlists();
-  }
-
-  //상세조회
-  @Get(':contactId')
-  async contactlist(
-    @Body() checkContactDto: CheckContactDto,
-    @Param('contactId') contactId: number,
-  ) {
-    return await this.contactService.contactlist(checkContactDto, contactId);
   }
 
   //문의사항 생성
@@ -52,7 +54,7 @@ export class ContactController {
     );
   }
 
-  //삭제
+  //문의사항 삭제
   @Delete(':contactId')
   async deletecontact(
     @Body() checkContactDto: CheckContactDto,
