@@ -42,9 +42,6 @@ export class Reservation {
   @Column()
   etc: string;
 
-  @Column()
-  password: number;
-
   @Column({ type: 'time' })
   time: Date;
 

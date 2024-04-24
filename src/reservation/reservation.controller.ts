@@ -13,7 +13,7 @@ import { ReservationService } from './reservation.service';
 import { CreateReservationDto } from './dto/create-reservation';
 import { UserId } from 'src/auth/decorators/userId.decorator';
 import { accessTokenGuard } from 'src/auth/guard/access-token.guard';
-import { DeleteReservationDto } from './dto/delete-reservation';
+import { CheckReservationDto } from './dto/check-reservation';
 import { UpdateReservationDto } from './dto/update-reservation';
 
 @ApiTags('클래스 예약')
@@ -66,10 +66,12 @@ export class ReservationController {
   @ApiBearerAuth('accessToken')
   @Put(':reservationId')
   async updatereservation(
+    @Body() checkReservationDto: CheckReservationDto,
     @Body() updateReservationDto: UpdateReservationDto,
     @Param('reservationId') reservationId: number,
   ) {
     return await this.reservationService.updatereservation(
+      checkReservationDto,
       updateReservationDto,
       reservationId,
     );
@@ -80,12 +82,12 @@ export class ReservationController {
   @UseGuards(accessTokenGuard)
   @Delete(':reservationId')
   async deletereservation(
-    // @Body() deleteReservationDto: DeleteReservationDto,
+    @Body() checkReservationDto: CheckReservationDto,
     @UserId() userId: number,
     @Param('reservationId') reservationId: number,
   ) {
     return await this.reservationService.deletereservation(
-      // deleteReservationDto,
+      checkReservationDto,
       userId,
       reservationId,
     );

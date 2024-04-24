@@ -10,9 +10,7 @@ import { Reservation } from 'src/entity/reservation.entity';
 import { Repository } from 'typeorm';
 import { CreateReservationDto } from './dto/create-reservation';
 import { UsersService } from 'src/users/users.service';
-import { DeleteReservationDto } from './dto/delete-reservation';
-import { ConfigService } from '@nestjs/config';
-import * as bcrypt from 'bcrypt';
+import { CheckReservationDto } from './dto/check-reservation';
 import { UpdateReservationDto } from './dto/update-reservation';
 import { Class } from 'src/entity/class.entity';
 import { ClientType } from './types/client-type';
@@ -169,12 +167,20 @@ export class ReservationService {
 
   //클래스 예약수정
   async updatereservation(
+    checkReservationDto: CheckReservationDto,
     updateReservationDto: UpdateReservationDto,
     reservationId: number,
   ) {
-    const reservation = this.findreservationbyid(reservationId);
+    const reservation = await this.findreservationbyid(reservationId);
     if (!reservation) {
       throw new BadRequestException('해당 예약내역이 존재하지 않습니다.');
+    }
+
+    //사용자 핸드폰번호가 일치하는지 확인
+    if (
+      reservation.client_phonenumber !== checkReservationDto.client_phonenumber
+    ) {
+      throw new ForbiddenException('핸드폰번호가 일치하지 않습니다.');
     }
 
     // totalPeople이 20을 넘으면 ClientType을 Group으로 설정
@@ -199,7 +205,7 @@ export class ReservationService {
 
   //예약 취소
   async deletereservation(
-    // deleteReservationDto: DeleteReservationDto,
+    checkReservationDto: CheckReservationDto,
     userId: number,
     reservationId: number,
   ) {
@@ -209,10 +215,16 @@ export class ReservationService {
       throw new BadRequestException('관리자만 예약취소가 가능합니다.');
     }
     const reservation = await this.findreservationbyid(reservationId);
+    if (!reservation) {
+      throw new BadRequestException('해당 예약내역이 존재하지 않습니다.');
+    }
 
-    // if (reservation.password !== deleteReservationDto.password) {
-    //   throw new ForbiddenException('비밀번호가 일치하지 않습니다.');
-    // }
+    //사용자 핸드폰번호가 일치하는지 확인
+    if (
+      reservation.client_phonenumber !== checkReservationDto.client_phonenumber
+    ) {
+      throw new ForbiddenException('핸드폰번호가 일치하지 않습니다.');
+    }
 
     const result = await this.reservationRepository.delete({
       id: reservationId,
