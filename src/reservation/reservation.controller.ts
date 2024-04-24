@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
@@ -33,11 +34,18 @@ export class ReservationController {
     );
   }
 
-  //유저 본인 클래스 예약 조회(유저)
-  @Get('/search/:phonenumber')
-  async findclassbyphonenumber(@Param('phonenumber') phonenumber: string) {
-    return await this.reservationService.findclassbyphonenumber(phonenumber);
+  //유저 클래스예약 상세조회
+  @Get(':classId')
+  async findclassbyphonenumber(
+    @Param('classId') classId: string,
+    @Query('user_phone') userPhone: string,
+  ) {
+    return await this.reservationService.findclassbyphonenumber(
+      classId,
+      userPhone,
+    );
   }
+
   //클래스 예약 전체 조회(관리자)
 
   @ApiBearerAuth('accessToken')

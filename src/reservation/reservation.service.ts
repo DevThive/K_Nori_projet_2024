@@ -102,9 +102,9 @@ export class ReservationService {
   }
 
   //유저 본인 클래스 예약 조회(유저)
-  async findclassbyphonenumber(phonenumber: string) {
+  async findclassbyphonenumber(classId: string, userPhone: string) {
     const reservations = await this.reservationRepository.findOne({
-      where: { client_phonenumber: phonenumber },
+      where: { client_phonenumber: userPhone },
     });
     if (!reservations) {
       throw new NotFoundException('예약내역이 없습니다.');
