@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  Patch,
   Post,
   Put,
   UseGuards,
@@ -11,9 +12,10 @@ import {
 import { ClassScheduleService } from './class-schedule.service';
 import { UserId } from 'src/auth/decorators/userId.decorator';
 import { accessTokenGuard } from 'src/auth/guard/access-token.guard';
-import { CreateClassScheduleDto } from './dto/create-class-schedule';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { UpdateClassScheduleDto } from './dto/update-class-schedule';
+import { CreateClassScheduleDto } from './dto/create-class-schedule';
+import { ShowClassScheduleDto } from './dto/show-class-schedule';
 
 @ApiTags('클래스 시간')
 @Controller('class-schedule')
@@ -64,6 +66,23 @@ export class ClassScheduleController {
       classScheduleId,
     );
   }
+
+  //스케줄 비공개 처리
+  @ApiBearerAuth('accessToken')
+  @Patch('show/:classscheduleId')
+  @UseGuards(accessTokenGuard)
+  async showclassschedule(
+    @UserId() user_id: number,
+    @Param('classscheduleId') classscheduleId: number,
+    @Body() showClassScheduleDto: ShowClassScheduleDto,
+  ) {
+    return await this.classScheduleService.showclassschedule(
+      user_id,
+      classscheduleId,
+      showClassScheduleDto,
+    );
+  }
+
   //   //클래스 스케줄 삭제
   //   @ApiBearerAuth('accessToken')
   //   @UseGuards(accessTokenGuard)
