@@ -23,16 +23,25 @@ export class ClassScheduleController {
   constructor(private readonly classScheduleService: ClassScheduleService) {}
 
   //클래스 스케줄 전체조회
-  @ApiBearerAuth('accessToken')
   @Get('')
   async findallschedules() {
     return await this.classScheduleService.findallschedules();
   }
-  //클래스 스케줄 상세조회
-  @ApiBearerAuth('accessToken')
+  //클래스 스케줄 상세조회(state 1인것만 조회)
   @Get(':classId')
   async findschedules(@Param('classId') classId: number) {
     return await this.classScheduleService.findschedules(classId);
+  }
+
+  //클래스 스케줄 상세조회(state 0,1 전부 조회)
+  @ApiBearerAuth('accessToken')
+  @Get('admin/:classId')
+  @UseGuards(accessTokenGuard)
+  async findallschedule(
+    @Param('classId') classId: number,
+    @UserId() userId: number,
+  ) {
+    return await this.classScheduleService.findallschedule(classId, userId);
   }
 
   //클래스 스케줄 추가
