@@ -17,6 +17,7 @@ import { ClientType } from './types/client-type';
 import { Invoice } from 'src/entity/invoice.entity';
 import { Calendar } from 'src/entity/calendar.entity';
 import { InvoiceItem } from 'src/entity/invoice-item.entity';
+import { ApproveReservationDto } from './dto/approve-reservation';
 
 @Injectable()
 export class ReservationService {
@@ -201,6 +202,25 @@ export class ReservationService {
     return await this.reservationRepository.findOne({
       where: { id: id },
     });
+  }
+
+  //예약 승인처리
+  async approvereservation(
+    userId: number,
+    approveReservationDto: ApproveReservationDto,
+    reservationId: number,
+  ) {
+    const user = await this.userService.findUserById(userId);
+
+    if (user.role !== 1) {
+      throw new BadRequestException('관리자만 수정 및 삭제가 가능합니다.');
+    }
+
+    const result = await this.reservationRepository.update(reservationId, {
+      ...approveReservationDto,
+    });
+
+    return result;
   }
 
   //예약 취소
