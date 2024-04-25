@@ -40,12 +40,13 @@ export class ClassScheduleService {
       throw new NotFoundException('해당 클래스가 없습니다.');
     }
 
-    // const classSchedule = await this.classScheduleRepository.findOne({
-    //   where: { class: { id: classId } },
-    //   select: ['time'],
-    // });
+    const classSchedules = await this.classScheduleRepository
+      .createQueryBuilder('class_schedule')
+      .where('class_schedule.classId = :classId', { classId })
+      .andWhere('class_schedule.state = 1')
+      .getMany();
 
-    return Class.classschedules_content;
+    return classSchedules;
   }
 
   //클래스 스케줄 생성
@@ -123,7 +124,7 @@ export class ClassScheduleService {
     });
   }
 
-  //스케줄 비공개 처리
+  //스케줄 공개 처리
   async showclassschedule(
     userId: number,
     classscheduleId: number,
