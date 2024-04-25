@@ -35,10 +35,6 @@ export class CreateReservationDto {
   @ApiProperty({ description: '기타사항' })
   etc: string;
 
-  @IsNumber()
-  @ApiProperty({ description: '비밀번호' })
-  password: number;
-
   @IsString()
   @ApiProperty({
     description: '시간',

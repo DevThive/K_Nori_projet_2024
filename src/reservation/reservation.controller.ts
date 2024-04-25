@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  Patch,
   Post,
   Put,
   Query,
@@ -16,6 +17,7 @@ import { UserId } from 'src/auth/decorators/userId.decorator';
 import { accessTokenGuard } from 'src/auth/guard/access-token.guard';
 import { CheckReservationDto } from './dto/check-reservation';
 import { UpdateReservationDto } from './dto/update-reservation';
+import { ApproveReservationDto } from './dto/approve-reservation';
 
 @ApiTags('클래스 예약')
 @Controller('reservation')
@@ -81,6 +83,22 @@ export class ReservationController {
     return await this.reservationService.updatereservation(
       checkReservationDto,
       updateReservationDto,
+      reservationId,
+    );
+  }
+
+  //예약 승인처리
+  @ApiBearerAuth('accessToken')
+  @Patch('approve/:reservationId')
+  @UseGuards(accessTokenGuard)
+  async approvereservation(
+    @UserId() user_id: number,
+    @Body() approveReservationDto: ApproveReservationDto,
+    @Param('reservationId') reservationId: number,
+  ) {
+    return await this.reservationService.approvereservation(
+      user_id,
+      approveReservationDto,
       reservationId,
     );
   }

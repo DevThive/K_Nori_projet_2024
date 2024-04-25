@@ -37,6 +37,9 @@ export class Reservation {
   client_email: string;
 
   @Column()
+  state: number;
+
+  @Column()
   client_phonenumber: string;
 
   @Column()
