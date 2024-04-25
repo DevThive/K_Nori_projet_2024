@@ -8,9 +8,12 @@ import { Reservation } from 'src/entity/reservation.entity';
 import { UsersService } from 'src/users/users.service';
 import { AwsService } from 'src/aws/aws.service';
 import { User } from 'src/entity/user.entity';
+import { ClassSchedule } from 'src/entity/class-schedule.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Class, Reservation, User])],
+  imports: [
+    TypeOrmModule.forFeature([Class, Reservation, User, ClassSchedule]),
+  ],
   controllers: [ClassController],
   providers: [ClassService, UsersService, AwsService],
 })

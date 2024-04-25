@@ -12,12 +12,15 @@ import { UpdateClassDto } from './dto/update-class';
 import { HideClassDto } from './dto/hide-class';
 import { v4 as uuidv4 } from 'uuid';
 import { UpdateClassScheduleDto } from './dto/update-schedule';
+import { ClassSchedule } from 'src/entity/class-schedule.entity';
 @Injectable()
 export class ClassService {
   constructor(
     private readonly userService: UsersService,
     @InjectRepository(Class)
     private classRepository: Repository<Class>,
+    @InjectRepository(ClassSchedule)
+    private classScheduleRepository: Repository<ClassSchedule>,
   ) {}
 
   //클래스 리스트 조회(관리자)
@@ -55,6 +58,29 @@ export class ClassService {
       photo: url,
       user: user,
     });
+
+    //class 생성시 class-schedule 9시-18시까지 자동 생성
+    const startTime = 9;
+    const endTime = 17;
+
+    for (let hour = startTime; hour <= endTime; hour++) {
+      for (let minute = 0; minute < 60; minute += 30) {
+        const time = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
+        const classSchedule = this.classScheduleRepository.create({
+          time,
+          class: Class,
+        });
+        await this.classScheduleRepository.save(classSchedule);
+      }
+    }
+    // 18:00 추가
+    const time18 = '18:00';
+    const classSchedule18 = this.classScheduleRepository.create({
+      time: time18,
+      class: Class,
+    });
+    await this.classScheduleRepository.save(classSchedule18);
+
     return Class;
   }
 

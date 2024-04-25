@@ -20,6 +20,9 @@ export class ClassSchedule {
   @Column()
   time: string;
 
+  @Column()
+  state: number;
+
   @CreateDateColumn({ type: 'timestamp', name: 'created_at' })
   createdAt: Date;
 
