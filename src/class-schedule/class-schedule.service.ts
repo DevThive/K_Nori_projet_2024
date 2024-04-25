@@ -10,6 +10,7 @@ import { CreateClassScheduleDto } from './dto/create-class-schedule';
 import { UsersService } from 'src/users/users.service';
 import { Class } from 'src/entity/class.entity';
 import { UpdateClassScheduleDto } from './dto/update-class-schedule';
+import { ShowClassScheduleDto } from './dto/show-class-schedule';
 
 @Injectable()
 export class ClassScheduleService {
@@ -120,5 +121,24 @@ export class ClassScheduleService {
     return await this.classScheduleRepository.delete({
       id: classScheduleId,
     });
+  }
+
+  //스케줄 비공개 처리
+  async showclassschedule(
+    userId: number,
+    classscheduleId: number,
+    showClassScheduleDto: ShowClassScheduleDto,
+  ) {
+    const user = await this.userService.findUserById(userId);
+
+    if (user.role !== 1) {
+      throw new BadRequestException('관리자만 수정 및 삭제가 가능합니다.');
+    }
+
+    const result = await this.classScheduleRepository.update(classscheduleId, {
+      ...showClassScheduleDto,
+    });
+
+    return result;
   }
 }
