@@ -29,7 +29,7 @@ export class ClassScheduleService {
     return classSchedules;
   }
 
-  //클래스 스케줄 상세조회
+  //클래스 스케줄 상세조회 (state 1인것만 조회)
   async findschedules(classId: number) {
     const Class = await this.classRepository.findOne({
       where: { id: classId },
@@ -47,6 +47,25 @@ export class ClassScheduleService {
       .getMany();
 
     return classSchedules;
+  }
+
+  //클래스 스케줄 상세조회 (state 0,1 전부 조회)
+  async findallschedule(classId: number, userId: number) {
+    const user = await this.userService.findUserById(userId);
+    if (user.role !== 1) {
+      throw new BadRequestException('관리자만 등록이 가능합니다.');
+    }
+
+    const Class = await this.classRepository.findOne({
+      where: { id: classId },
+      relations: ['classschedules_content'],
+    });
+
+    if (!Class) {
+      throw new NotFoundException('해당 클래스가 없습니다.');
+    }
+
+    return Class.classschedules_content;
   }
 
   //클래스 스케줄 생성
