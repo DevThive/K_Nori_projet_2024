@@ -38,13 +38,10 @@ export class NoticeController {
     schema: {
       type: 'object',
       properties: {
-        files: {
-          type: 'array',
-          items: {
-            type: 'string',
-            format: 'binary',
-            description: 'The image files to upload.',
-          },
+        file: {
+          type: 'string',
+          format: 'binary',
+          description: 'The image file to upload..',
         },
         content_name: {
           type: 'string',
