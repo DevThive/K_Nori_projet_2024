@@ -59,46 +59,6 @@ export class ReservationService {
       client_type: clientType,
     });
 
-    const invoiceData = {
-      issuedDate: new Date(),
-      companyEmail: createReservationDto.client_email,
-      contact: createReservationDto.client_phonenumber,
-      name: createReservationDto.client_name,
-      service: Class.title,
-      totalPeople: createReservationDto.totalPeople,
-      company: createReservationDto.agency,
-    };
-
-    const invoice = this.invoiceRepository.create(invoiceData);
-    invoice.reservation = reservation; // Reservation과의 관계 설정
-
-    await this.invoiceRepository.save(invoice);
-
-    const calendarData = {
-      title: createReservationDto.client_name,
-      class: Class.title,
-      caledartype: 0,
-      start: createReservationDto.date,
-      end: createReservationDto.date,
-      allday: Class.time === '풀타임' ? true : false,
-    };
-    const calendar = await this.calendarRepository.create(calendarData);
-    calendar.reservation = reservation;
-
-    await this.calendarRepository.save(calendar);
-
-    const invoiceItemData = {
-      className: Class.title,
-      service: Class.title,
-      people: createReservationDto.totalPeople,
-      time: Class.time,
-    };
-    const invoiceItem =
-      await this.invoiceItemRepository.create(invoiceItemData);
-    invoiceItem.invoice = invoice;
-
-    await this.invoiceItemRepository.save(invoiceItem);
-
     return reservation;
   }
 
@@ -202,6 +162,7 @@ export class ReservationService {
   async findreservationbyid(id: number) {
     return await this.reservationRepository.findOne({
       where: { id: id },
+      relations: ['class'],
     });
   }
 
@@ -216,6 +177,61 @@ export class ReservationService {
     if (user.role !== 1) {
       throw new BadRequestException('관리자만 수정 및 삭제가 가능합니다.');
     }
+    const reservation = await this.findreservationbyid(reservationId);
+    if (!reservation) {
+      throw new BadRequestException('해당 예약내역이 존재하지 않습니다.');
+    }
+    console.log('reservation', reservation);
+    console.log('reservation.class.id', reservation.class.id);
+
+    const classId = reservation.class.id;
+
+    const Class = await this.classRepository.findOne({
+      where: { id: classId },
+    });
+    if (!Class) {
+      throw new NotFoundException('해당 클래스가 없습니다.');
+    }
+
+    const invoiceData = {
+      issuedDate: new Date(),
+      companyEmail: reservation.client_email,
+      contact: reservation.client_phonenumber,
+      name: reservation.client_name,
+      service: Class.title,
+      totalPeople: reservation.totalPeople,
+      company: reservation.agency,
+    };
+
+    const invoice = this.invoiceRepository.create(invoiceData);
+    invoice.reservation = reservation; // Reservation과의 관계 설정
+
+    await this.invoiceRepository.save(invoice);
+
+    const calendarData = {
+      title: reservation.client_name,
+      class: Class.title,
+      caledartype: 0,
+      start: reservation.date,
+      end: reservation.date,
+      allday: Class.time === '풀타임' ? true : false,
+    };
+    const calendar = await this.calendarRepository.create(calendarData);
+    calendar.reservation = reservation;
+
+    await this.calendarRepository.save(calendar);
+
+    const invoiceItemData = {
+      className: Class.title,
+      service: Class.title,
+      people: reservation.totalPeople,
+      time: Class.time,
+    };
+    const invoiceItem =
+      await this.invoiceItemRepository.create(invoiceItemData);
+    invoiceItem.invoice = invoice;
+
+    await this.invoiceItemRepository.save(invoiceItem);
 
     const result = await this.reservationRepository.update(reservationId, {
       ...approveReservationDto,
