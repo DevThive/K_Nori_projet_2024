@@ -133,6 +133,7 @@ export class ReservationService {
         'etc',
         'date',
         'time',
+        'state',
       ],
       // relations: { user: true },
     });
