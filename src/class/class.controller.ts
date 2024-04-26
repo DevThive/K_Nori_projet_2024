@@ -20,7 +20,7 @@ import { CreateClassDto } from './dto/create-class';
 import { UpdateClassDto } from './dto/update-class';
 import { HideClassDto } from './dto/hide-class';
 import { AwsService } from 'src/aws/aws.service';
-import { UpdateClassScheduleDto } from './dto/update-schedule';
+// import { UpdateClassScheduleDto } from './dto/update-schedule';
 
 @ApiTags('클래스')
 @Controller('class')
