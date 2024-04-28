@@ -18,11 +18,14 @@ import { Invoice } from 'src/entity/invoice.entity';
 import { Calendar } from 'src/entity/calendar.entity';
 import { InvoiceItem } from 'src/entity/invoice-item.entity';
 import { ApproveReservationDto } from './dto/approve-reservation';
+import { CalendarService } from 'src/calendar/calendar.service';
+import { InvoiceService } from 'src/invoice/invoice.service';
 
 @Injectable()
 export class ReservationService {
   constructor(
     private readonly userService: UsersService,
+
     @InjectRepository(Reservation)
     private reservationRepository: Repository<Reservation>,
     @InjectRepository(Class)
@@ -254,8 +257,6 @@ export class ReservationService {
       if (reservation.calendar) {
         await this.calendarRepository.remove(reservation.calendar);
       }
-      reservation.invoice = null;
-      reservation.calendar = null;
 
       await this.reservationRepository.save(reservation);
     }
