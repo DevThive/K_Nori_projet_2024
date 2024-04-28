@@ -39,6 +39,9 @@ export class Reservation {
   @Column()
   state: number;
 
+  // @Column()
+  // is_completed: number;
+
   @Column()
   client_phonenumber: string;
 
@@ -63,7 +66,7 @@ export class Reservation {
   class: Relation<Class>;
 
   @OneToOne(() => Invoice, (invoice) => invoice.reservation, {
-    // cascade: true,
+    cascade: true,
   })
   @JoinColumn()
   invoice: Relation<Invoice>;
