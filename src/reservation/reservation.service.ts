@@ -7,7 +7,7 @@ import {
 
 import { InjectRepository } from '@nestjs/typeorm';
 import { Reservation } from 'src/entity/reservation.entity';
-import { Repository } from 'typeorm';
+import { Repository, In } from 'typeorm';
 import { CreateReservationDto } from './dto/create-reservation';
 import { UsersService } from 'src/users/users.service';
 import { CheckReservationDto } from './dto/check-reservation';
@@ -18,11 +18,14 @@ import { Invoice } from 'src/entity/invoice.entity';
 import { Calendar } from 'src/entity/calendar.entity';
 import { InvoiceItem } from 'src/entity/invoice-item.entity';
 import { ApproveReservationDto } from './dto/approve-reservation';
+import { CalendarService } from 'src/calendar/calendar.service';
+import { InvoiceService } from 'src/invoice/invoice.service';
 
 @Injectable()
 export class ReservationService {
   constructor(
     private readonly userService: UsersService,
+
     @InjectRepository(Reservation)
     private reservationRepository: Repository<Reservation>,
     @InjectRepository(Class)
@@ -73,7 +76,7 @@ export class ReservationService {
     return reservations;
   }
 
-  //클래스 예약 전체 조회(관리자)
+  //예약 전체 조회(관리자)
   async findallreservation(userId: number) {
     console.log('userId', userId);
     const user = await this.userService.findUserById(userId);
@@ -83,6 +86,9 @@ export class ReservationService {
     }
 
     const result = await this.reservationRepository.find({
+      where: {
+        state: In([0, 1]),
+      },
       select: [
         'id',
         'totalPeople',
@@ -95,7 +101,15 @@ export class ReservationService {
         'time',
         'state',
       ],
-      // relations: { user: true },
+    });
+
+    return result;
+  }
+
+  //핸드폰번호로 예약조회
+  async findbyphonenumber(phonenumber: string) {
+    const result = await this.reservationRepository.find({
+      where: { client_phonenumber: phonenumber },
     });
 
     return result;
@@ -162,7 +176,7 @@ export class ReservationService {
   async findreservationbyid(id: number) {
     return await this.reservationRepository.findOne({
       where: { id: id },
-      relations: ['class'],
+      relations: ['class', 'invoice', 'calendar'],
     });
   }
 
@@ -181,8 +195,6 @@ export class ReservationService {
     if (!reservation) {
       throw new BadRequestException('해당 예약내역이 존재하지 않습니다.');
     }
-    console.log('reservation', reservation);
-    console.log('reservation.class.id', reservation.class.id);
 
     const classId = reservation.class.id;
 
@@ -193,64 +205,67 @@ export class ReservationService {
       throw new NotFoundException('해당 클래스가 없습니다.');
     }
 
-    const invoiceData = {
-      issuedDate: new Date(),
-      companyEmail: reservation.client_email,
-      contact: reservation.client_phonenumber,
-      name: reservation.client_name,
-      service: Class.title,
-      totalPeople: reservation.totalPeople,
-      company: reservation.agency,
-    };
-
-    const invoice = this.invoiceRepository.create(invoiceData);
-    invoice.reservation = reservation; // Reservation과의 관계 설정
-
-    await this.invoiceRepository.save(invoice);
-
-    const calendarData = {
-      title: reservation.client_name,
-      class: Class.title,
-      caledartype: 0,
-      start: reservation.date,
-      end: reservation.date,
-      allday: Class.time === '풀타임' ? true : false,
-    };
-    const calendar = await this.calendarRepository.create(calendarData);
-    calendar.reservation = reservation;
-
-    await this.calendarRepository.save(calendar);
-
-    const invoiceItemData = {
-      className: Class.title,
-      service: Class.title,
-      people: reservation.totalPeople,
-      time: Class.time,
-    };
-    const invoiceItem =
-      await this.invoiceItemRepository.create(invoiceItemData);
-    invoiceItem.invoice = invoice;
-
-    await this.invoiceItemRepository.save(invoiceItem);
-
     const result = await this.reservationRepository.update(reservationId, {
       ...approveReservationDto,
     });
+    if (approveReservationDto.state === 1) {
+      const invoiceData = {
+        issuedDate: new Date(),
+        companyEmail: reservation.client_email,
+        contact: reservation.client_phonenumber,
+        name: reservation.client_name,
+        service: Class.title,
+        totalPeople: reservation.totalPeople,
+        company: reservation.agency,
+      };
 
+      const invoice = this.invoiceRepository.create(invoiceData);
+      invoice.reservation = reservation; // Reservation과의 관계 설정
+
+      await this.invoiceRepository.save(invoice);
+
+      const calendarData = {
+        title: reservation.client_name,
+        class: Class.title,
+        caledartype: 0,
+        start: reservation.date,
+        end: reservation.date,
+        allday: Class.time === '풀타임' ? true : false,
+      };
+      const calendar = await this.calendarRepository.create(calendarData);
+      calendar.reservation = reservation;
+
+      await this.calendarRepository.save(calendar);
+
+      const invoiceItemData = {
+        className: Class.title,
+        service: Class.title,
+        people: reservation.totalPeople,
+        time: Class.time,
+      };
+      const invoiceItem =
+        await this.invoiceItemRepository.create(invoiceItemData);
+      invoiceItem.invoice = invoice;
+
+      await this.invoiceItemRepository.save(invoiceItem);
+    } else if (approveReservationDto.state === 0) {
+      if (reservation.invoice) {
+        await this.invoiceRepository.remove(reservation.invoice);
+      }
+      if (reservation.calendar) {
+        await this.calendarRepository.remove(reservation.calendar);
+      }
+
+      await this.reservationRepository.save(reservation);
+    }
     return result;
   }
 
-  //예약 취소
+  //예약 취소(유저)
   async deletereservation(
     checkReservationDto: CheckReservationDto,
-    userId: number,
     reservationId: number,
   ) {
-    const user = await this.userService.findUserById(userId);
-
-    if (user.role !== 1) {
-      throw new BadRequestException('관리자만 예약취소가 가능합니다.');
-    }
     const reservation = await this.findreservationbyid(reservationId);
     if (!reservation) {
       throw new BadRequestException('해당 예약내역이 존재하지 않습니다.');
@@ -261,6 +276,25 @@ export class ReservationService {
       reservation.client_phonenumber !== checkReservationDto.client_phonenumber
     ) {
       throw new ForbiddenException('핸드폰번호가 일치하지 않습니다.');
+    }
+
+    const result = await this.reservationRepository.delete({
+      id: reservationId,
+    });
+
+    return result;
+  }
+
+  //예약 취소(어드민)
+  async admindelete(userId: number, reservationId: number) {
+    const user = await this.userService.findUserById(userId);
+
+    if (user.role !== 1) {
+      throw new BadRequestException('관리자만 예약취소가 가능합니다.');
+    }
+    const reservation = await this.findreservationbyid(reservationId);
+    if (!reservation) {
+      throw new BadRequestException('해당 예약내역이 존재하지 않습니다.');
     }
 
     const result = await this.reservationRepository.delete({
