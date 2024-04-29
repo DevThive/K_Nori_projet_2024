@@ -24,6 +24,12 @@ import { ApproveReservationDto } from './dto/approve-reservation';
 export class ReservationController {
   constructor(private readonly reservationService: ReservationService) {}
 
+  //핸드폰번호로만 예약조회
+  @Get('findbyphonenumber')
+  async findbyphonenumber(@Param('phonenumber') phonenumber: string) {
+    return await this.reservationService.findbyphonenumber(phonenumber);
+  }
+
   //클래스 예약
   @Post(':classId')
   async classreservation(
@@ -37,7 +43,7 @@ export class ReservationController {
   }
 
   //유저 클래스예약 상세조회
-  @Get(':classId')
+  @Get('finding/:classId')
   async findclassbyphonenumber(
     @Param('classId') classId: string,
     @Query('user_phone') userPhone: string,
@@ -49,10 +55,9 @@ export class ReservationController {
   }
 
   //클래스 예약 전체 조회(관리자)
-
   @ApiBearerAuth('accessToken')
   @UseGuards(accessTokenGuard)
-  @Get('')
+  @Get('admin')
   async findallreservation(@UserId() userId: number) {
     return await this.reservationService.findallreservation(userId);
   }
@@ -72,8 +77,6 @@ export class ReservationController {
   }
 
   //클래스 예약수정
-
-  @ApiBearerAuth('accessToken')
   @Put(':reservationId')
   async updatereservation(
     @Body() checkReservationDto: CheckReservationDto,
@@ -103,19 +106,26 @@ export class ReservationController {
     );
   }
 
-  //예약내역 삭제
-
-  @UseGuards(accessTokenGuard)
+  //예약내역 삭제(유저)
   @Delete(':reservationId')
   async deletereservation(
     @Body() checkReservationDto: CheckReservationDto,
-    @UserId() userId: number,
     @Param('reservationId') reservationId: number,
   ) {
     return await this.reservationService.deletereservation(
       checkReservationDto,
-      userId,
       reservationId,
     );
+  }
+
+  //예약내역 삭제(어드민)
+  @ApiBearerAuth('accessToken')
+  @UseGuards(accessTokenGuard)
+  @Delete('admin/:reservationId')
+  async admindelete(
+    @UserId() userId: number,
+    @Param('reservationId') reservationId: number,
+  ) {
+    return await this.reservationService.admindelete(userId, reservationId);
   }
 }

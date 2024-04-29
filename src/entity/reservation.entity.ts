@@ -39,6 +39,9 @@ export class Reservation {
   @Column()
   state: number;
 
+  // @Column()
+  // is_completed: number;
+
   @Column()
   client_phonenumber: string;
 
@@ -64,12 +67,14 @@ export class Reservation {
 
   @OneToOne(() => Invoice, (invoice) => invoice.reservation, {
     // cascade: true,
+    onDelete: 'CASCADE',
   })
   @JoinColumn()
   invoice: Relation<Invoice>;
 
   @OneToOne(() => Calendar, (calendar) => calendar.reservation, {
-    cascade: true,
+    // cascade: true,
+    onDelete: 'CASCADE',
   })
   @JoinColumn()
   calendar: Relation<Calendar>;
