@@ -205,10 +205,23 @@ export class ReservationService {
       throw new NotFoundException('해당 클래스가 없습니다.');
     }
 
+    if (approveReservationDto.state === reservation.state) {
+      throw new BadRequestException('바뀐 내용이 없습니다.');
+    }
+
     const result = await this.reservationRepository.update(reservationId, {
       ...approveReservationDto,
     });
-    if (approveReservationDto.state === 1) {
+    if (approveReservationDto.state === 0) {
+      if (reservation.invoice) {
+        await this.invoiceRepository.remove(reservation.invoice);
+      }
+      if (reservation.calendar) {
+        await this.calendarRepository.remove(reservation.calendar);
+      }
+      await this.reservationRepository.save(reservation);
+      await this.reservationRepository.update(reservationId, { state: 0 });
+    } else if (approveReservationDto.state === 1) {
       const invoiceData = {
         issuedDate: new Date(),
         companyEmail: reservation.client_email,
@@ -248,15 +261,6 @@ export class ReservationService {
       invoiceItem.invoice = invoice;
 
       await this.invoiceItemRepository.save(invoiceItem);
-    } else if (approveReservationDto.state === 0) {
-      if (reservation.invoice) {
-        await this.invoiceRepository.remove(reservation.invoice);
-      }
-      if (reservation.calendar) {
-        await this.calendarRepository.remove(reservation.calendar);
-      }
-
-      await this.reservationRepository.save(reservation);
     }
     return result;
   }
