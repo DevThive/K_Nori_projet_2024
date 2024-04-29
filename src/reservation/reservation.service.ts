@@ -248,9 +248,7 @@ export class ReservationService {
       invoiceItem.invoice = invoice;
 
       await this.invoiceItemRepository.save(invoiceItem);
-    } else {
-      // invoice 및 calendar 레코드를 수동으로 삭제합니다.
-      console.log('reservation.invoice', reservation.invoice);
+    } else if (approveReservationDto.state === 0) {
       if (reservation.invoice) {
         await this.invoiceRepository.remove(reservation.invoice);
       }
