@@ -133,14 +133,14 @@ export class ClassController {
   @UseInterceptors(FileInterceptor('file'))
   @UseGuards(accessTokenGuard)
   async updateclass(
-    // @Body() updateClassDto: UpdateClassDto,
+    @Body() updateClassDto: UpdateClassDto,
     @UserId() userId: number,
     @Param('classId') classId: number,
     @UploadedFile() file: Express.Multer.File,
   ) {
     const url = await this.awsService.imageUpload(file);
     return await this.classService.updateclass(
-      // updateClassDto,
+      updateClassDto,
       userId,
       classId,
       url,
