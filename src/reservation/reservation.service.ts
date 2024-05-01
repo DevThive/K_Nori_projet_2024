@@ -18,13 +18,13 @@ import { Invoice } from 'src/entity/invoice.entity';
 import { Calendar } from 'src/entity/calendar.entity';
 import { InvoiceItem } from 'src/entity/invoice-item.entity';
 import { ApproveReservationDto } from './dto/approve-reservation';
-import { CalendarService } from 'src/calendar/calendar.service';
-import { InvoiceService } from 'src/invoice/invoice.service';
+import { SmsService } from 'src/sms/sms.service';
 
 @Injectable()
 export class ReservationService {
   constructor(
     private readonly userService: UsersService,
+    private readonly smsService: SmsService,
 
     @InjectRepository(Reservation)
     private reservationRepository: Repository<Reservation>,
@@ -212,6 +212,33 @@ export class ReservationService {
     const result = await this.reservationRepository.update(reservationId, {
       ...approveReservationDto,
     });
+
+    const toPhoneNumber = reservation.client_phonenumber;
+    const imageFilePath = '../public/img/logo2.png'; // MMS에 포함될 이미지 파일 경로
+
+    // MMS 전송
+    if (approveReservationDto.state === 0) {
+      // 예약 취소
+      const text = '예약이 거부되었습니다.';
+
+      await this.smsService.sendMMS(
+        toPhoneNumber,
+        this.smsService.getFromPhoneNumber(),
+        text,
+        imageFilePath,
+      );
+    } else if (approveReservationDto.state === 1) {
+      // 예약 승인
+      const text = '예약이 승인되었습니다.';
+
+      await this.smsService.sendMMS(
+        toPhoneNumber,
+        this.smsService.getFromPhoneNumber(),
+        text,
+        imageFilePath,
+      );
+    }
+
     if (approveReservationDto.state === 0) {
       if (reservation.invoice) {
         await this.invoiceRepository.remove(reservation.invoice);

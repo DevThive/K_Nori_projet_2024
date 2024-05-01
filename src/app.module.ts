@@ -24,6 +24,8 @@ import { InvoiceModule } from './invoice/invoice.module';
 import { CalendarModule } from './calendar/calendar.module';
 
 import { InvoiceItemModule } from './invoice-item/invoice-item.module';
+import { SmsService } from './sms/sms.service';
+import { SmsModule } from './sms/sms.module';
 
 @Module({
   imports: [
@@ -49,9 +51,11 @@ import { InvoiceItemModule } from './invoice-item/invoice-item.module';
     InvoiceItemModule,
 
     ClassScheduleModule,
+
+    SmsModule,
   ],
   controllers: [AppController],
-  providers: [AppService, ConfigService, AwsService],
+  providers: [AppService, ConfigService, AwsService, SmsService],
   exports: [ConfigService],
 })
 export class AppModule {}
