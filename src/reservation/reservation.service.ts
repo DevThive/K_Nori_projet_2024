@@ -213,31 +213,31 @@ export class ReservationService {
       ...approveReservationDto,
     });
 
-    const toPhoneNumber = reservation.client_phonenumber;
-    const imageFilePath = '../public/img/logo2.png'; // MMS에 포함될 이미지 파일 경로
+    // const toPhoneNumber = reservation.client_phonenumber;
+    // const imageFilePath = '../public/img/logo2.png'; // MMS에 포함될 이미지 파일 경로
 
-    // MMS 전송
-    if (approveReservationDto.state === 0) {
-      // 예약 취소
-      const text = '예약이 거부되었습니다.';
+    // // MMS 전송
+    // if (approveReservationDto.state === 0) {
+    //   // 예약 취소
+    //   const text = '예약이 거부되었습니다.';
 
-      await this.smsService.sendMMS(
-        toPhoneNumber,
-        this.smsService.getFromPhoneNumber(),
-        text,
-        imageFilePath,
-      );
-    } else if (approveReservationDto.state === 1) {
-      // 예약 승인
-      const text = '예약이 승인되었습니다.';
+    //   await this.smsService.sendMMS(
+    //     toPhoneNumber,
+    //     this.smsService.getFromPhoneNumber(),
+    //     text,
+    //     imageFilePath,
+    //   );
+    // } else if (approveReservationDto.state === 1) {
+    //   // 예약 승인
+    //   const text = '예약이 승인되었습니다.';
 
-      await this.smsService.sendMMS(
-        toPhoneNumber,
-        this.smsService.getFromPhoneNumber(),
-        text,
-        imageFilePath,
-      );
-    }
+    //   await this.smsService.sendMMS(
+    //     toPhoneNumber,
+    //     this.smsService.getFromPhoneNumber(),
+    //     text,
+    //     imageFilePath,
+    //   );
+    // }
 
     if (approveReservationDto.state === 0) {
       if (reservation.invoice) {

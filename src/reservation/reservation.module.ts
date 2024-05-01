@@ -9,6 +9,7 @@ import { User } from 'src/entity/user.entity';
 import { Invoice } from 'src/entity/invoice.entity';
 import { Calendar } from 'src/entity/calendar.entity';
 import { InvoiceItem } from 'src/entity/invoice-item.entity';
+import { SmsService } from 'src/sms/sms.service';
 
 @Module({
   imports: [
@@ -22,6 +23,6 @@ import { InvoiceItem } from 'src/entity/invoice-item.entity';
     ]),
   ],
   controllers: [ReservationController],
-  providers: [ReservationService, UsersService],
+  providers: [ReservationService, UsersService, SmsService],
 })
 export class ReservationModule {}
