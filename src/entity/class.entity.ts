@@ -24,7 +24,7 @@ export class Class {
   @Column()
   title: string;
 
-  @Column()
+  @Column({ type: 'text' })
   content: string;
 
   @Column({ default: 18000 })
