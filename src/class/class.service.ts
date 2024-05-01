@@ -86,7 +86,7 @@ export class ClassService {
 
   //클래스 수정
   async updateclass(
-    // updateClassDto: UpdateClassDto,
+    updateClassDto: UpdateClassDto,
     userId: number,
     classId: number,
     url: string,
@@ -104,7 +104,7 @@ export class ClassService {
 
     const updatedClass = await this.classRepository.update(
       { id: classId },
-      { photo: url },
+      { ...updateClassDto, photo: url },
     );
     return updatedClass;
   }
