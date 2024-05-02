@@ -122,29 +122,25 @@ export class NoticeController {
     schema: {
       type: 'object',
       properties: {
-        files: {
-          type: 'array',
-          items: {
-            type: 'string',
-            format: 'binary',
-            description: 'The image files to upload.',
-          },
+        file: {
+          type: 'string',
+          format: 'binary',
+          description: 'The image file to upload..',
         },
       },
     },
   })
   @Patch('updatenoticeimage/:noticeid')
-  @UseInterceptors(FilesInterceptor('files', 5))
+  @UseInterceptors(FileInterceptor('file'))
   @UseGuards(accessTokenGuard)
   async updatenoticeimage(
     @UserId() user_id: number,
     @Param('noticeid') noticeid: number,
-    @UploadedFiles() files: Express.Multer.File[],
+    @UploadedFile() file: Express.Multer.File,
   ) {
-    const urls = await Promise.all(
-      files.map(async (file) => await this.awsService.imageUpload(file)),
-    );
-    return await this.noticeService.updatenoticeimage(user_id, noticeid, urls);
+    const url = await this.awsService.imageUpload(file);
+
+    return await this.noticeService.updatenoticeimage(user_id, noticeid, url);
   }
 
   //공지사항 이미지 제외 수정
