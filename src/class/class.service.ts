@@ -84,12 +84,31 @@ export class ClassService {
     return Class;
   }
 
-  //클래스 수정
+  //클래스 이미지 수정
+  async updateclassimage(userId: number, classId: number, url: string) {
+    const user = await this.userService.findUserById(userId);
+
+    if (user.role !== 1) {
+      throw new BadRequestException('관리자만 수정이 가능합니다.');
+    }
+
+    const Class = this.findclassbyid(classId);
+    if (!Class) {
+      throw new BadRequestException('해당 클래스가 존재하지 않습니다.');
+    }
+
+    const updatedClass = await this.classRepository.update(
+      { id: classId },
+      { photo: url },
+    );
+    return updatedClass;
+  }
+
+  //클래스 이미지 제외하고 수정
   async updateclass(
     updateClassDto: UpdateClassDto,
     userId: number,
     classId: number,
-    url: string,
   ) {
     const user = await this.userService.findUserById(userId);
 
@@ -104,7 +123,7 @@ export class ClassService {
 
     const updatedClass = await this.classRepository.update(
       { id: classId },
-      { ...updateClassDto, photo: url },
+      { ...updateClassDto },
     );
     return updatedClass;
   }

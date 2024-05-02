@@ -96,7 +96,7 @@ export class ClassController {
     return await this.classService.addclass(createClassDto, userId, url);
   }
 
-  //클래스 수정
+  //클래스 이미지 수정
   @ApiBearerAuth('accessToken')
   @ApiConsumes('multipart/form-data')
   @ApiBody({
@@ -110,41 +110,57 @@ export class ClassController {
           format: 'binary',
           description: 'The image file to upload..',
         },
-        title: {
-          type: 'string',
-          description: 'The title of the class.',
-        },
-        content: {
-          type: 'string',
-          description: 'The content of the class.',
-        },
-        time: {
-          type: 'string',
-          description: 'The time of the class.',
-        },
-        // schedules: {
-        //   type: 'string',
-        //   description: 'The schedules of the class.',
-        // },
       },
     },
   })
-  @Put(':classId')
+  @Put('updateclassimage/:classId')
   @UseInterceptors(FileInterceptor('file'))
   @UseGuards(accessTokenGuard)
-  async updateclass(
-    @Body() updateClassDto: UpdateClassDto,
+  async updateclassimage(
     @UserId() userId: number,
     @Param('classId') classId: number,
     @UploadedFile() file: Express.Multer.File,
   ) {
     const url = await this.awsService.imageUpload(file);
-    return await this.classService.updateclass(
-      updateClassDto,
-      userId,
-      classId,
-      url,
-    );
+    return await this.classService.updateclassimage(userId, classId, url);
+  }
+
+  //클래스 이미지 제외하고 수정
+  @ApiBearerAuth('accessToken')
+  // @ApiConsumes('multipart/form-data')
+  // @ApiBody({
+  //   description: 'Upload class with image.',
+  //   type: 'multipart/form-data',
+  //   schema: {
+  //     type: 'object',
+  //     properties: {
+  //       title: {
+  //         type: 'string',
+  //         description: 'The title of the class.',
+  //       },
+  //       content: {
+  //         type: 'string',
+  //         description: 'The content of the class.',
+  //       },
+  //       time: {
+  //         type: 'string',
+  //         description: 'The time of the class.',
+  //       },
+  //       // schedules: {
+  //       //   type: 'string',
+  //       //   description: 'The schedules of the class.',
+  //       // },
+  //     },
+  //   },
+  // })
+  @Put('updateclass/:classId')
+  @UseGuards(accessTokenGuard)
+  async updateclass(
+    @Body() updateClassDto: UpdateClassDto,
+    @UserId() userId: number,
+    @Param('classId') classId: number,
+  ) {
+    return await this.classService.updateclass(updateClassDto, userId, classId);
   }
 
   // //클래스 스케줄 수정
