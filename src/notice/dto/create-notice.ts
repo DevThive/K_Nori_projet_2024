@@ -2,11 +2,11 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsString } from 'class-validator';
 
 export class CreateNoticeDto {
-  // @IsString()
+  @IsString()
   @ApiProperty({ description: '제목' })
   content_name: string;
 
-  // @IsString()
+  @IsString()
   @ApiProperty({ description: '내용' })
   content: string;
 
