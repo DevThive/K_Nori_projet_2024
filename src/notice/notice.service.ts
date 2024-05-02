@@ -85,12 +85,35 @@ export class NoticeService {
     return result;
   }
 
+  //공지사항 이미지 수정
+  async updatenoticeimage(userId: number, noticeid: number, urls: string[]) {
+    const user = await this.userService.findUserById(userId);
+
+    if (user.role !== 1) {
+      throw new BadRequestException('관리자만 수정 및 삭제가 가능합니다.');
+    }
+
+    const notice = this.findnoticebyid(noticeid);
+
+    if (!notice) {
+      throw new BadRequestException('공지글을 확인해주세요');
+    }
+
+    await this.noticesRepository.update(
+      {
+        id: noticeid,
+      },
+      {
+        photo: JSON.stringify(urls),
+      },
+    );
+  }
+
   //공지사항 수정
   async updatenotice(
     userId: number,
     noticeid: number,
     updatenoticedto: UpdateNoticeDto,
-    urls: string[],
   ) {
     const user = await this.userService.findUserById(userId);
 
@@ -110,7 +133,6 @@ export class NoticeService {
       },
       {
         ...updatenoticedto,
-        photo: JSON.stringify(urls),
       },
     );
   }
