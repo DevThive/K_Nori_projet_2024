@@ -86,7 +86,7 @@ export class NoticeService {
   }
 
   //공지사항 이미지 수정
-  async updatenoticeimage(userId: number, noticeid: number, urls: string[]) {
+  async updatenoticeimage(userId: number, noticeid: number, url: string) {
     const user = await this.userService.findUserById(userId);
 
     if (user.role !== 1) {
@@ -104,7 +104,7 @@ export class NoticeService {
         id: noticeid,
       },
       {
-        photo: JSON.stringify(urls),
+        photo: JSON.stringify(url),
       },
     );
   }
