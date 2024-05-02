@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Post,
+  Put,
   UploadedFile,
   UploadedFiles,
   UseGuards,
@@ -130,7 +131,7 @@ export class NoticeController {
       },
     },
   })
-  @Patch('updatenoticeimage/:noticeid')
+  @Put('updatenoticeimage/:noticeid')
   @UseInterceptors(FileInterceptor('file'))
   @UseGuards(accessTokenGuard)
   async updatenoticeimage(
@@ -145,7 +146,7 @@ export class NoticeController {
 
   //공지사항 이미지 제외 수정
   @ApiBearerAuth('accessToken')
-  @Patch('updatenotice/:noticeid')
+  @Put('updatenotice/:noticeid')
   @UseGuards(accessTokenGuard)
   async updatenotice(
     @UserId() user_id: number,
