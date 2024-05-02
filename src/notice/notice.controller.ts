@@ -113,7 +113,7 @@ export class NoticeController {
     return await this.noticeService.deletenotice(user_id, noticeid);
   }
 
-  //공지사항 수정
+  //공지사항 이미지 수정
   @ApiBearerAuth('accessToken')
   @ApiConsumes('multipart/form-data')
   @ApiBody({
@@ -130,34 +130,36 @@ export class NoticeController {
             description: 'The image files to upload.',
           },
         },
-        content_name: {
-          type: 'string',
-          description: 'The content_name of the notice.',
-        },
-        content: {
-          type: 'string',
-          description: 'The content of the notice.',
-        },
       },
     },
   })
-  @Patch('/:noticeid')
+  @Patch('updatenoticeimage/:noticeid')
   @UseInterceptors(FilesInterceptor('files', 5))
   @UseGuards(accessTokenGuard)
-  async updatenotice(
+  async updatenoticeimage(
     @UserId() user_id: number,
     @Param('noticeid') noticeid: number,
-    @Body() updatenoticedto: UpdateNoticeDto,
     @UploadedFiles() files: Express.Multer.File[],
   ) {
     const urls = await Promise.all(
       files.map(async (file) => await this.awsService.imageUpload(file)),
     );
+    return await this.noticeService.updatenoticeimage(user_id, noticeid, urls);
+  }
+
+  //공지사항 이미지 제외 수정
+  @ApiBearerAuth('accessToken')
+  @Patch('updatenotice/:noticeid')
+  @UseGuards(accessTokenGuard)
+  async updatenotice(
+    @UserId() user_id: number,
+    @Param('noticeid') noticeid: number,
+    @Body() updatenoticedto: UpdateNoticeDto,
+  ) {
     return await this.noticeService.updatenotice(
       user_id,
       noticeid,
       updatenoticedto,
-      urls,
     );
   }
 }
