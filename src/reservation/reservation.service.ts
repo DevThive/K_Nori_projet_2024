@@ -214,32 +214,30 @@ export class ReservationService {
       ...approveReservationDto,
     });
     // 구매자명과 상품명 설정
-    const buyerName = reservation.client_name;
-    const productName = Class.title;
-    const from = this.smsService.getFromPhoneNumber();
+    // const buyerName = reservation.client_name;
+    // const productName = Class.title;
+    // const from = this.smsService.getFromPhoneNumber();
     //알림톡 전송
     if (approveReservationDto.state === 1) {
       // 예약 승인
-      const templateId = 'KA01TP240110072220677clp0DwzaW23';
-
-      await this.smsService.sendMMS(
-        reservation.client_phonenumber,
-        from,
-        buyerName,
-        productName,
-        templateId,
-      );
+      // const templateId = 'KA01TP240110072220677clp0DwzaW23';
+      // await this.smsService.sendMMS(
+      //   reservation.client_phonenumber,
+      //   from,
+      //   buyerName,
+      //   productName,
+      //   templateId,
+      // );
     } else if (approveReservationDto.state === 0) {
       // 예약 취소
-      const templateId = 'KA01TP240110072220677clp0DwzaW23';
-
-      await this.smsService.sendMMS(
-        reservation.client_phonenumber,
-        from,
-        buyerName,
-        productName,
-        templateId,
-      );
+      // const templateId = 'KA01TP240110072220677clp0DwzaW23';
+      // await this.smsService.sendMMS(
+      //   reservation.client_phonenumber,
+      //   from,
+      //   buyerName,
+      //   productName,
+      //   templateId,
+      // );
     }
 
     if (approveReservationDto.state === 0) {
