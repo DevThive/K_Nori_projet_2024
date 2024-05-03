@@ -127,32 +127,6 @@ export class ClassController {
 
   //클래스 이미지 제외하고 수정
   @ApiBearerAuth('accessToken')
-  // @ApiConsumes('multipart/form-data')
-  // @ApiBody({
-  //   description: 'Upload class with image.',
-  //   type: 'multipart/form-data',
-  //   schema: {
-  //     type: 'object',
-  //     properties: {
-  //       title: {
-  //         type: 'string',
-  //         description: 'The title of the class.',
-  //       },
-  //       content: {
-  //         type: 'string',
-  //         description: 'The content of the class.',
-  //       },
-  //       time: {
-  //         type: 'string',
-  //         description: 'The time of the class.',
-  //       },
-  //       // schedules: {
-  //       //   type: 'string',
-  //       //   description: 'The schedules of the class.',
-  //       // },
-  //     },
-  //   },
-  // })
   @Put('updateclass/:classId')
   @UseGuards(accessTokenGuard)
   async updateclass(
