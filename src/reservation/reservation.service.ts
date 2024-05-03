@@ -100,6 +100,7 @@ export class ReservationService {
         'date',
         'time',
         'state',
+        'etc',
       ],
     });
 
