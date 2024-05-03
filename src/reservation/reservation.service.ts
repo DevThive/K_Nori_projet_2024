@@ -212,32 +212,34 @@ export class ReservationService {
     const result = await this.reservationRepository.update(reservationId, {
       ...approveReservationDto,
     });
+    // 구매자명과 상품명 설정
+    const buyerName = reservation.client_name;
+    const productName = Class.title;
+    const from = this.smsService.getFromPhoneNumber();
+    //알림톡 전송
+    if (approveReservationDto.state === 1) {
+      // 예약 승인
+      const templateId = 'KA01TP240110072220677clp0DwzaW23';
 
-    // const toPhoneNumber = reservation.client_phonenumber;
-    // const imageFilePath = '../public/img/logo2.png'; // MMS에 포함될 이미지 파일 경로
+      await this.smsService.sendMMS(
+        reservation.client_phonenumber,
+        from,
+        buyerName,
+        productName,
+        templateId,
+      );
+    } else if (approveReservationDto.state === 0) {
+      // 예약 취소
+      const templateId = 'KA01TP240110072220677clp0DwzaW23';
 
-    // // MMS 전송
-    // if (approveReservationDto.state === 0) {
-    //   // 예약 취소
-    //   const text = '예약이 거부되었습니다.';
-
-    //   await this.smsService.sendMMS(
-    //     toPhoneNumber,
-    //     this.smsService.getFromPhoneNumber(),
-    //     text,
-    //     imageFilePath,
-    //   );
-    // } else if (approveReservationDto.state === 1) {
-    //   // 예약 승인
-    //   const text = '예약이 승인되었습니다.';
-
-    //   await this.smsService.sendMMS(
-    //     toPhoneNumber,
-    //     this.smsService.getFromPhoneNumber(),
-    //     text,
-    //     imageFilePath,
-    //   );
-    // }
+      await this.smsService.sendMMS(
+        reservation.client_phonenumber,
+        from,
+        buyerName,
+        productName,
+        templateId,
+      );
+    }
 
     if (approveReservationDto.state === 0) {
       if (reservation.invoice) {
