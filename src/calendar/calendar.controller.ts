@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { CalendarService } from './calendar.service';
@@ -43,14 +44,17 @@ export class CalendarController {
     return await this.calendarService.findcalendar(userId, calendarId);
   }
 
-  //캘린더 전체조회
+  // 캘린더 전체 조회
   @ApiBearerAuth('accessToken')
   @UseGuards(accessTokenGuard)
   @Get('')
-  async findallcalendars(@UserId() userId: number) {
-    return await this.calendarService.findallcalendars(userId);
+  async findCalendars(
+    @UserId() userId: number,
+    @Query('calendars') calendars: string[],
+  ) {
+    // `calendars`는 이미 배열이므로, 직접 `findCalendarsByList` 함수에 전달합니다.
+    return await this.calendarService.findCalendarsByList(userId, calendars);
   }
-
   //캘린더 수정
   @ApiBearerAuth('accessToken')
   @Put(':calendarId')
