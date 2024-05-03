@@ -7,6 +7,7 @@ import {
   Relation,
   OneToMany,
   OneToOne,
+  BeforeInsert,
 } from 'typeorm';
 // import { Instructor } from './instructor.entity';
 import { Reservation } from './reservation.entity';
@@ -26,6 +27,13 @@ export class Calendar {
   extendedProps: {
     calendar: string;
   };
+
+  @BeforeInsert()
+  setDefaultExtendedProps() {
+    if (!this.extendedProps) {
+      this.extendedProps = { calendar: 'Business' };
+    }
+  }
 
   @Column()
   start: Date;
