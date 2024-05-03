@@ -22,8 +22,10 @@ export class Calendar {
   @Column()
   title: string;
 
-  @Column()
-  calendartype: CalendarType;
+  @Column({ type: 'json', nullable: true })
+  extendedProps: {
+    calendar: string;
+  };
 
   @Column()
   start: Date;
