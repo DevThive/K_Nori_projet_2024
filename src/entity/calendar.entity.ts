@@ -48,7 +48,7 @@ export class Calendar {
   class: string;
 
   @Column()
-  allday: boolean;
+  allDay: boolean;
 
   @Column()
   state: number;
