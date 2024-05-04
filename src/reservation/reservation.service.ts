@@ -271,7 +271,7 @@ export class ReservationService {
         caledartype: 0,
         start: reservation.date,
         end: reservation.date,
-        allday: Class.time === '풀타임' ? true : false,
+        allDay: Class.time === '풀타임' ? true : false,
       };
       const calendar = await this.calendarRepository.create(calendarData);
       calendar.reservation = reservation;
