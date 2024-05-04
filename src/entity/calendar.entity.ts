@@ -42,7 +42,7 @@ export class Calendar {
   end: Date;
 
   @Column()
-  content: string;
+  description: string;
 
   @Column({ nullable: true })
   class: string;
