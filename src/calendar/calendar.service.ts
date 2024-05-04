@@ -5,8 +5,7 @@ import { UsersService } from 'src/users/users.service';
 import { Repository } from 'typeorm';
 import { CreateCalendarDto } from './dto/create-calendar';
 import { UpdateCalendarDto } from './dto/update-calendar';
-import { In } from 'typeorm';
-import { CalendarType } from './types/calendar-type';
+
 import { HideCalendarDto } from './dto/hide-calendar';
 
 @Injectable()
@@ -24,19 +23,7 @@ export class CalendarService {
     if (user.role !== 1) {
       throw new BadRequestException('관리자만 생성이 가능합니다.');
     }
-    console.log(
-      'createCalendarDto.calendartype',
-      createCalendarDto.calendartype,
-    );
-    // let type;
 
-    // if (createCalendarDto.calendartype === 'Bussiness') {
-    //   type = CalendarType.Bussiness;
-    // } else if (createCalendarDto.calendartype === 'Personal') {
-    //   type = CalendarType.Personal;
-    // } else if (createCalendarDto.calendartype === 'Holiday') {
-    //   type = CalendarType.Holiday;
-    // }
     const calendar = await this.calendarRepository.save({
       ...createCalendarDto,
     });

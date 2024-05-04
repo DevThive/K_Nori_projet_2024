@@ -1,6 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsBoolean, IsDate, IsEnum, IsString } from 'class-validator';
-import { CalendarType } from '../types/calendar-type';
+import {
+  IsBoolean,
+  IsDate,
+  IsString,
+  IsNumber,
+  IsOptional,
+} from 'class-validator';
 
 export class CreateCalendarDto {
   @IsString()
@@ -13,23 +18,31 @@ export class CreateCalendarDto {
 
   @IsDate()
   @ApiProperty({ description: '시작날짜' })
-  startdate: Date;
+  start: Date;
 
   @IsDate()
   @ApiProperty({ description: '끝나는날짜' })
-  enddate: Date;
+  end: Date;
 
   @IsBoolean()
   @ApiProperty({ description: '풀타임 여부' })
-  allday: boolean;
+  allDay: boolean;
 
-  @IsEnum(CalendarType)
-  @ApiProperty({ description: '캘린더 타입' })
-  calendartype: CalendarType;
+  @IsNumber()
+  @IsOptional()
+  @ApiProperty({ description: '상태', required: false })
+  state?: number;
+
+  @IsString()
+  @IsOptional()
+  @ApiProperty({ description: '분류', required: false })
+  class?: string;
+
+  // extendedProps는 JSON 객체이므로, DTO에서는 이를 직접 받아 처리할 수 있도록 합니다.
+  // 실제 유효성 검증이 필요한 경우, 커스텀 데코레이터를 사용하거나 클래스를 따로 정의해야 합니다.
+  @IsOptional()
+  @ApiProperty({ description: '확장 속성', type: 'object', required: false })
+  extendedProps?: {
+    calendar: string;
+  };
 }
-
-// @IsDate()
-// @ApiProperty({
-//   description: '날짜',
-// })
-// date: Date;
