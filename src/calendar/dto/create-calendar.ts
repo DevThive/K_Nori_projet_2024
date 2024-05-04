@@ -14,7 +14,7 @@ export class CreateCalendarDto {
 
   @IsString()
   @ApiProperty({ description: '내용' })
-  content: string;
+  description: string;
 
   @IsDate()
   @ApiProperty({ description: '시작날짜' })
