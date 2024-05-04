@@ -5,8 +5,7 @@ import { UsersService } from 'src/users/users.service';
 import { Repository } from 'typeorm';
 import { CreateCalendarDto } from './dto/create-calendar';
 import { UpdateCalendarDto } from './dto/update-calendar';
-import { In } from 'typeorm';
-import { CalendarType } from './types/calendar-type';
+
 import { HideCalendarDto } from './dto/hide-calendar';
 
 @Injectable()
