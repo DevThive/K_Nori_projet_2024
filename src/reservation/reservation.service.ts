@@ -212,6 +212,42 @@ export class ReservationService {
     });
   }
 
+  //이전 예약 상태 변경
+  async approvesuccessreservation(
+    userId: number,
+    approveReservationDto: ApproveReservationDto,
+    reservationId: number,
+  ) {
+    const user = await this.userService.findUserById(userId);
+
+    if (user.role !== 1) {
+      throw new BadRequestException('관리자만 수정 및 삭제가 가능합니다.');
+    }
+    const reservation = await this.findreservationbyid(reservationId);
+    if (!reservation) {
+      throw new BadRequestException('해당 예약내역이 존재하지 않습니다.');
+    }
+
+    const classId = reservation.class.id;
+
+    const Class = await this.classRepository.findOne({
+      where: { id: classId },
+    });
+    if (!Class) {
+      throw new NotFoundException('해당 클래스가 없습니다.');
+    }
+
+    if (approveReservationDto.state === reservation.state) {
+      throw new BadRequestException('바뀐 내용이 없습니다.');
+    }
+
+    const result = await this.reservationRepository.update(reservationId, {
+      ...approveReservationDto,
+    });
+
+    return result;
+  }
+
   //예약 승인처리
   async approvereservation(
     userId: number,
