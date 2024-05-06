@@ -107,6 +107,37 @@ export class ReservationService {
     return result;
   }
 
+  //예약 전체 조회(관리자)
+  async findsuccessreservation(userId: number) {
+    console.log('userId', userId);
+    const user = await this.userService.findUserById(userId);
+
+    if (user.role !== 1) {
+      throw new BadRequestException('관리자만 조회가 가능합니다.');
+    }
+
+    const result = await this.reservationRepository.find({
+      where: {
+        state: In([0, 1]),
+      },
+      select: [
+        'id',
+        'totalPeople',
+        'client_email',
+        'client_name',
+        'client_phonenumber',
+        'client_type',
+        'etc',
+        'date',
+        'time',
+        'state',
+        'etc',
+      ],
+    });
+
+    return result;
+  }
+
   //핸드폰번호로 예약조회
   async findbyphonenumber(phonenumber: string) {
     const result = await this.reservationRepository.find({
