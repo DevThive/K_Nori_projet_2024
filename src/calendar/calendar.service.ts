@@ -40,14 +40,7 @@ export class CalendarService {
 
     const result = await this.calendarRepository.find({
       where: { id: calendarId },
-      select: [
-        'title',
-        'description',
-        'extendedProps',
-        'start',
-        'end',
-        'allDay',
-      ],
+      select: ['title', 'extendedProps', 'start', 'end', 'allDay'],
     });
 
     return result;
@@ -61,11 +54,12 @@ export class CalendarService {
       throw new BadRequestException('관리자만 조회가 가능합니다.');
     }
 
-    // calendars가 undefined이거나 빈 배열일 경우 빈 배열을 반환
+    // calendars가 undefined이거나 빈 배열일 경우 빈 배열을 반환하는 로직은 유지
     if (!calendars || calendars.length === 0) {
       return [];
     }
 
+    // 쿼리를 실행하는 부분은 기존과 동일하게 유지
     const result = await this.calendarRepository
       .createQueryBuilder('calendar')
       .where(

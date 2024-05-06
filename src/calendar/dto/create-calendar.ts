@@ -12,10 +12,6 @@ export class CreateCalendarDto {
   @ApiProperty({ description: '제목' })
   title: string;
 
-  @IsString()
-  @ApiProperty({ description: '내용' })
-  description: string;
-
   @IsDate()
   @ApiProperty({ description: '시작날짜' })
   start: Date;
@@ -44,5 +40,6 @@ export class CreateCalendarDto {
   @ApiProperty({ description: '확장 속성', type: 'object', required: false })
   extendedProps?: {
     calendar: string;
+    description: string;
   };
 }
