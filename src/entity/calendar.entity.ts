@@ -4,14 +4,11 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
-  Relation,
-  OneToMany,
   OneToOne,
   BeforeInsert,
 } from 'typeorm';
 // import { Instructor } from './instructor.entity';
 import { Reservation } from './reservation.entity';
-import { CalendarType } from 'src/calendar/types/calendar-type';
 
 @Entity({
   name: 'calendars',
@@ -26,12 +23,13 @@ export class Calendar {
   @Column({ type: 'json', nullable: true })
   extendedProps: {
     calendar: string;
+    description?: string;
   };
 
   @BeforeInsert()
   setDefaultExtendedProps() {
     if (!this.extendedProps) {
-      this.extendedProps = { calendar: 'Business' };
+      this.extendedProps = { calendar: 'Business', description: '' };
     }
   }
 
@@ -40,9 +38,6 @@ export class Calendar {
 
   @Column()
   end: Date;
-
-  @Column()
-  description: string;
 
   @Column({ nullable: true })
   class: string;
@@ -62,5 +57,5 @@ export class Calendar {
   @OneToOne(() => Reservation, (reservation) => reservation.calendar, {
     onDelete: 'CASCADE',
   })
-  reservation: Relation<Reservation>;
+  reservation: Reservation;
 }
