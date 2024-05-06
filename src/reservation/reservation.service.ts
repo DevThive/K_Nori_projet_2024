@@ -118,7 +118,7 @@ export class ReservationService {
 
     const result = await this.reservationRepository.find({
       where: {
-        state: In([0, 1]),
+        state: In([2]),
       },
       select: [
         'id',
