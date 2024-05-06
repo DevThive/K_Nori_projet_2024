@@ -76,6 +76,13 @@ export class ReservationController {
     );
   }
 
+  @ApiBearerAuth('accessToken')
+  @UseGuards(accessTokenGuard)
+  @Get('admin/success')
+  async findsuccessreservation(@UserId() userId: number) {
+    return await this.reservationService.findsuccessreservation(userId);
+  }
+
   //클래스 예약수정
   @Put(':reservationId')
   async updatereservation(
