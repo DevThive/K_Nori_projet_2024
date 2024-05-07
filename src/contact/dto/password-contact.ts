@@ -1,8 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNumber } from 'class-validator';
+import { IsString } from 'class-validator';
 
 export class ContactPasswordDto {
-  @IsNumber()
+  @IsString()
   @ApiProperty({ description: '비밀번호' })
-  password: number;
+  password: string;
 }
