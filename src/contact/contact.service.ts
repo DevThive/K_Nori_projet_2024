@@ -47,6 +47,13 @@ export class ContactService {
     return contactlists;
   }
 
+  //조회
+  async admincontactlist() {
+    const contactlists = await this.contactRepository.find();
+
+    return contactlists;
+  }
+
   //문의사항 생성
   async addcontact(createContactDto: CreateContactDto) {
     // 해싱할 때 사용할 salt의 라운드 수를 정합니다.
