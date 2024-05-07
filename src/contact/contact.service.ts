@@ -47,6 +47,13 @@ export class ContactService {
     return contactlists;
   }
 
+  //조회
+  async admincontactlist() {
+    const contactlists = await this.contactRepository.find();
+
+    return contactlists;
+  }
+
   //문의사항 생성
   async addcontact(createContactDto: CreateContactDto) {
     // 해싱할 때 사용할 salt의 라운드 수를 정합니다.
@@ -131,10 +138,13 @@ export class ContactService {
     }
 
     // bcrypt.compare() 함수를 사용하여 입력된 비밀번호와 저장된 해시를 비교합니다.
+    // 여기서는 사용자가 입력한 평문 비밀번호와 데이터베이스에 저장된 해시된 비밀번호를 직접 비교합니다.
     const isMatch = await bcrypt.compare(
       contactpassword.password,
       contact.password,
     );
+
+    // console.log(isMatch);
 
     if (!isMatch) {
       throw new BadRequestException('비밀번호가 올바르지 않습니다.');

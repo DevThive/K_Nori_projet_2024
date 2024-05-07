@@ -26,6 +26,11 @@ export class ContactController {
     return await this.contactService.contactlists();
   }
 
+  @Get('admin')
+  async admincontactlist() {
+    return await this.contactService.admincontactlist();
+  }
+
   //문의사항 상세조회
   @Get(':contactId')
   async contactlist(
