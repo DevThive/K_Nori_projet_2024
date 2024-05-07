@@ -44,6 +44,10 @@ export class Contact {
   @Column()
   password: number;
 
+  //답변
+  @Column({ type: 'text' })
+  contact_answer: string;
+
   //유저 선택사항(공개,비공개)
   @Column()
   public: number;
