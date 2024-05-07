@@ -65,7 +65,7 @@ export class ContactController {
   }
 
   //문의사항 답변 조회
-  @Get(':contactId')
+  @Get('password/:contactId')
   async contactanswer(
     @Body() contactpassword: ContactPasswordDto,
     @Param('contactId') contactId: number,
