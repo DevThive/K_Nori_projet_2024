@@ -64,8 +64,8 @@ export class ContactController {
     return await this.contactService.deletecontact(checkContactDto, contactId);
   }
 
-  //문의사항 답변 조회
-  @Get('password/:contactId')
+  //문의사항 답변 비밀번호 확인 로직
+  @Post('password/:contactId')
   async contactanswer(
     @Body() contactpassword: ContactPasswordDto,
     @Param('contactId') contactId: number,
