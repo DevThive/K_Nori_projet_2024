@@ -18,11 +18,7 @@ export class CreateContactDto {
   @ApiProperty({ description: '문의자 핸드폰 번호' })
   user_phone: string;
 
-  @IsString()
-  @ApiProperty({ description: '문의자 이메일' })
-  user_email: string;
-
   @IsNumber()
-  @ApiProperty({ description: '문의자 이메일' })
+  @ApiProperty({ description: '공개/비공개' })
   public: number;
 }
