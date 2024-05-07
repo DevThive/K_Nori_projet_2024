@@ -107,8 +107,18 @@ export class ContactService {
     });
   }
 
-  //문의 답변 확인
+  //문의 답변 비밀번호 확인 로직
   async contactanswer(contactpassword: ContactPasswordDto, id: number) {
-    console.log(contactpassword.password);
+    const contact = await this.findcontactbyid(id);
+
+    if (!contact) {
+      throw new BadRequestException('해당 문의사항이 존재하지 않습니다.');
+    }
+
+    if (contact.password !== contactpassword.password) {
+      throw new BadRequestException('비밀번호가 올바르지 않습니다.');
+    }
+
+    return 200;
   }
 }
