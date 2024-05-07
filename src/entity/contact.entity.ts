@@ -41,7 +41,7 @@ export class Contact {
   state: number;
 
   //비공개 시 유저 비밀번호 입력 후 내용 확인
-  @Column()
+  @Column({ nullable: true })
   password: string;
 
   //답변
