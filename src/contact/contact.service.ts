@@ -10,6 +10,7 @@ import { And, Repository } from 'typeorm';
 import { CreateContactDto } from './dto/create-contact';
 import { UpdateContactDto } from './dto/update-contact';
 import { CheckContactDto } from './dto/check-contact';
+import { ContactPasswordDto } from './dto/password-contact';
 
 @Injectable()
 export class ContactService {
@@ -104,5 +105,10 @@ export class ContactService {
     return await this.contactRepository.findOne({
       where: { id: id },
     });
+  }
+
+  //문의 답변 확인
+  async contactanswer(contactpassword: ContactPasswordDto, id: number) {
+    console.log(contactpassword.password);
   }
 }

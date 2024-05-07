@@ -13,6 +13,7 @@ import { ContactService } from './contact.service';
 import { CheckContactDto } from './dto/check-contact';
 import { CreateContactDto } from './dto/create-contact';
 import { UpdateContactDto } from './dto/update-contact';
+import { ContactPasswordDto } from './dto/password-contact';
 
 @ApiTags('문의하기')
 @Controller('contact')
@@ -61,5 +62,14 @@ export class ContactController {
     @Param('contactId') contactId: number,
   ) {
     return await this.contactService.deletecontact(checkContactDto, contactId);
+  }
+
+  //문의사항 답변 조회
+  @Get(':contactId')
+  async contactanswer(
+    @Body() contactpassword: ContactPasswordDto,
+    @Param('contactId') contactId: number,
+  ) {
+    return await this.contactService.contactanswer(contactpassword, contactId);
   }
 }

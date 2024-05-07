@@ -40,6 +40,10 @@ export class Contact {
   @Column()
   state: number;
 
+  //비공개 시 유저 비밀번호 입력 후 내용 확인
+  @Column()
+  password: number;
+
   //유저 선택사항(공개,비공개)
   @Column()
   public: number;
