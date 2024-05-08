@@ -12,6 +12,7 @@ import { UpdateContactDto } from './dto/update-contact';
 import { CheckContactDto } from './dto/check-contact';
 import { ContactPasswordDto } from './dto/password-contact';
 import * as bcrypt from 'bcrypt';
+import { ContactAnswerDto } from './dto/contact-answer';
 
 @Injectable()
 export class ContactService {
@@ -151,5 +152,29 @@ export class ContactService {
     }
 
     return true;
+  }
+
+  async admincontactanswer(
+    contactAnswerDto: ContactAnswerDto,
+    contactid: number,
+    userid: number,
+  ) {
+    const user = await this.userService.findUserById(userid);
+
+    if (user.role !== 1) {
+      throw new BadRequestException('관리자만 수정이 가능합니다.');
+    }
+
+    const contact = await this.findcontactbyid(contactid);
+
+    if (!contact) {
+      throw new BadRequestException('해당 문의사항이 존재하지 않습니다.');
+    }
+
+    const updatedcontact = await this.contactRepository.update(
+      { id: contactid },
+      { ...contactAnswerDto },
+    );
+    return updatedcontact;
   }
 }
