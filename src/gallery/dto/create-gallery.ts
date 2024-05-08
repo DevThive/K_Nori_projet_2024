@@ -16,4 +16,5 @@ export class CreateGalleryDto {
     // format: 'date',
   })
   date: Date;
+  //
 }

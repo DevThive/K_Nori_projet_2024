@@ -23,7 +23,16 @@ import { ApproveReservationDto } from './dto/approve-reservation';
 @Controller('reservation')
 export class ReservationController {
   constructor(private readonly reservationService: ReservationService) {}
-
+  //연도별 예약조회
+  @ApiBearerAuth('accessToken')
+  @UseGuards(accessTokenGuard)
+  @Get(':year')
+  async findreservationbyyear(
+    @UserId() userId: number,
+    @Param('year') year: number,
+  ) {
+    return await this.reservationService.findreservationbyyear(userId, year);
+  }
   //핸드폰번호로만 예약조회
   @Get('findbyphonenumber')
   async findbyphonenumber(@Param('phonenumber') phonenumber: string) {
