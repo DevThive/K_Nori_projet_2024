@@ -30,7 +30,11 @@ export class SmsService {
     to: string,
     from: string,
     buyerName: string,
-    productName: string,
+    url: string,
+    classTitle: string,
+    totalPeople: string,
+    date: string,
+    time: string,
     templateId: string,
   ) {
     // 발신 번호 설정
@@ -43,9 +47,12 @@ export class SmsService {
         pfId: this.pfId,
         templateId: templateId,
         variables: {
-          '#{상점명}': '케이놀이문화재단',
-          '#{구매자명}': buyerName,
-          '#{상품명}': productName,
+          '#{홍길동}': buyerName,
+          '#{url}': url,
+          '#{클래스명}': classTitle,
+          '#{총인원수}': totalPeople,
+          '#{예약날짜}': date,
+          '#{예약시간}': time,
         },
       },
     });

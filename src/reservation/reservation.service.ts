@@ -7,7 +7,7 @@ import {
 
 import { InjectRepository } from '@nestjs/typeorm';
 import { Reservation } from 'src/entity/reservation.entity';
-import { Repository, In } from 'typeorm';
+import { Repository, In, Between } from 'typeorm';
 import { CreateReservationDto } from './dto/create-reservation';
 import { UsersService } from 'src/users/users.service';
 import { CheckReservationDto } from './dto/check-reservation';
@@ -280,34 +280,20 @@ export class ReservationService {
     const result = await this.reservationRepository.update(reservationId, {
       ...approveReservationDto,
     });
-    // 구매자명과 상품명 설정
-    // const buyerName = reservation.client_name;
-    // const productName = Class.title;
-    // const from = this.smsService.getFromPhoneNumber();
-    //알림톡 전송
-    if (approveReservationDto.state === 1) {
-      // 예약 승인
-      // const templateId = 'KA01TP240110072220677clp0DwzaW23';
-      // await this.smsService.sendMMS(
-      //   reservation.client_phonenumber,
-      //   from,
-      //   buyerName,
-      //   productName,
-      //   templateId,
-      // );
-    } else if (approveReservationDto.state === 0) {
-      // 예약 취소
-      // const templateId = 'KA01TP240110072220677clp0DwzaW23';
-      // await this.smsService.sendMMS(
-      //   reservation.client_phonenumber,
-      //   from,
-      //   buyerName,
-      //   productName,
-      //   templateId,
-      // );
-    }
+
+    // 알림톡 구매자명과 상품명 설정
+    const buyerName = reservation.client_name;
+    const classTitle = Class.title;
+    const from = this.smsService.getFromPhoneNumber();
+    const to = reservation.client_phonenumber;
+    const url = 'www.knori.or.kr/';
+    const totalPeople = reservation.totalPeople.toString();
+    const date = reservation.date.toLocaleString();
+    const time = reservation.time.toLocaleString();
 
     if (approveReservationDto.state === 0) {
+      // 예약 취소
+
       if (reservation.invoice) {
         await this.invoiceRepository.remove(reservation.invoice);
       }
@@ -316,7 +302,22 @@ export class ReservationService {
       }
       await this.reservationRepository.save(reservation);
       await this.reservationRepository.update(reservationId, { state: 0 });
+
+      const templateId = 'KA01TP2405030940220466fA6dv2lF6x';
+      // await this.smsService.sendMMS(
+      //   to,
+      //   from,
+      //   buyerName,
+      //   url,
+      //   classTitle,
+      //   totalPeople,
+      //   date,
+      //   time,
+      //   templateId,
+      // );
     } else if (approveReservationDto.state === 1) {
+      // 예약 승인
+
       const invoiceData = {
         issuedDate: new Date(),
         companyEmail: reservation.client_email,
@@ -356,6 +357,19 @@ export class ReservationService {
       invoiceItem.invoice = invoice;
 
       await this.invoiceItemRepository.save(invoiceItem);
+
+      const templateId = 'KA01TP2405030935577648jHHuySDCMv';
+      // await this.smsService.sendMMS(
+      //   to,
+      //   from,
+      //   buyerName,
+      //   url,
+      //   classTitle,
+      //   totalPeople,
+      //   date,
+      //   time,
+      //   templateId,
+      // );
     }
     return result;
   }
@@ -398,6 +412,26 @@ export class ReservationService {
 
     const result = await this.reservationRepository.delete({
       id: reservationId,
+    });
+
+    return result;
+  }
+
+  //연도별 예약조회
+  async findreservationbyyear(userId: number, year: number) {
+    const user = await this.userService.findUserById(userId);
+
+    if (user.role !== 1) {
+      throw new BadRequestException('관리자만 조회가 가능합니다.');
+    }
+    const formattedYear = year.toString(); // 연도를 문자열로 변환
+    const startDate = new Date(`${formattedYear}-01-01`); // 해당 연도의 시작일
+    const endDate = new Date(`${formattedYear}-12-31`); // 해당 연도의 종료일
+
+    const result = await this.reservationRepository.count({
+      where: {
+        createdAt: Between(startDate, endDate), // startDate부터 endDate까지의 범위에 해당하는 데이터만 검색
+      },
     });
 
     return result;

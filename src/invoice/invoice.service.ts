@@ -6,6 +6,7 @@ import { Repository } from 'typeorm';
 import { CreateInvoiceDto } from './dto/create-invoice';
 import { UpdateInvoiceDto } from './dto/update-invoice';
 import { InvoiceItem } from 'src/entity/invoice-item.entity';
+import PDFDocument from 'pdfkit';
 
 @Injectable()
 export class InvoiceService {
@@ -83,12 +84,6 @@ export class InvoiceService {
   }
 
   async invoiceDetail(invoiceId: number) {
-    // const user = await this.userService.findUserById(userId);
-
-    // if (user.role !== 1) {
-    //   throw new BadRequestException('관리자만 작성이 가능합니다.');
-    // }
-
     const data = this.InvoiceRepository.findOne({
       where: { id: invoiceId },
       relations: { invoiceItems: true },
@@ -146,6 +141,38 @@ export class InvoiceService {
       where: { id: id },
     });
   }
+
+  //pdf 변환
+  async generatePDF(data: any): Promise<Buffer> {
+    const doc = new PDFDocument({
+      size: 'A4',
+      // font:  'font/NotoSansKR-Bold.ttf',
+    });
+    const { id, name, price } = data;
+
+    doc.fontSize(18).text(`청구서 #${id}`, 100, 100);
+    doc.fontSize(12).text(`Customer: ${name}`, 100, 150);
+    console.log('invoiceId', id);
+    doc.moveDown();
+    doc.fontSize(14).text('Items:', 100, 200);
+    doc.moveDown();
+
+    doc.moveDown();
+    doc.fontSize(14).text(`Total: $${price.toFixed(2)}`, 100, doc.y);
+
+    return this.savePDF(doc);
+  }
+
+  private async savePDF(doc: PDFDocument): Promise<Buffer> {
+    return new Promise((resolve, reject) => {
+      const chunks: Buffer[] = [];
+      doc.on('data', (chunk) => chunks.push(chunk));
+      doc.on('end', () => resolve(Buffer.concat(chunks)));
+      doc.on('error', (err) => reject(err));
+      doc.end();
+    });
+  }
+
   // async deleteinvoice(userid: number, invoicid: number) {
   //   const user = await this.userService.findUserById(userid);
 
