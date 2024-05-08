@@ -23,6 +23,7 @@ import { ApproveReservationDto } from './dto/approve-reservation';
 @Controller('reservation')
 export class ReservationController {
   constructor(private readonly reservationService: ReservationService) {}
+
   //연도별 예약조회
   @ApiBearerAuth('accessToken')
   @UseGuards(accessTokenGuard)
