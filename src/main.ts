@@ -9,8 +9,14 @@ import {
 import * as dotenv from 'dotenv';
 import { ConfigService } from '@nestjs/config';
 import { NestExpressApplication } from '@nestjs/platform-express';
-// import { join } from 'path';
-// import { join } from 'path';
+import { join } from 'path';
+import { FontConfig } from 'pdfmake/build/vfs_fonts';
+import pdfMake from 'pdfmake/build/pdfmake';
+import pdfFonts from 'pdfmake/build/vfs_fonts';
+
+const { vfs } = pdfFonts.pdfMake;
+
+pdfMake.vfs = vfs;
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -74,11 +80,27 @@ async function bootstrap() {
   const configService = app.get(ConfigService);
   const port: number = configService.get('SERVER_PORT');
 
-  // app.useStaticAssets(join(__dirname, '..', 'public')); // 정적 프론트 파일 (이번 최종 프로젝트에서는 사용할지 고민)
-  // app.setBaseViewsDir(join(__dirname, '..', 'src', 'views'));
-  // app.setViewEngine('ejs');
-
   console.log(port);
+
+  // 한글 폰트 파일 경로
+  const fontPath = '/public/fonts';
+
+  // pdfmake에 한글 폰트 등록
+  pdfMake.fonts = {
+    NotoSansKR: {
+      normal: `${fontPath}/NotoSansKR-Regular.ttf`,
+      bold: `${fontPath}/NotoSansKR-Bold.ttf`,
+      italics: `${fontPath}/NotoSansKR-Light.ttf`,
+      bolditalics: `${fontPath}/NotoSansKR-Medium.ttf`,
+    },
+  };
+  // // 상대 경로를 절대 경로로 변환하여 폰트 파일이 위치한 디렉토리 경로 지정
+  // const fontsDirectoryPath = join(__dirname, '..', 'public', 'fonts');
+
+  // // 정적 파일 서빙 미들웨어 추가
+  // app.useStaticAssets(fontsDirectoryPath, {
+  //   prefix: '/fonts', // 클라이언트에서 접근할 경로 지정
+  // });
 
   await app.listen(port);
 }

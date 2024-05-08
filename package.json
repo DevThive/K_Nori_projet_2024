@@ -65,6 +65,8 @@
     "passport-jwt": "^4.0.1",
     "passport-kakao": "^1.0.1",
     "passport-naver": "^1.0.6",
+    "pdfkit": "^0.15.0",
+    "pdfmake": "^0.2.10",
     "pg": "^8.11.3",
     "redis": "^4.6.12",
     "reflect-metadata": "^0.1.13",
