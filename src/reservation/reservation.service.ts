@@ -280,7 +280,8 @@ export class ReservationService {
     const result = await this.reservationRepository.update(reservationId, {
       ...approveReservationDto,
     });
-    // 구매자명과 상품명 설정
+
+    // 알림톡 구매자명과 상품명 설정
     const buyerName = reservation.client_name;
     const classTitle = Class.title;
     const from = this.smsService.getFromPhoneNumber();
@@ -290,40 +291,9 @@ export class ReservationService {
     const date = reservation.date.toLocaleString();
     const time = reservation.time.toLocaleString();
 
-    console.log(buyerName, classTitle, from, to, url, totalPeople, date, time);
-
-    //알림톡 전송
-    if (approveReservationDto.state === 1) {
-      // 예약 승인
-      const templateId = 'KA01TP2405030935577648jHHuySDCMv';
-      await this.smsService.sendMMS(
-        to,
-        from,
-        buyerName,
-        url,
-        classTitle,
-        totalPeople,
-        date,
-        time,
-        templateId,
-      );
-    } else if (approveReservationDto.state === 0) {
-      // 예약 취소
-      const templateId = 'KA01TP2405030940220466fA6dv2lF6x';
-      await this.smsService.sendMMS(
-        to,
-        from,
-        buyerName,
-        url,
-        classTitle,
-        totalPeople,
-        date,
-        time,
-        templateId,
-      );
-    }
-
     if (approveReservationDto.state === 0) {
+      // 예약 취소
+
       if (reservation.invoice) {
         await this.invoiceRepository.remove(reservation.invoice);
       }
@@ -332,7 +302,22 @@ export class ReservationService {
       }
       await this.reservationRepository.save(reservation);
       await this.reservationRepository.update(reservationId, { state: 0 });
+
+      const templateId = 'KA01TP2405030940220466fA6dv2lF6x';
+      // await this.smsService.sendMMS(
+      //   to,
+      //   from,
+      //   buyerName,
+      //   url,
+      //   classTitle,
+      //   totalPeople,
+      //   date,
+      //   time,
+      //   templateId,
+      // );
     } else if (approveReservationDto.state === 1) {
+      // 예약 승인
+
       const invoiceData = {
         issuedDate: new Date(),
         companyEmail: reservation.client_email,
@@ -372,6 +357,19 @@ export class ReservationService {
       invoiceItem.invoice = invoice;
 
       await this.invoiceItemRepository.save(invoiceItem);
+
+      const templateId = 'KA01TP2405030935577648jHHuySDCMv';
+      // await this.smsService.sendMMS(
+      //   to,
+      //   from,
+      //   buyerName,
+      //   url,
+      //   classTitle,
+      //   totalPeople,
+      //   date,
+      //   time,
+      //   templateId,
+      // );
     }
     return result;
   }
