@@ -281,30 +281,46 @@ export class ReservationService {
       ...approveReservationDto,
     });
     // 구매자명과 상품명 설정
-    // const buyerName = reservation.client_name;
-    // const productName = Class.title;
-    // const from = this.smsService.getFromPhoneNumber();
+    const buyerName = reservation.client_name;
+    const classTitle = Class.title;
+    const from = this.smsService.getFromPhoneNumber();
+    const to = reservation.client_phonenumber;
+    const url = 'www.knori.or.kr/';
+    const totalPeople = reservation.totalPeople.toString();
+    const date = reservation.date.toLocaleString();
+    const time = reservation.time.toLocaleString();
+
+    console.log(buyerName, classTitle, from, to, url, totalPeople, date, time);
+
     //알림톡 전송
     if (approveReservationDto.state === 1) {
       // 예약 승인
-      // const templateId = 'KA01TP240110072220677clp0DwzaW23';
-      // await this.smsService.sendMMS(
-      //   reservation.client_phonenumber,
-      //   from,
-      //   buyerName,
-      //   productName,
-      //   templateId,
-      // );
+      const templateId = 'KA01TP2405030935577648jHHuySDCMv';
+      await this.smsService.sendMMS(
+        to,
+        from,
+        buyerName,
+        url,
+        classTitle,
+        totalPeople,
+        date,
+        time,
+        templateId,
+      );
     } else if (approveReservationDto.state === 0) {
       // 예약 취소
-      // const templateId = 'KA01TP240110072220677clp0DwzaW23';
-      // await this.smsService.sendMMS(
-      //   reservation.client_phonenumber,
-      //   from,
-      //   buyerName,
-      //   productName,
-      //   templateId,
-      // );
+      const templateId = 'KA01TP2405030940220466fA6dv2lF6x';
+      await this.smsService.sendMMS(
+        to,
+        from,
+        buyerName,
+        url,
+        classTitle,
+        totalPeople,
+        date,
+        time,
+        templateId,
+      );
     }
 
     if (approveReservationDto.state === 0) {
