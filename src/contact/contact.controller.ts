@@ -4,16 +4,21 @@ import {
   Delete,
   Get,
   Param,
+  Patch,
   Post,
   Put,
   Query,
+  UseGuards,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { ContactService } from './contact.service';
 import { CheckContactDto } from './dto/check-contact';
 import { CreateContactDto } from './dto/create-contact';
 import { UpdateContactDto } from './dto/update-contact';
 import { ContactPasswordDto } from './dto/password-contact';
+import { ContactAnswerDto } from './dto/contact-answer';
+import { accessTokenGuard } from 'src/auth/guard/access-token.guard';
+import { UserId } from 'src/auth/decorators/userId.decorator';
 
 @ApiTags('문의하기')
 @Controller('contact')
@@ -76,5 +81,21 @@ export class ContactController {
     @Param('contactId') contactId: number,
   ) {
     return await this.contactService.contactanswer(contactpassword, contactId);
+  }
+
+  //문의 답글
+  @ApiBearerAuth('accessToken')
+  @UseGuards(accessTokenGuard)
+  @Patch(':contactId')
+  async createanswer(
+    @Body() contactAnswerDto: ContactAnswerDto,
+    @UserId() userId: number,
+    @Param('contactId') contactId: number,
+  ) {
+    return await this.contactService.admincontactanswer(
+      contactAnswerDto,
+      contactId,
+      userId,
+    );
   }
 }
