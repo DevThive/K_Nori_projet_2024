@@ -21,4 +21,8 @@ export class CreateContactDto {
   @IsNumber()
   @ApiProperty({ description: '공개/비공개' })
   public: number;
+
+  @IsString()
+  @ApiProperty({ description: '비밀번호' })
+  password: string;
 }

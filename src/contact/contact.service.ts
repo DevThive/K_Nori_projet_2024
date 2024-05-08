@@ -11,6 +11,8 @@ import { CreateContactDto } from './dto/create-contact';
 import { UpdateContactDto } from './dto/update-contact';
 import { CheckContactDto } from './dto/check-contact';
 import { ContactPasswordDto } from './dto/password-contact';
+import * as bcrypt from 'bcrypt';
+import { ContactAnswerDto } from './dto/contact-answer';
 
 @Injectable()
 export class ContactService {
@@ -46,10 +48,30 @@ export class ContactService {
     return contactlists;
   }
 
+  //조회
+  async admincontactlist() {
+    const contactlists = await this.contactRepository.find();
+
+    return contactlists;
+  }
+
   //문의사항 생성
   async addcontact(createContactDto: CreateContactDto) {
+    // 해싱할 때 사용할 salt의 라운드 수를 정합니다.
+    // 라운드 수가 높을수록 해싱은 더 안전해지지만, 처리 시간도 더 오래 걸립니다.
+    const saltOrRounds = 10;
+
+    // 비밀번호를 해싱합니다.
+    const hashedPassword = await bcrypt.hash(
+      createContactDto.password,
+      saltOrRounds,
+    );
+
+    // 해싱된 비밀번호를 사용하여 contact 객체를 생성합니다.
     const contact = await this.contactRepository.save({
       ...createContactDto,
+      // 원본 비밀번호 대신 해싱된 비밀번호를 저장합니다.
+      password: hashedPassword,
     });
 
     return contact;
@@ -107,8 +129,52 @@ export class ContactService {
     });
   }
 
-  //문의 답변 확인
+  //문의 답변 비밀번호 확인 로직
+
   async contactanswer(contactpassword: ContactPasswordDto, id: number) {
-    console.log(contactpassword.password);
+    const contact = await this.findcontactbyid(id);
+
+    if (!contact) {
+      throw new BadRequestException('해당 문의사항이 존재하지 않습니다.');
+    }
+
+    // bcrypt.compare() 함수를 사용하여 입력된 비밀번호와 저장된 해시를 비교합니다.
+    // 여기서는 사용자가 입력한 평문 비밀번호와 데이터베이스에 저장된 해시된 비밀번호를 직접 비교합니다.
+    const isMatch = await bcrypt.compare(
+      contactpassword.password,
+      contact.password,
+    );
+
+    // console.log(isMatch);
+
+    if (!isMatch) {
+      throw new BadRequestException('비밀번호가 올바르지 않습니다.');
+    }
+
+    return true;
+  }
+
+  async admincontactanswer(
+    contactAnswerDto: ContactAnswerDto,
+    contactid: number,
+    userid: number,
+  ) {
+    const user = await this.userService.findUserById(userid);
+
+    if (user.role !== 1) {
+      throw new BadRequestException('관리자만 수정이 가능합니다.');
+    }
+
+    const contact = await this.findcontactbyid(contactid);
+
+    if (!contact) {
+      throw new BadRequestException('해당 문의사항이 존재하지 않습니다.');
+    }
+
+    const updatedcontact = await this.contactRepository.update(
+      { id: contactid },
+      { ...contactAnswerDto },
+    );
+    return updatedcontact;
   }
 }
