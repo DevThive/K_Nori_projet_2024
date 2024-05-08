@@ -7,7 +7,7 @@ import {
 
 import { InjectRepository } from '@nestjs/typeorm';
 import { Reservation } from 'src/entity/reservation.entity';
-import { Repository, In } from 'typeorm';
+import { Repository, In, Between } from 'typeorm';
 import { CreateReservationDto } from './dto/create-reservation';
 import { UsersService } from 'src/users/users.service';
 import { CheckReservationDto } from './dto/check-reservation';
@@ -412,6 +412,26 @@ export class ReservationService {
 
     const result = await this.reservationRepository.delete({
       id: reservationId,
+    });
+
+    return result;
+  }
+
+  //연도별 예약조회
+  async findreservationbyyear(userId: number, year: number) {
+    const user = await this.userService.findUserById(userId);
+
+    if (user.role !== 1) {
+      throw new BadRequestException('관리자만 조회가 가능합니다.');
+    }
+    const formattedYear = year.toString(); // 연도를 문자열로 변환
+    const startDate = new Date(`${formattedYear}-01-01`); // 해당 연도의 시작일
+    const endDate = new Date(`${formattedYear}-12-31`); // 해당 연도의 종료일
+
+    const result = await this.reservationRepository.count({
+      where: {
+        createdAt: Between(startDate, endDate), // startDate부터 endDate까지의 범위에 해당하는 데이터만 검색
+      },
     });
 
     return result;
