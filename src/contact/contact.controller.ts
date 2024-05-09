@@ -83,7 +83,7 @@ export class ContactController {
     return await this.contactService.contactanswer(contactpassword, contactId);
   }
 
-  //문의 답글
+  //문의 답글.
   @ApiBearerAuth('accessToken')
   @UseGuards(accessTokenGuard)
   @Patch(':contactId')
