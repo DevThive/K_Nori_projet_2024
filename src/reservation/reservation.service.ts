@@ -436,4 +436,94 @@ export class ReservationService {
 
     return result;
   }
+
+  //연도별 예약 완료 건수 조회
+  async findcompletedreservation(userId: number, year: number) {
+    const user = await this.userService.findUserById(userId);
+
+    if (user.role !== 1) {
+      throw new BadRequestException('관리자만 조회가 가능합니다.');
+    }
+    const formattedYear = year.toString(); // 연도를 문자열로 변환
+    const startDate = new Date(`${formattedYear}-01-01`); // 해당 연도의 시작일
+    const endDate = new Date(`${formattedYear}-12-31`); // 해당 연도의 종료일
+
+    const result = await this.reservationRepository.count({
+      where: {
+        state: 2,
+        createdAt: Between(startDate, endDate),
+      },
+    });
+
+    return result;
+  }
+
+  //한달예상매출액
+  async findmonthlycost(userId: number, year: number, month: number) {
+    const user = await this.userService.findUserById(userId);
+
+    if (user.role !== 1) {
+      throw new BadRequestException('관리자만 조회가 가능합니다.');
+    }
+
+    // 연도와 월을 문자열로 변환
+    const formattedYear = year.toString();
+    const formattedMonth = month.toString().padStart(2, '0'); // 월이 한 자리 수인 경우 앞에 0을 추가하여 두 자리로 만듦
+
+    // 시작일과 종료일 생성
+    const startDate = new Date(`${formattedYear}-${formattedMonth}-01`);
+    const endDate = new Date(
+      new Date(startDate).setMonth(startDate.getMonth() + 1),
+    ); // 다음 달의 시작일
+
+    // 해당 월의 예약 완료 건수 조회
+    const reservations = await this.reservationRepository.find({
+      where: {
+        state: 2,
+        createdAt: Between(startDate, endDate),
+      },
+      select: ['totalPeople'],
+    });
+
+    // 예약된 총 인원 계산
+    const totalPeople = reservations.reduce(
+      (acc, cur) => acc + cur.totalPeople,
+      0,
+    );
+
+    // 총 매출액 계산
+    const totalRevenue = totalPeople * 18000;
+
+    return totalRevenue;
+  }
+
+  //이번해매출수익액
+  async findyearlycost(userId: number, year: number) {
+    const user = await this.userService.findUserById(userId);
+
+    if (user.role !== 1) {
+      throw new BadRequestException('관리자만 조회가 가능합니다.');
+    }
+    const formattedYear = year.toString(); // 연도를 문자열로 변환
+    const startDate = new Date(`${formattedYear}-01-01`); // 해당 연도의 시작일
+    const endDate = new Date(`${formattedYear}-12-31`); // 해당 연도의 종료일
+
+    const result = await this.reservationRepository.find({
+      where: {
+        state: 2,
+        createdAt: Between(startDate, endDate),
+      },
+    });
+
+    let totalPeople = 0;
+    result.forEach((reservation) => {
+      totalPeople += reservation.totalPeople;
+    });
+
+    const totalRevenue = totalPeople * 18000;
+
+    return totalRevenue;
+  }
+
+  //매달수익조회
 }
