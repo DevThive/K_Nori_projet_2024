@@ -430,7 +430,7 @@ export class ReservationService {
 
     const result = await this.reservationRepository.count({
       where: {
-        createdAt: Between(startDate, endDate), // startDate부터 endDate까지의 범위에 해당하는 데이터만 검색
+        date: Between(startDate, endDate), // startDate부터 endDate까지의 범위에 해당하는 데이터만 검색
       },
     });
 
@@ -451,7 +451,7 @@ export class ReservationService {
     const result = await this.reservationRepository.count({
       where: {
         state: 2,
-        createdAt: Between(startDate, endDate),
+        date: Between(startDate, endDate),
       },
     });
 
@@ -558,14 +558,21 @@ export class ReservationService {
       throw new BadRequestException('관리자만 조회가 가능합니다.');
     }
 
-    // 현재 날짜를 기준으로 주어진 주의 시작일과 종료일 계산
+    // 현재 날짜를 기준으로 주어진 주의 시작일과 종료일 계산 (월요일부터 시작)
     const currentDate = new Date();
     const currentYear = currentDate.getFullYear();
     const startDate = this.getDateOfISOWeek(weekNumber, currentYear);
+    const mondayOffset = startDate.getDay() === 0 ? 6 : startDate.getDay() - 1; // 월요일이 아니면 이전 주의 월요일까지의 날짜 수 계산
+    startDate.setDate(startDate.getDate() - mondayOffset); // 주의 시작일을 월요일로 조정
     const endDate = new Date(startDate);
-    endDate.setDate(startDate.getDate() + 7); // 해당 주의 다음 주의 첫 번째 날
+    endDate.setDate(startDate.getDate() + 6); // 해당 주의 일요일로 설정
 
-    const weeklyRevenue = [];
+    console.log(
+      `이번 주 일주일은 ${startDate.toLocaleDateString()}부터 ${endDate.toLocaleDateString()}까지입니다.`,
+    );
+
+    const weeklyBookings = [];
+    let todayBookings = 0;
 
     // 해당 주의 각 날짜별 예약 건수 조회
     for (let i = 0; i < 7; i++) {
@@ -575,17 +582,36 @@ export class ReservationService {
       const reservationCount = await this.reservationRepository.count({
         where: {
           state: 2,
-          date: Between(currentDate, currentDate),
+          date: Between(
+            new Date(
+              currentDate.getFullYear(),
+              currentDate.getMonth(),
+              currentDate.getDate(),
+              0,
+              0,
+              0,
+            ),
+            new Date(
+              currentDate.getFullYear(),
+              currentDate.getMonth(),
+              currentDate.getDate() + 1,
+              0,
+              0,
+              0,
+            ),
+          ),
         },
       });
 
-      weeklyRevenue.push({
-        date: currentDate.toISOString().split('T')[0],
-        reservationCount: reservationCount,
-      });
+      if (currentDate.toDateString() === new Date().toDateString()) {
+        // 오늘 예약 건수 저장
+        todayBookings = reservationCount;
+      }
+
+      weeklyBookings.push(reservationCount);
     }
 
-    return weeklyRevenue;
+    return { weeklyBookings, todayBookings };
   }
 
   // ISO 주차에서 주어진 연도와 주차에 해당하는 주의 시작일을 반환
