@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
   Put,
@@ -23,6 +24,32 @@ import { ApproveReservationDto } from './dto/approve-reservation';
 @Controller('reservation')
 export class ReservationController {
   constructor(private readonly reservationService: ReservationService) {}
+
+  //일주일 예약건수
+  @ApiBearerAuth('accessToken')
+  @UseGuards(accessTokenGuard)
+  @Get('completedreservation/week')
+  async findCompletedReservationByWeek(@UserId() userId: number) {
+    const weeklyRevenue =
+      await this.reservationService.findCompletedReservationByWeek(userId);
+    return { revenue: weeklyRevenue };
+  }
+
+  //일주일 매출수익액
+  @ApiBearerAuth('accessToken')
+  @UseGuards(accessTokenGuard)
+  @Get(':year/week/:weekNumber')
+  async getWeeklyRevenue(
+    @UserId() userId: number,
+    @Param('year', ParseIntPipe) year: number,
+    @Param('weekNumber', ParseIntPipe) weekNumber: number,
+  ) {
+    return await this.reservationService.findWeeklyRevenue(
+      userId,
+      year,
+      weekNumber,
+    );
+  }
 
   //이번해매출수익액
   @ApiBearerAuth('accessToken')
