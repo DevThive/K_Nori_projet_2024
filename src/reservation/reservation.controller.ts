@@ -28,10 +28,16 @@ export class ReservationController {
   //일주일 예약건수
   @ApiBearerAuth('accessToken')
   @UseGuards(accessTokenGuard)
-  @Get('completedreservation/week')
-  async findCompletedReservationByWeek(@UserId() userId: number) {
+  @Get('completedreservation/week/:weekNumber')
+  async findCompletedReservationByWeek(
+    @UserId() userId: number,
+    @Param('weekNumber') weekNumber: number,
+  ) {
     const weeklyRevenue =
-      await this.reservationService.findCompletedReservationByWeek(userId);
+      await this.reservationService.findCompletedReservationByWeek(
+        userId,
+        weekNumber,
+      );
     return { revenue: weeklyRevenue };
   }
 
