@@ -25,6 +25,14 @@ import { ApproveReservationDto } from './dto/approve-reservation';
 export class ReservationController {
   constructor(private readonly reservationService: ReservationService) {}
 
+  //클래스별 예약건수(누적)
+  @ApiBearerAuth('accessToken')
+  @UseGuards(accessTokenGuard)
+  @Get('countsByClass')
+  async findReservationCountsByClass(@UserId() userId: number) {
+    return await this.reservationService.findReservationCountsByClass(userId);
+  }
+
   // 특정 날짜 예약 건수 조회(일일 예약건수 조회)
   @ApiBearerAuth('accessToken')
   @UseGuards(accessTokenGuard)

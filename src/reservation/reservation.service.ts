@@ -7,7 +7,7 @@ import {
 
 import { InjectRepository } from '@nestjs/typeorm';
 import { Reservation } from 'src/entity/reservation.entity';
-import { Repository, In } from 'typeorm';
+import { Repository, In, Equal } from 'typeorm';
 import { CreateReservationDto } from './dto/create-reservation';
 import { UsersService } from 'src/users/users.service';
 import { CheckReservationDto } from './dto/check-reservation';
@@ -20,12 +20,14 @@ import { InvoiceItem } from 'src/entity/invoice-item.entity';
 import { ApproveReservationDto } from './dto/approve-reservation';
 import { SmsService } from 'src/sms/sms.service';
 import { Between } from 'typeorm';
+import { ClassService } from 'src/class/class.service';
 
 @Injectable()
 export class ReservationService {
   constructor(
     private readonly userService: UsersService,
     private readonly smsService: SmsService,
+    private readonly classService: ClassService,
 
     @InjectRepository(Reservation)
     private reservationRepository: Repository<Reservation>,
@@ -603,6 +605,32 @@ export class ReservationService {
       weeklyBookings.push(reservationCount);
     }
     return { weeklyBookings, todayBookings };
+  }
+
+  //클래스별 예약건수(누적)
+  async findReservationCountsByClass(userId: number) {
+    const user = await this.userService.findUserById(userId);
+
+    if (user.role !== 1) {
+      throw new BadRequestException('관리자만 조회가 가능합니다.');
+    }
+
+    const classes = await this.classService.findallclasses(userId); // 클래스 정보를 가져옴
+    const classReservationCounts = {};
+
+    for (const classInfo of classes) {
+      const classId = classInfo.id;
+      const reservationCount = await this.reservationRepository.count({
+        where: {
+          state: 2,
+          class: Equal(classId), // 클래스 아이디로 필터링
+        },
+      });
+
+      classReservationCounts[classId] = reservationCount;
+    }
+
+    return { classReservationCounts };
   }
 
   // //일주일 매출수익액
