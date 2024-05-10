@@ -633,6 +633,23 @@ export class ReservationService {
     return { classReservationCounts };
   }
 
+  //예약 미승인건수 조회
+  async unapprovedReservationCount(userId: number) {
+    const user = await this.userService.findUserById(userId);
+
+    if (user.role !== 1) {
+      throw new BadRequestException('관리자만 조회가 가능합니다.');
+    }
+
+    const result = await this.reservationRepository.count({
+      where: {
+        state: 0,
+      },
+    });
+
+    return result;
+  }
+
   // //일주일 매출수익액
   // async findWeeklyRevenue(userId: number, year: number, weekNumber: number) {
   //   const user = await this.userService.findUserById(userId);
