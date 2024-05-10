@@ -98,7 +98,7 @@ export class ReservationController {
   }
 
   //핸드폰번호로만 예약조회
-  @Get('findbyphonenumber')
+  @Get('findbyphonenumber/:phonenumber')
   async findbyphonenumber(@Param('phonenumber') phonenumber: string) {
     return await this.reservationService.findbyphonenumber(phonenumber);
   }
