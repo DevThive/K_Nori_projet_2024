@@ -42,10 +42,16 @@ export class ReservationController {
   // 이번 주 일주일간의 예약 건수 및 오늘의 예약 건수 조회
   @ApiBearerAuth('accessToken')
   @UseGuards(accessTokenGuard)
-  @Get('completedreservation/week')
-  async findCompletedReservationByWeek(@UserId() userId: number) {
+  @Get('completedreservation/:startdate')
+  async findCompletedReservationByWeek(
+    @UserId() userId: number,
+    @Param('startdate') startdate: string,
+  ) {
     const weeklyRevenue =
-      await this.reservationService.findCompletedReservationByWeek(userId);
+      await this.reservationService.findCompletedReservationByWeek(
+        userId,
+        startdate,
+      );
     return { revenue: weeklyRevenue };
   }
 
@@ -124,7 +130,7 @@ export class ReservationController {
   //클래스 예약 전체 조회(관리자)
   @ApiBearerAuth('accessToken')
   @UseGuards(accessTokenGuard)
-  @Get('admin')
+  @Get('adminFindAll')
   async findallreservation(@UserId() userId: number) {
     return await this.reservationService.findallreservation(userId);
   }
@@ -145,7 +151,7 @@ export class ReservationController {
 
   @ApiBearerAuth('accessToken')
   @UseGuards(accessTokenGuard)
-  @Get('admin/success')
+  @Get('adminSuccess')
   async findsuccessreservation(@UserId() userId: number) {
     return await this.reservationService.findsuccessreservation(userId);
   }
@@ -211,7 +217,7 @@ export class ReservationController {
   //예약내역 삭제(어드민)
   @ApiBearerAuth('accessToken')
   @UseGuards(accessTokenGuard)
-  @Delete('admin/:reservationId')
+  @Delete('adminDelete/:reservationId')
   async admindelete(
     @UserId() userId: number,
     @Param('reservationId') reservationId: number,
