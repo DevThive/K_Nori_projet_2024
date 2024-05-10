@@ -562,6 +562,55 @@ export class ReservationService {
     return { date, reservationCount };
   }
 
+  // 이번 주 일주일간의 예약 건수 및 오늘의 예약 건수 조회
+  //한국시간대 변경 전
+  async findCompletedReservationByWeek(userId: number) {
+    const user = await this.userService.findUserById(userId);
+
+    if (user.role !== 1) {
+      throw new BadRequestException('관리자만 조회가 가능합니다.');
+    }
+
+    // 이번 주의 시작일과 종료일 계산 (월요일부터 시작)
+    const currentDate = new Date();
+    const currentDay = currentDate.getDay(); // 오늘의 요일 (0: 일요일, 1: 월요일, ..., 6: 토요일)
+    const startOfWeek = new Date(currentDate); // 이번 주의 시작일
+    const mondayOffset = currentDay === 0 ? 6 : currentDay - 1; // 월요일이 아니면 이전 주의 월요일까지의 날짜 수 계산
+    startOfWeek.setDate(currentDate.getDate() - mondayOffset); // 이번 주의 첫 번째 날(월요일)
+    const endOfWeek = new Date(startOfWeek); // 이번 주의 마지막 날(일요일)
+    endOfWeek.setDate(startOfWeek.getDate() + 6); // 이번 주의 마지막 날(일요일)
+
+    console.log(`오늘 날짜: ${currentDate.toLocaleDateString()}`);
+    console.log(
+      `이번 주 일주일간의 기간: ${startOfWeek.toLocaleDateString()} ~ ${endOfWeek.toLocaleDateString()}`,
+    );
+
+    const weeklyBookings = [];
+    let todayBookings = 0;
+    // 이번 주 일주일간 각 날짜별 예약 건수 조회
+    for (let i = 0; i < 7; i++) {
+      const startDate = new Date(startOfWeek);
+      startDate.setDate(startOfWeek.getDate() + i);
+      const endDate = new Date(startDate);
+      endDate.setDate(startDate.getDate() + 1); // 해당 날짜의 다음 날까지
+
+      const reservationCount = await this.reservationRepository.count({
+        where: {
+          state: 2,
+          date: Between(startDate, endDate),
+        },
+      });
+
+      if (i === currentDay) {
+        todayBookings = reservationCount;
+      } else {
+        weeklyBookings.push(reservationCount);
+      }
+    }
+
+    return { weeklyBookings, todayBookings };
+  }
+
   // //일주일 매출수익액
   // async findWeeklyRevenue(userId: number, year: number, weekNumber: number) {
   //   const user = await this.userService.findUserById(userId);
@@ -585,54 +634,5 @@ export class ReservationService {
   //   });
 
   //   return totalRevenue;
-  // }
-
-  // // 이번 주 일주일간의 예약 건수 및 오늘의 예약 건수 조회
-  // //한국시간대 변경 전
-  // async findCompletedReservationByWeek(userId: number) {
-  //   const user = await this.userService.findUserById(userId);
-
-  //   if (user.role !== 1) {
-  //     throw new BadRequestException('관리자만 조회가 가능합니다.');
-  //   }
-
-  //   // 이번 주의 시작일과 종료일 계산 (월요일부터 시작)
-  //   const currentDate = new Date();
-  //   const currentDay = currentDate.getDay(); // 오늘의 요일 (0: 일요일, 1: 월요일, ..., 6: 토요일)
-  //   const startOfWeek = new Date(currentDate); // 이번 주의 시작일
-  //   const mondayOffset = currentDay === 0 ? 6 : currentDay - 1; // 월요일이 아니면 이전 주의 월요일까지의 날짜 수 계산
-  //   startOfWeek.setDate(currentDate.getDate() - mondayOffset); // 이번 주의 첫 번째 날(월요일)
-  //   const endOfWeek = new Date(startOfWeek); // 이번 주의 마지막 날(일요일)
-  //   endOfWeek.setDate(startOfWeek.getDate() + 6); // 이번 주의 마지막 날(일요일)
-
-  //   console.log(`오늘 날짜: ${currentDate.toLocaleDateString()}`);
-  //   console.log(
-  //     `이번 주 일주일간의 기간: ${startOfWeek.toLocaleDateString()} ~ ${endOfWeek.toLocaleDateString()}`,
-  //   );
-
-  //   const weeklyBookings = [];
-  //   let todayBookings = 0;
-  //   // 이번 주 일주일간 각 날짜별 예약 건수 조회
-  //   for (let i = 0; i < 7; i++) {
-  //     const startDate = new Date(startOfWeek);
-  //     startDate.setDate(startOfWeek.getDate() + i);
-  //     const endDate = new Date(startDate);
-  //     endDate.setDate(startDate.getDate() + 1); // 해당 날짜의 다음 날까지
-
-  //     const reservationCount = await this.reservationRepository.count({
-  //       where: {
-  //         state: 2,
-  //         date: Between(startDate, endDate),
-  //       },
-  //     });
-
-  //     if (i === currentDay) {
-  //       todayBookings = reservationCount;
-  //     } else {
-  //       weeklyBookings.push(reservationCount);
-  //     }
-  //   }
-
-  //   return { weeklyBookings, todayBookings };
   // }
 }
