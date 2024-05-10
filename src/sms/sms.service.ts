@@ -57,4 +57,32 @@ export class SmsService {
       },
     });
   }
+
+  async sendContactAlarm(
+    to: string,
+    from: string,
+    buyerName: string,
+    url: string,
+    contentTitle: string,
+    content: string,
+    templateId: string,
+  ) {
+    // 발신 번호 설정
+    // const from = this.getFromPhoneNumber();
+
+    await this.messageService.send({
+      to,
+      from,
+      kakaoOptions: {
+        pfId: this.pfId,
+        templateId: templateId,
+        variables: {
+          '#{홍길동}': buyerName,
+          '#{url}': url,
+          '#{문의제목}': contentTitle,
+          '#{문의내용}': content,
+        },
+      },
+    });
+  }
 }
