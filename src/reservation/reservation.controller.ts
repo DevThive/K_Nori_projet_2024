@@ -39,31 +39,15 @@ export class ReservationController {
     );
   }
 
-  // //일주일 예약건수
-  // @ApiBearerAuth('accessToken')
-  // @UseGuards(accessTokenGuard)
-  // @Get('completedreservation/week')
-  // async findCompletedReservationByWeek(@UserId() userId: number) {
-  //   const weeklyRevenue =
-  //     await this.reservationService.findCompletedReservationByWeek(userId);
-  //   return { revenue: weeklyRevenue };
-  // }
-
-  // //일주일 매출수익액
-  // @ApiBearerAuth('accessToken')
-  // @UseGuards(accessTokenGuard)
-  // @Get(':year/week/:weekNumber')
-  // async getWeeklyRevenue(
-  //   @UserId() userId: number,
-  //   @Param('year', ParseIntPipe) year: number,
-  //   @Param('weekNumber', ParseIntPipe) weekNumber: number,
-  // ) {
-  //   return await this.reservationService.findWeeklyRevenue(
-  //     userId,
-  //     year,
-  //     weekNumber,
-  //   );
-  // }
+  // 이번 주 일주일간의 예약 건수 및 오늘의 예약 건수 조회
+  @ApiBearerAuth('accessToken')
+  @UseGuards(accessTokenGuard)
+  @Get('completedreservation/week')
+  async findCompletedReservationByWeek(@UserId() userId: number) {
+    const weeklyRevenue =
+      await this.reservationService.findCompletedReservationByWeek(userId);
+    return { revenue: weeklyRevenue };
+  }
 
   //이번해매출수익액
   @ApiBearerAuth('accessToken')
@@ -234,4 +218,20 @@ export class ReservationController {
   ) {
     return await this.reservationService.admindelete(userId, reservationId);
   }
+
+  // //일주일 매출수익액
+  // @ApiBearerAuth('accessToken')
+  // @UseGuards(accessTokenGuard)
+  // @Get(':year/week/:weekNumber')
+  // async getWeeklyRevenue(
+  //   @UserId() userId: number,
+  //   @Param('year', ParseIntPipe) year: number,
+  //   @Param('weekNumber', ParseIntPipe) weekNumber: number,
+  // ) {
+  //   return await this.reservationService.findWeeklyRevenue(
+  //     userId,
+  //     year,
+  //     weekNumber,
+  //   );
+  // }
 }
