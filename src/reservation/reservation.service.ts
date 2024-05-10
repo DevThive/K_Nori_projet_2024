@@ -142,6 +142,7 @@ export class ReservationService {
   async findbyphonenumber(phonenumber: string) {
     const result = await this.reservationRepository.find({
       where: { client_phonenumber: phonenumber },
+      relations: { class: true },
     });
 
     return result;
