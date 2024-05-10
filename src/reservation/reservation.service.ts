@@ -107,7 +107,7 @@ export class ReservationService {
     return result;
   }
 
-  //예약 전체 조회(관리자)
+  //예약 전체 조회(관리자).
   async findsuccessreservation(userId: number) {
     console.log('userId', userId);
     const user = await this.userService.findUserById(userId);
