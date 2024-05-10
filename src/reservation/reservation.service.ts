@@ -526,105 +526,113 @@ export class ReservationService {
     return totalRevenue;
   }
 
-  //일주일 매출수익액
-  async findWeeklyRevenue(userId: number, year: number, weekNumber: number) {
+  // 특정 날짜 예약 건수 조회(일일 예약건수 조회)
+  async findCompletedReservationByDate(userId: number, date: string) {
     const user = await this.userService.findUserById(userId);
 
     if (user.role !== 1) {
       throw new BadRequestException('관리자만 조회가 가능합니다.');
     }
 
-    const startDate = new Date(year, 0, 1 + (weekNumber - 1) * 7);
-    const endDate = new Date(year, 0, 1 + weekNumber * 7);
-    const reservations = await this.reservationRepository.find({
+    const selectedDate = new Date(date);
+    const startDate = new Date(
+      selectedDate.getFullYear(),
+      selectedDate.getMonth(),
+      selectedDate.getDate(),
+      0,
+      0,
+      0,
+    );
+    const endDate = new Date(
+      selectedDate.getFullYear(),
+      selectedDate.getMonth(),
+      selectedDate.getDate(),
+      23,
+      59,
+      59,
+    );
+
+    const reservationCount = await this.reservationRepository.count({
       where: {
+        state: 2,
         date: Between(startDate, endDate),
-        state: 2, // 예약 완료 상태일 경우에만 계산
       },
     });
 
-    let totalRevenue = 0;
-    reservations.forEach((reservation) => {
-      totalRevenue += reservation.totalPeople * 18000;
-    });
-
-    return totalRevenue;
+    return { date, reservationCount };
   }
 
-  // 이번 주 일주일간의 예약 건수 조회
-  async findCompletedReservationByWeek(userId: number, weekNumber: number) {
-    const user = await this.userService.findUserById(userId);
+  // //일주일 매출수익액
+  // async findWeeklyRevenue(userId: number, year: number, weekNumber: number) {
+  //   const user = await this.userService.findUserById(userId);
 
-    if (user.role !== 1) {
-      throw new BadRequestException('관리자만 조회가 가능합니다.');
-    }
+  //   if (user.role !== 1) {
+  //     throw new BadRequestException('관리자만 조회가 가능합니다.');
+  //   }
 
-    // 현재 날짜를 기준으로 주어진 주의 시작일과 종료일 계산 (월요일부터 시작)
-    const currentDate = new Date();
-    const currentYear = currentDate.getFullYear();
-    const startDate = this.getDateOfISOWeek(weekNumber, currentYear);
-    const mondayOffset = startDate.getDay() === 0 ? 6 : startDate.getDay() - 1; // 월요일이 아니면 이전 주의 월요일까지의 날짜 수 계산
-    startDate.setDate(startDate.getDate() - mondayOffset); // 주의 시작일을 월요일로 조정
-    const endDate = new Date(startDate);
-    endDate.setDate(startDate.getDate() + 6); // 해당 주의 일요일로 설정
+  //   const startDate = new Date(year, 0, 1 + (weekNumber - 1) * 7);
+  //   const endDate = new Date(year, 0, 1 + weekNumber * 7);
+  //   const reservations = await this.reservationRepository.find({
+  //     where: {
+  //       date: Between(startDate, endDate),
+  //       state: 2, // 예약 완료 상태일 경우에만 계산
+  //     },
+  //   });
 
-    console.log(
-      `이번 주 일주일은 ${startDate.toLocaleDateString()}부터 ${endDate.toLocaleDateString()}까지입니다.`,
-    );
+  //   let totalRevenue = 0;
+  //   reservations.forEach((reservation) => {
+  //     totalRevenue += reservation.totalPeople * 18000;
+  //   });
 
-    const weeklyBookings = [];
-    let todayBookings = 0;
+  //   return totalRevenue;
+  // }
 
-    // 해당 주의 각 날짜별 예약 건수 조회
-    for (let i = 0; i < 7; i++) {
-      const currentDate = new Date(startDate);
-      currentDate.setDate(startDate.getDate() + i);
+  // // 이번 주 일주일간의 예약 건수 및 오늘의 예약 건수 조회
+  // //한국시간대 변경 전
+  // async findCompletedReservationByWeek(userId: number) {
+  //   const user = await this.userService.findUserById(userId);
 
-      const reservationCount = await this.reservationRepository.count({
-        where: {
-          state: 2,
-          date: Between(
-            new Date(
-              currentDate.getFullYear(),
-              currentDate.getMonth(),
-              currentDate.getDate(),
-              0,
-              0,
-              0,
-            ),
-            new Date(
-              currentDate.getFullYear(),
-              currentDate.getMonth(),
-              currentDate.getDate() + 1,
-              0,
-              0,
-              0,
-            ),
-          ),
-        },
-      });
+  //   if (user.role !== 1) {
+  //     throw new BadRequestException('관리자만 조회가 가능합니다.');
+  //   }
 
-      if (currentDate.toDateString() === new Date().toDateString()) {
-        // 오늘 예약 건수 저장
-        todayBookings = reservationCount;
-      }
+  //   // 이번 주의 시작일과 종료일 계산 (월요일부터 시작)
+  //   const currentDate = new Date();
+  //   const currentDay = currentDate.getDay(); // 오늘의 요일 (0: 일요일, 1: 월요일, ..., 6: 토요일)
+  //   const startOfWeek = new Date(currentDate); // 이번 주의 시작일
+  //   const mondayOffset = currentDay === 0 ? 6 : currentDay - 1; // 월요일이 아니면 이전 주의 월요일까지의 날짜 수 계산
+  //   startOfWeek.setDate(currentDate.getDate() - mondayOffset); // 이번 주의 첫 번째 날(월요일)
+  //   const endOfWeek = new Date(startOfWeek); // 이번 주의 마지막 날(일요일)
+  //   endOfWeek.setDate(startOfWeek.getDate() + 6); // 이번 주의 마지막 날(일요일)
 
-      weeklyBookings.push(reservationCount);
-    }
+  //   console.log(`오늘 날짜: ${currentDate.toLocaleDateString()}`);
+  //   console.log(
+  //     `이번 주 일주일간의 기간: ${startOfWeek.toLocaleDateString()} ~ ${endOfWeek.toLocaleDateString()}`,
+  //   );
 
-    return { weeklyBookings, todayBookings };
-  }
+  //   const weeklyBookings = [];
+  //   let todayBookings = 0;
+  //   // 이번 주 일주일간 각 날짜별 예약 건수 조회
+  //   for (let i = 0; i < 7; i++) {
+  //     const startDate = new Date(startOfWeek);
+  //     startDate.setDate(startOfWeek.getDate() + i);
+  //     const endDate = new Date(startDate);
+  //     endDate.setDate(startDate.getDate() + 1); // 해당 날짜의 다음 날까지
 
-  // ISO 주차에서 주어진 연도와 주차에 해당하는 주의 시작일을 반환
-  getDateOfISOWeek(weekNumber: number, year: number) {
-    const januaryFirst = new Date(year, 0, 1);
-    const daysOffset =
-      januaryFirst.getDay() > 4
-        ? 11 - januaryFirst.getDay()
-        : 4 - januaryFirst.getDay();
-    const firstThursday = new Date(januaryFirst);
-    firstThursday.setDate(januaryFirst.getDate() + daysOffset);
-    firstThursday.setDate(firstThursday.getDate() + (weekNumber - 1) * 7);
-    return firstThursday;
-  }
+  //     const reservationCount = await this.reservationRepository.count({
+  //       where: {
+  //         state: 2,
+  //         date: Between(startDate, endDate),
+  //       },
+  //     });
+
+  //     if (i === currentDay) {
+  //       todayBookings = reservationCount;
+  //     } else {
+  //       weeklyBookings.push(reservationCount);
+  //     }
+  //   }
+
+  //   return { weeklyBookings, todayBookings };
+  // }
 }

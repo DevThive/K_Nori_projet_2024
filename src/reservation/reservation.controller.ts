@@ -25,37 +25,45 @@ import { ApproveReservationDto } from './dto/approve-reservation';
 export class ReservationController {
   constructor(private readonly reservationService: ReservationService) {}
 
-  //일주일 예약건수
+  // 특정 날짜 예약 건수 조회(일일 예약건수 조회)
   @ApiBearerAuth('accessToken')
   @UseGuards(accessTokenGuard)
-  @Get('completedreservation/week/:weekNumber')
-  async findCompletedReservationByWeek(
+  @Get('reservationByDate/:date')
+  async findCompletedReservationByDate(
     @UserId() userId: number,
-    @Param('weekNumber') weekNumber: number,
+    @Param('date') date: string,
   ) {
-    const weeklyRevenue =
-      await this.reservationService.findCompletedReservationByWeek(
-        userId,
-        weekNumber,
-      );
-    return { revenue: weeklyRevenue };
-  }
-
-  //일주일 매출수익액
-  @ApiBearerAuth('accessToken')
-  @UseGuards(accessTokenGuard)
-  @Get(':year/week/:weekNumber')
-  async getWeeklyRevenue(
-    @UserId() userId: number,
-    @Param('year', ParseIntPipe) year: number,
-    @Param('weekNumber', ParseIntPipe) weekNumber: number,
-  ) {
-    return await this.reservationService.findWeeklyRevenue(
+    return await this.reservationService.findCompletedReservationByDate(
       userId,
-      year,
-      weekNumber,
+      date,
     );
   }
+
+  // //일주일 예약건수
+  // @ApiBearerAuth('accessToken')
+  // @UseGuards(accessTokenGuard)
+  // @Get('completedreservation/week')
+  // async findCompletedReservationByWeek(@UserId() userId: number) {
+  //   const weeklyRevenue =
+  //     await this.reservationService.findCompletedReservationByWeek(userId);
+  //   return { revenue: weeklyRevenue };
+  // }
+
+  // //일주일 매출수익액
+  // @ApiBearerAuth('accessToken')
+  // @UseGuards(accessTokenGuard)
+  // @Get(':year/week/:weekNumber')
+  // async getWeeklyRevenue(
+  //   @UserId() userId: number,
+  //   @Param('year', ParseIntPipe) year: number,
+  //   @Param('weekNumber', ParseIntPipe) weekNumber: number,
+  // ) {
+  //   return await this.reservationService.findWeeklyRevenue(
+  //     userId,
+  //     year,
+  //     weekNumber,
+  //   );
+  // }
 
   //이번해매출수익액
   @ApiBearerAuth('accessToken')
