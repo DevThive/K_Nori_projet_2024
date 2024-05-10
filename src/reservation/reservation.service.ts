@@ -565,11 +565,9 @@ export class ReservationService {
 
   async findCompletedReservationByWeek(userId: number) {
     const user = await this.userService.findUserById(userId);
-
     if (user.role !== 1) {
       throw new BadRequestException('관리자만 조회가 가능합니다.');
     }
-
     // 한국 시간대로 변경하기 위한 조정
     const KST_OFFSET = 9;
     // 이번 주의 시작일과 종료일 계산 (월요일부터 시작)
@@ -581,7 +579,6 @@ export class ReservationService {
     const startOfWeek = new Date(currentDate);
     startOfWeek.setDate(currentDate.getDate() + mondayOffset);
     startOfWeek.setHours(0, 0, 0, 0); // 이번 주의 첫 번째 날(월요일) 자정
-
     const weeklyBookings = [];
     let todayBookings = 0;
     // 이번 주 일주일간 각 날짜별 예약 건수 조회
@@ -589,7 +586,6 @@ export class ReservationService {
       const targetDate = new Date(startOfWeek);
       targetDate.setDate(startOfWeek.getDate() + i);
       targetDate.setHours(0, 0, 0, 0); // 해당 날짜 자정
-
       const reservationCount = await this.reservationRepository.count({
         where: {
           state: 2,
@@ -599,7 +595,6 @@ export class ReservationService {
           ),
         },
       });
-
       // 오늘 날짜의 예약 건수를 별도로 저장
       if (i === (currentDay + 6) % 7) {
         // 한국 시간 기준으로 오늘의 요일을 조정
@@ -607,12 +602,7 @@ export class ReservationService {
       }
       weeklyBookings.push(reservationCount);
     }
-
-    return {
-      startDate: startOfWeek,
-      weeklyReservationCounts,
-      todayReservationCount,
-    };
+    return { weeklyBookings, todayBookings };
   }
 
   // //일주일 매출수익액
