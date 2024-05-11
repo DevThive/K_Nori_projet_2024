@@ -26,6 +26,7 @@ import { CalendarModule } from './calendar/calendar.module';
 import { InvoiceItemModule } from './invoice-item/invoice-item.module';
 import { SmsService } from './sms/sms.service';
 import { SmsModule } from './sms/sms.module';
+import { DashboardModule } from './dashboard/dashboard.module';
 
 @Module({
   imports: [
@@ -53,6 +54,8 @@ import { SmsModule } from './sms/sms.module';
     ClassScheduleModule,
 
     SmsModule,
+
+    DashboardModule,
   ],
   controllers: [AppController],
   providers: [AppService, ConfigService, AwsService, SmsService],
