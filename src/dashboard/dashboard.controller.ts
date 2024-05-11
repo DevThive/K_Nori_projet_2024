@@ -107,6 +107,23 @@ export class DashboardController {
     );
   }
 
+  //6개월 예약 건수 월별 조회
+  @ApiBearerAuth('accessToken')
+  @UseGuards(accessTokenGuard)
+  @Get('halfmonthreservation')
+  async findhalfmonthreservation(
+    @UserId() userId: number,
+    // @Param('year') year: number,
+    // @Param('month') month: number,
+  ) {
+    return await this.dashboardService.findhalfmonthreservation(
+      userId,
+      //   year,
+      //   month,
+    );
+  }
+  //6개월 방문 건수 월별 조회
+
   // //일주일 매출수익액
   // @ApiBearerAuth('accessToken')
   // @UseGuards(accessTokenGuard)

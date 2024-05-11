@@ -4,7 +4,7 @@ import { ClassService } from 'src/class/class.service';
 import { Reservation } from 'src/entity/reservation.entity';
 import { ReservationService } from 'src/reservation/reservation.service';
 import { UsersService } from 'src/users/users.service';
-import { Between, Equal, Repository } from 'typeorm';
+import { Between, Equal, In, Repository } from 'typeorm';
 
 @Injectable()
 export class DashboardService {
@@ -273,28 +273,69 @@ export class DashboardService {
     return reservations;
   }
 
-  // //일주일 매출수익액
-  // async findWeeklyRevenue(userId: number, year: number, weekNumber: number) {
-  //   const user = await this.userService.findUserById(userId);
+  //6개월 예약 건수 월별 조회
 
-  //   if (user.role !== 1) {
-  //     throw new BadRequestException('관리자만 조회가 가능합니다.');
-  //   }
+  async findhalfmonthreservation(userId: number) {
+    const user = await this.userService.findUserById(userId);
 
-  //   const startDate = new Date(year, 0, 1 + (weekNumber - 1) * 7);
-  //   const endDate = new Date(year, 0, 1 + weekNumber * 7);
-  //   const reservations = await this.reservationRepository.find({
-  //     where: {
-  //       date: Between(startDate, endDate),
-  //       state: 2, // 예약 완료 상태일 경우에만 계산
-  //     },
-  //   });
+    if (user.role !== 1) {
+      throw new BadRequestException('관리자만 조회가 가능합니다.');
+    }
 
-  //   let totalRevenue = 0;
-  //   reservations.forEach((reservation) => {
-  //     totalRevenue += reservation.totalPeople * 18000;
-  //   });
+    const currentDate = new Date();
+    const sixMonthsAgo = new Date(currentDate);
+    sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 5);
 
-  //   return totalRevenue;
-  // }
+    const monthlyReservationCounts = [];
+
+    for (let i = 0; i < 6; i++) {
+      const year = sixMonthsAgo.getFullYear();
+      const month = sixMonthsAgo.getMonth() + 1;
+      const startDate = new Date(year, month - 1, 1); // 각 월의 시작일
+      const endDate = new Date(year, month, 0); // 각 월의 마지막 날
+
+      // 해당 월의 예약 완료 및 취소 건수 조회
+      const reservations = await this.reservationRepository.count({
+        where: {
+          state: In([0, 1]), // 예약 완료 및 취소 상태
+          date: Between(startDate, endDate),
+        },
+      });
+
+      monthlyReservationCounts.push({
+        year: year,
+        month: month,
+        reservationCount: reservations,
+      });
+
+      sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() + 1); // 다음 달로 이동
+    }
+
+    return monthlyReservationCounts;
+  }
 }
+
+// //일주일 매출수익액
+// async findWeeklyRevenue(userId: number, year: number, weekNumber: number) {
+//   const user = await this.userService.findUserById(userId);
+
+//   if (user.role !== 1) {
+//     throw new BadRequestException('관리자만 조회가 가능합니다.');
+//   }
+
+//   const startDate = new Date(year, 0, 1 + (weekNumber - 1) * 7);
+//   const endDate = new Date(year, 0, 1 + weekNumber * 7);
+//   const reservations = await this.reservationRepository.find({
+//     where: {
+//       date: Between(startDate, endDate),
+//       state: 2, // 예약 완료 상태일 경우에만 계산
+//     },
+//   });
+
+//   let totalRevenue = 0;
+//   reservations.forEach((reservation) => {
+//     totalRevenue += reservation.totalPeople * 18000;
+//   });
+
+//   return totalRevenue;
+// }
