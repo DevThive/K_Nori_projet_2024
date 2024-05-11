@@ -111,17 +111,18 @@ export class DashboardController {
   @ApiBearerAuth('accessToken')
   @UseGuards(accessTokenGuard)
   @Get('halfmonthreservation')
-  async findhalfmonthreservation(
-    @UserId() userId: number,
-    // @Param('year') year: number,
-    // @Param('month') month: number,
-  ) {
-    return await this.dashboardService.findhalfmonthreservation(
-      userId,
-      //   year,
-      //   month,
-    );
+  async findhalfmonthreservation(@UserId() userId: number) {
+    return await this.dashboardService.findhalfmonthreservation(userId);
   }
+
+  //6개월 방문 건수 월별 조회
+  @ApiBearerAuth('accessToken')
+  @UseGuards(accessTokenGuard)
+  @Get('findhalfmonthvisiting')
+  async findhalfmonthvisiting(@UserId() userId: number) {
+    return await this.dashboardService.findhalfmonthvisiting(userId);
+  }
+
   //6개월 방문 건수 월별 조회
 
   // //일주일 매출수익액

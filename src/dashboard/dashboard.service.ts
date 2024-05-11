@@ -313,6 +313,47 @@ export class DashboardService {
 
     return monthlyReservationCounts;
   }
+
+  //6개월 방문 건수 월별 조회
+
+  async findhalfmonthvisiting(userId: number) {
+    const user = await this.userService.findUserById(userId);
+
+    if (user.role !== 1) {
+      throw new BadRequestException('관리자만 조회가 가능합니다.');
+    }
+
+    const currentDate = new Date();
+    const sixMonthsAgo = new Date(currentDate);
+    sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 5);
+
+    const monthlyReservationCounts = [];
+
+    for (let i = 0; i < 6; i++) {
+      const year = sixMonthsAgo.getFullYear();
+      const month = sixMonthsAgo.getMonth() + 1;
+      const startDate = new Date(year, month - 1, 1); // 각 월의 시작일
+      const endDate = new Date(year, month, 0); // 각 월의 마지막 날
+
+      // 해당 월의 예약 완료 및 취소 건수 조회
+      const reservations = await this.reservationRepository.count({
+        where: {
+          state: In([2]), // 예약 완료 및 취소 상태
+          date: Between(startDate, endDate),
+        },
+      });
+
+      monthlyReservationCounts.push({
+        year: year,
+        month: month,
+        reservationCount: reservations,
+      });
+
+      sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() + 1); // 다음 달로 이동
+    }
+
+    return monthlyReservationCounts;
+  }
 }
 
 // //일주일 매출수익액
