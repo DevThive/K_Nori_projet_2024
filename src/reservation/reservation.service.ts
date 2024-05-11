@@ -7,7 +7,7 @@ import {
 
 import { InjectRepository } from '@nestjs/typeorm';
 import { Reservation } from 'src/entity/reservation.entity';
-import { Repository, In } from 'typeorm';
+import { Repository, In, Equal } from 'typeorm';
 import { CreateReservationDto } from './dto/create-reservation';
 import { UsersService } from 'src/users/users.service';
 import { CheckReservationDto } from './dto/check-reservation';
@@ -20,12 +20,14 @@ import { InvoiceItem } from 'src/entity/invoice-item.entity';
 import { ApproveReservationDto } from './dto/approve-reservation';
 import { SmsService } from 'src/sms/sms.service';
 import { Between } from 'typeorm';
+import { ClassService } from 'src/class/class.service';
 
 @Injectable()
 export class ReservationService {
   constructor(
     private readonly userService: UsersService,
     private readonly smsService: SmsService,
+    private readonly classService: ClassService,
 
     @InjectRepository(Reservation)
     private reservationRepository: Repository<Reservation>,
@@ -565,11 +567,9 @@ export class ReservationService {
 
   async findCompletedReservationByWeek(userId: number) {
     const user = await this.userService.findUserById(userId);
-
     if (user.role !== 1) {
       throw new BadRequestException('관리자만 조회가 가능합니다.');
     }
-
     // 한국 시간대로 변경하기 위한 조정
     const KST_OFFSET = 9;
     // 이번 주의 시작일과 종료일 계산 (월요일부터 시작)
@@ -581,7 +581,6 @@ export class ReservationService {
     const startOfWeek = new Date(currentDate);
     startOfWeek.setDate(currentDate.getDate() + mondayOffset);
     startOfWeek.setHours(0, 0, 0, 0); // 이번 주의 첫 번째 날(월요일) 자정
-
     const weeklyBookings = [];
     let todayBookings = 0;
     // 이번 주 일주일간 각 날짜별 예약 건수 조회
@@ -589,7 +588,6 @@ export class ReservationService {
       const targetDate = new Date(startOfWeek);
       targetDate.setDate(startOfWeek.getDate() + i);
       targetDate.setHours(0, 0, 0, 0); // 해당 날짜 자정
-
       const reservationCount = await this.reservationRepository.count({
         where: {
           state: 2,
@@ -599,7 +597,6 @@ export class ReservationService {
           ),
         },
       });
-
       // 오늘 날짜의 예약 건수를 별도로 저장
       if (i === (currentDay + 6) % 7) {
         // 한국 시간 기준으로 오늘의 요일을 조정
@@ -607,8 +604,50 @@ export class ReservationService {
       }
       weeklyBookings.push(reservationCount);
     }
-
     return { weeklyBookings, todayBookings };
+  }
+
+  //클래스별 예약건수(누적)
+  async findReservationCountsByClass(userId: number) {
+    const user = await this.userService.findUserById(userId);
+
+    if (user.role !== 1) {
+      throw new BadRequestException('관리자만 조회가 가능합니다.');
+    }
+
+    const classes = await this.classService.findallclasses(userId); // 클래스 정보를 가져옴
+    const classReservationCounts = {};
+
+    for (const classInfo of classes) {
+      const classId = classInfo.id;
+      const reservationCount = await this.reservationRepository.count({
+        where: {
+          state: 2,
+          class: Equal(classId), // 클래스 아이디로 필터링
+        },
+      });
+
+      classReservationCounts[classId] = reservationCount;
+    }
+
+    return { classReservationCounts };
+  }
+
+  //예약 미승인건수 조회
+  async unapprovedReservationCount(userId: number) {
+    const user = await this.userService.findUserById(userId);
+
+    if (user.role !== 1) {
+      throw new BadRequestException('관리자만 조회가 가능합니다.');
+    }
+
+    const result = await this.reservationRepository.count({
+      where: {
+        state: 0,
+      },
+    });
+
+    return result;
   }
 
   // //일주일 매출수익액
