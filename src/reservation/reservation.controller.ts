@@ -25,12 +25,20 @@ import { ApproveReservationDto } from './dto/approve-reservation';
 export class ReservationController {
   constructor(private readonly reservationService: ReservationService) {}
 
-  //클래스 예약 전체 조회(관리자)
+  //예약 미승인건수 조회
   @ApiBearerAuth('accessToken')
   @UseGuards(accessTokenGuard)
-  @Get('admin')
-  async findallreservation(@UserId() userId: number) {
-    return await this.reservationService.findallreservation(userId);
+  @Get('unapprovedReservationCount')
+  async unapprovedReservationCount(@UserId() userId: number) {
+    return await this.reservationService.unapprovedReservationCount(userId);
+  }
+
+  //클래스별 예약건수(누적)
+  @ApiBearerAuth('accessToken')
+  @UseGuards(accessTokenGuard)
+  @Get('countsByClass')
+  async findReservationCountsByClass(@UserId() userId: number) {
+    return await this.reservationService.findReservationCountsByClass(userId);
   }
 
   // 특정 날짜 예약 건수 조회(일일 예약건수 조회)
@@ -129,6 +137,14 @@ export class ReservationController {
     );
   }
 
+  //클래스 예약 전체 조회(관리자)
+  @ApiBearerAuth('accessToken')
+  @UseGuards(accessTokenGuard)
+  @Get('adminFindAll')
+  async findallreservation(@UserId() userId: number) {
+    return await this.reservationService.findallreservation(userId);
+  }
+
   //클래스별 예약 전체 조회(관리자)
   @ApiBearerAuth('accessToken')
   @UseGuards(accessTokenGuard)
@@ -145,7 +161,7 @@ export class ReservationController {
 
   @ApiBearerAuth('accessToken')
   @UseGuards(accessTokenGuard)
-  @Get('admin/success')
+  @Get('adminSuccess')
   async findsuccessreservation(@UserId() userId: number) {
     return await this.reservationService.findsuccessreservation(userId);
   }
@@ -211,7 +227,7 @@ export class ReservationController {
   //예약내역 삭제(어드민)
   @ApiBearerAuth('accessToken')
   @UseGuards(accessTokenGuard)
-  @Delete('admin/:reservationId')
+  @Delete('adminDelete/:reservationId')
   async admindelete(
     @UserId() userId: number,
     @Param('reservationId') reservationId: number,

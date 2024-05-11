@@ -13,11 +13,17 @@ import { CheckContactDto } from './dto/check-contact';
 import { ContactPasswordDto } from './dto/password-contact';
 import * as bcrypt from 'bcrypt';
 import { ContactAnswerDto } from './dto/contact-answer';
+import { ReservationService } from 'src/reservation/reservation.service';
+import { SmsService } from 'src/sms/sms.service';
 
 @Injectable()
 export class ContactService {
   constructor(
     private readonly userService: UsersService,
+    private readonly smsService: SmsService,
+
+    // private readonly reservationService: ReservationService,
+
     @InjectRepository(Contact)
     private contactRepository: Repository<Contact>,
   ) {}
@@ -175,6 +181,33 @@ export class ContactService {
       { id: contactid },
       { ...contactAnswerDto },
     );
+
+    // const reservation = await this.reservationService.findreservationbyid(reservationId);
+    // if (!reservation) {
+    //   throw new BadRequestException('해당 예약내역이 존재하지 않습니다.');
+    // }
+
+    if (updatedcontact) {
+      // 알림톡 구매자명과 상품명 설정
+      const buyerName = contact.user_name;
+      const from = this.smsService.getFromPhoneNumber();
+      const to = contact.user_phone;
+      const url = contact.id.toString();
+      const contentTitle = contact.content_title;
+      const content = contact.content;
+
+      const templateId = 'KA01TP240510174001837wcPizu4BcDs';
+
+      await this.smsService.sendContactAlarm(
+        to,
+        from,
+        buyerName,
+        url,
+        contentTitle,
+        content,
+        templateId,
+      );
+    }
     return updatedcontact;
   }
 }
