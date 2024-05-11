@@ -244,6 +244,35 @@ export class DashboardService {
     return result;
   }
 
+  //한달 예약건수
+  async findmonthlyreservation(userId: number, year: number, month: number) {
+    const user = await this.userService.findUserById(userId);
+
+    if (user.role !== 1) {
+      throw new BadRequestException('관리자만 조회가 가능합니다.');
+    }
+
+    // 연도와 월을 문자열로 변환
+    const formattedYear = year.toString();
+    const formattedMonth = month.toString().padStart(2, '0'); // 월이 한 자리 수인 경우 앞에 0을 추가하여 두 자리로 만듦
+
+    // 시작일과 종료일 생성
+    const startDate = new Date(`${formattedYear}-${formattedMonth}-01`);
+    const endDate = new Date(
+      new Date(startDate).setMonth(startDate.getMonth() + 1),
+    ); // 다음 달의 시작일
+
+    // 해당 월의 예약 완료 건수 조회
+    const reservations = await this.reservationRepository.count({
+      where: {
+        state: 2,
+        date: Between(startDate, endDate),
+      },
+    });
+
+    return reservations;
+  }
+
   // //일주일 매출수익액
   // async findWeeklyRevenue(userId: number, year: number, weekNumber: number) {
   //   const user = await this.userService.findUserById(userId);

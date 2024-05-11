@@ -91,6 +91,22 @@ export class DashboardController {
     return await this.dashboardService.findreservationbyyear(userId, year);
   }
 
+  //한달 예약건수
+  @ApiBearerAuth('accessToken')
+  @UseGuards(accessTokenGuard)
+  @Get('monthly-reservation/:year/:month')
+  async findmonthlyreservation(
+    @UserId() userId: number,
+    @Param('year') year: number,
+    @Param('month') month: number,
+  ) {
+    return await this.dashboardService.findmonthlyreservation(
+      userId,
+      year,
+      month,
+    );
+  }
+
   // //일주일 매출수익액
   // @ApiBearerAuth('accessToken')
   // @UseGuards(accessTokenGuard)
