@@ -43,6 +43,14 @@ export class ReservationController {
     );
   }
 
+  //클래스 예약 전체 조회(관리자)
+  @ApiBearerAuth('accessToken')
+  @UseGuards(accessTokenGuard)
+  @Get('adminFindAll')
+  async findallreservation(@UserId() userId: number) {
+    return await this.reservationService.findallreservation(userId);
+  }
+
   //예약 완료 리스트 조회
   @ApiBearerAuth('accessToken')
   @UseGuards(accessTokenGuard)
@@ -91,7 +99,7 @@ export class ReservationController {
     );
   }
 
-  //예약 승인처리
+  //예약 승인처리(알림톡)
   @ApiBearerAuth('accessToken')
   @Patch('approve/:reservationId')
   @UseGuards(accessTokenGuard)
@@ -107,21 +115,21 @@ export class ReservationController {
     );
   }
 
-  //예약 승인처리
-  @ApiBearerAuth('accessToken')
-  @Patch('success/approve/:reservationId')
-  @UseGuards(accessTokenGuard)
-  async approvesuccessreservation(
-    @UserId() user_id: number,
-    @Body() approveReservationDto: ApproveReservationDto,
-    @Param('reservationId') reservationId: number,
-  ) {
-    return await this.reservationService.approvesuccessreservation(
-      user_id,
-      approveReservationDto,
-      reservationId,
-    );
-  }
+  // //예약 승인처리
+  // @ApiBearerAuth('accessToken')
+  // @Patch('success/approve/:reservationId')
+  // @UseGuards(accessTokenGuard)
+  // async approvesuccessreservation(
+  //   @UserId() user_id: number,
+  //   @Body() approveReservationDto: ApproveReservationDto,
+  //   @Param('reservationId') reservationId: number,
+  // ) {
+  //   return await this.reservationService.approvesuccessreservation(
+  //     user_id,
+  //     approveReservationDto,
+  //     reservationId,
+  //   );
+  // }
 
   //예약내역 삭제(유저)
   @Delete(':reservationId')
@@ -145,20 +153,4 @@ export class ReservationController {
   ) {
     return await this.reservationService.admindelete(userId, reservationId);
   }
-
-  // //일주일 매출수익액
-  // @ApiBearerAuth('accessToken')
-  // @UseGuards(accessTokenGuard)
-  // @Get(':year/week/:weekNumber')
-  // async getWeeklyRevenue(
-  //   @UserId() userId: number,
-  //   @Param('year', ParseIntPipe) year: number,
-  //   @Param('weekNumber', ParseIntPipe) weekNumber: number,
-  // ) {
-  //   return await this.reservationService.findWeeklyRevenue(
-  //     userId,
-  //     year,
-  //     weekNumber,
-  //   );
-  // }
 }
