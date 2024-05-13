@@ -81,7 +81,6 @@ export class ReservationService {
 
   //예약 전체 조회(관리자)
   async findallreservation(userId: number) {
-    console.log('userId', userId);
     const user = await this.userService.findUserById(userId);
 
     if (user.role !== 1) {
@@ -112,7 +111,6 @@ export class ReservationService {
 
   //예약 전체 조회(관리자).
   async findsuccessreservation(userId: number) {
-    console.log('userId', userId);
     const user = await this.userService.findUserById(userId);
 
     if (user.role !== 1) {
@@ -121,7 +119,7 @@ export class ReservationService {
 
     const result = await this.reservationRepository.find({
       where: {
-        state: In([2]),
+        state: 2,
       },
       select: [
         'id',

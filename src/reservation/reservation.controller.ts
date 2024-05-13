@@ -98,7 +98,7 @@ export class ReservationController {
     );
   }
 
-  //예약 승인처리
+  //예약 승인처리(알림톡)
   @ApiBearerAuth('accessToken')
   @Patch('approve/:reservationId')
   @UseGuards(accessTokenGuard)
@@ -152,20 +152,4 @@ export class ReservationController {
   ) {
     return await this.reservationService.admindelete(userId, reservationId);
   }
-
-  // //일주일 매출수익액
-  // @ApiBearerAuth('accessToken')
-  // @UseGuards(accessTokenGuard)
-  // @Get(':year/week/:weekNumber')
-  // async getWeeklyRevenue(
-  //   @UserId() userId: number,
-  //   @Param('year', ParseIntPipe) year: number,
-  //   @Param('weekNumber', ParseIntPipe) weekNumber: number,
-  // ) {
-  //   return await this.reservationService.findWeeklyRevenue(
-  //     userId,
-  //     year,
-  //     weekNumber,
-  //   );
-  // }
 }
