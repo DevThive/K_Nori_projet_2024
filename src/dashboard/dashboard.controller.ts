@@ -123,8 +123,6 @@ export class DashboardController {
     return await this.dashboardService.findhalfmonthvisiting(userId);
   }
 
-  //6개월 방문 건수 월별 조회
-
   // //일주일 매출수익액
   // @ApiBearerAuth('accessToken')
   // @UseGuards(accessTokenGuard)

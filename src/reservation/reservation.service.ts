@@ -81,7 +81,6 @@ export class ReservationService {
 
   //예약 전체 조회(관리자)
   async findallreservation(userId: number) {
-    console.log('userId', userId);
     const user = await this.userService.findUserById(userId);
 
     if (user.role !== 1) {
@@ -112,7 +111,6 @@ export class ReservationService {
 
   //예약 전체 조회(관리자).
   async findsuccessreservation(userId: number) {
-    console.log('userId', userId);
     const user = await this.userService.findUserById(userId);
 
     if (user.role !== 1) {
@@ -121,7 +119,7 @@ export class ReservationService {
 
     const result = await this.reservationRepository.find({
       where: {
-        state: In([2]),
+        state: 2,
       },
       select: [
         'id',
@@ -216,41 +214,41 @@ export class ReservationService {
     });
   }
 
-  //이전 예약 상태 변경
-  async approvesuccessreservation(
-    userId: number,
-    approveReservationDto: ApproveReservationDto,
-    reservationId: number,
-  ) {
-    const user = await this.userService.findUserById(userId);
+  // //이전 예약 상태 변경
+  // async approvesuccessreservation(
+  //   userId: number,
+  //   approveReservationDto: ApproveReservationDto,
+  //   reservationId: number,
+  // ) {
+  //   const user = await this.userService.findUserById(userId);
 
-    if (user.role !== 1) {
-      throw new BadRequestException('관리자만 수정 및 삭제가 가능합니다.');
-    }
-    const reservation = await this.findreservationbyid(reservationId);
-    if (!reservation) {
-      throw new BadRequestException('해당 예약내역이 존재하지 않습니다.');
-    }
+  //   if (user.role !== 1) {
+  //     throw new BadRequestException('관리자만 수정 및 삭제가 가능합니다.');
+  //   }
+  //   const reservation = await this.findreservationbyid(reservationId);
+  //   if (!reservation) {
+  //     throw new BadRequestException('해당 예약내역이 존재하지 않습니다.');
+  //   }
 
-    const classId = reservation.class.id;
+  //   const classId = reservation.class.id;
 
-    const Class = await this.classRepository.findOne({
-      where: { id: classId },
-    });
-    if (!Class) {
-      throw new NotFoundException('해당 클래스가 없습니다.');
-    }
+  //   const Class = await this.classRepository.findOne({
+  //     where: { id: classId },
+  //   });
+  //   if (!Class) {
+  //     throw new NotFoundException('해당 클래스가 없습니다.');
+  //   }
 
-    if (approveReservationDto.state === reservation.state) {
-      throw new BadRequestException('바뀐 내용이 없습니다.');
-    }
+  //   if (approveReservationDto.state === reservation.state) {
+  //     throw new BadRequestException('바뀐 내용이 없습니다.');
+  //   }
 
-    const result = await this.reservationRepository.update(reservationId, {
-      ...approveReservationDto,
-    });
+  //   const result = await this.reservationRepository.update(reservationId, {
+  //     ...approveReservationDto,
+  //   });
 
-    return result;
-  }
+  //   return result;
+  // }
 
   //예약 승인처리
   async approvereservation(
@@ -337,12 +335,20 @@ export class ReservationService {
 
       await this.invoiceRepository.save(invoice);
 
+      const startDateTime = new Date(reservation.date + 'T' + reservation.time);
+      const endDateTime = new Date(
+        startDateTime.getTime() + 1 * 60 * 60 * 1000 + 20 * 60 * 1000,
+      );
+      console.log('Start:', startDateTime);
+      console.log('End:', endDateTime);
       const calendarData = {
         title: reservation.client_name,
         class: Class.title,
         caledartype: 0,
-        start: reservation.date,
-        end: reservation.date,
+        //start에 reservation.time 플러스
+        //end 에 Start 플러스 1시간20분
+        start: startDateTime,
+        end: endDateTime,
         allDay: Class.time === '풀타임' ? true : false,
       };
       const calendar = await this.calendarRepository.create(calendarData);
