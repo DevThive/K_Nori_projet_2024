@@ -39,6 +39,7 @@ export class Reservation {
   @Column()
   state: number;
 
+  //.
   // @Column()
   // is_completed: number;
 
