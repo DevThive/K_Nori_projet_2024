@@ -107,21 +107,21 @@ export class ReservationController {
     );
   }
 
-  //예약 승인처리
-  @ApiBearerAuth('accessToken')
-  @Patch('success/approve/:reservationId')
-  @UseGuards(accessTokenGuard)
-  async approvesuccessreservation(
-    @UserId() user_id: number,
-    @Body() approveReservationDto: ApproveReservationDto,
-    @Param('reservationId') reservationId: number,
-  ) {
-    return await this.reservationService.approvesuccessreservation(
-      user_id,
-      approveReservationDto,
-      reservationId,
-    );
-  }
+  // //예약 승인처리
+  // @ApiBearerAuth('accessToken')
+  // @Patch('success/approve/:reservationId')
+  // @UseGuards(accessTokenGuard)
+  // async approvesuccessreservation(
+  //   @UserId() user_id: number,
+  //   @Body() approveReservationDto: ApproveReservationDto,
+  //   @Param('reservationId') reservationId: number,
+  // ) {
+  //   return await this.reservationService.approvesuccessreservation(
+  //     user_id,
+  //     approveReservationDto,
+  //     reservationId,
+  //   );
+  // }
 
   //예약내역 삭제(유저)
   @Delete(':reservationId')
