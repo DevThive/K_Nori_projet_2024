@@ -43,6 +43,14 @@ export class ReservationController {
     );
   }
 
+  //예약 완료 리스트 조회
+  @ApiBearerAuth('accessToken')
+  @UseGuards(accessTokenGuard)
+  @Get('adminSuccess')
+  async findsuccessreservation(@UserId() userId: number) {
+    return await this.reservationService.findsuccessreservation(userId);
+  }
+
   //유저 클래스예약 상세조회
   @Get('finding/:classId')
   async findclassbyphonenumber(
@@ -67,13 +75,6 @@ export class ReservationController {
       classId,
       userId,
     );
-  }
-
-  @ApiBearerAuth('accessToken')
-  @UseGuards(accessTokenGuard)
-  @Get('adminSuccess')
-  async findsuccessreservation(@UserId() userId: number) {
-    return await this.reservationService.findsuccessreservation(userId);
   }
 
   //클래스 예약수정
