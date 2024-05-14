@@ -5,6 +5,7 @@ import { Reservation } from 'src/entity/reservation.entity';
 import { ReservationService } from 'src/reservation/reservation.service';
 import { UsersService } from 'src/users/users.service';
 import { Between, Equal, In, Repository } from 'typeorm';
+import { startOfWeek, endOfWeek, eachDayOfInterval } from 'date-fns';
 
 @Injectable()
 export class DashboardService {
@@ -159,45 +160,56 @@ export class DashboardService {
     return { date, reservationCount };
   }
 
-  async findCompletedReservationByWeek(userId: number) {
+  async findCompletedReservationByWeek(userId: number, weekNumber: number) {
     const user = await this.userService.findUserById(userId);
     if (user.role !== 1) {
       throw new BadRequestException('관리자만 조회가 가능합니다.');
     }
-    // 한국 시간대로 변경하기 위한 조정
-    const KST_OFFSET = 9;
-    // 이번 주의 시작일과 종료일 계산 (월요일부터 시작)
-    const currentDate = new Date(
-      new Date().getTime() + KST_OFFSET * 60 * 60 * 1000,
+
+    // 현재 년도를 기준으로 주차에 해당하는 주의 시작일과 종료일을 계산합니다.
+    const year = new Date().getFullYear();
+    const firstDayOfYear = new Date(year, 0, 1);
+    const weeksPassedBefore = weekNumber - 1;
+    const startDate = startOfWeek(
+      new Date(
+        firstDayOfYear.getTime() + weeksPassedBefore * 7 * 24 * 60 * 60 * 1000,
+      ),
+      { weekStartsOn: 1 },
     );
-    const currentDay = currentDate.getDay(); // 오늘의 요일 (0: 일요일, 1: 월요일, ..., 6: 토요일)
-    const mondayOffset = currentDay === 0 ? -6 : 1 - currentDay; // 월요일이 아니면 이전 주의 월요일까지의 날짜 수 계산
-    const startOfWeek = new Date(currentDate);
-    startOfWeek.setDate(currentDate.getDate() + mondayOffset);
-    startOfWeek.setHours(0, 0, 0, 0); // 이번 주의 첫 번째 날(월요일) 자정
+    const endDate = endOfWeek(startDate, { weekStartsOn: 1 });
+
+    const datesOfTheWeek = eachDayOfInterval({
+      start: startDate,
+      end: endDate,
+    });
+
     const weeklyBookings = [];
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // 자정으로 설정
+
     let todayBookings = 0;
-    // 이번 주 일주일간 각 날짜별 예약 건수 조회
-    for (let i = 0; i < 7; i++) {
-      const targetDate = new Date(startOfWeek);
-      targetDate.setDate(startOfWeek.getDate() + i);
-      targetDate.setHours(0, 0, 0, 0); // 해당 날짜 자정
+    const todayStart = new Date(today.getTime());
+    const todayEnd = new Date(today.getTime() + 24 * 60 * 60 * 1000 - 1); // 다음 날짜의 자정 직전
+    todayBookings = await this.reservationRepository.count({
+      where: {
+        state: 2,
+        date: Between(todayStart, todayEnd),
+      },
+    });
+
+    for (const date of datesOfTheWeek) {
       const reservationCount = await this.reservationRepository.count({
         where: {
           state: 2,
           date: Between(
-            targetDate, // 현재 날짜의 자정 (예: '2024-05-10 00:00:00')
-            new Date(targetDate.getTime() + 24 * 60 * 60 * 1000 - 1), // 다음 날짜의 자정 직전 (예: '2024-05-10 23:59:59.999')
+            date, // 해당 날짜의 자정
+            new Date(date.getTime() + 24 * 60 * 60 * 1000 - 1), // 다음 날짜의 자정 직전
           ),
         },
       });
-      // 오늘 날짜의 예약 건수를 별도로 저장
-      if (i === (currentDay + 6) % 7) {
-        // 한국 시간 기준으로 오늘의 요일을 조정
-        todayBookings = reservationCount;
-      }
       weeklyBookings.push(reservationCount);
     }
+
     return { weeklyBookings, todayBookings };
   }
 
