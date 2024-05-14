@@ -7,12 +7,14 @@ import {
   Column,
   OneToOne,
   JoinColumn,
+  OneToMany,
 } from 'typeorm';
 import { UpdateDateColumn } from 'typeorm';
 import { Class } from './class.entity';
 import { ClientType } from 'src/reservation/types/client-type';
 import { Invoice } from './invoice.entity';
 import { Calendar } from './calendar.entity';
+import { UpdateContact } from './update-contact.entity';
 
 @Entity({
   name: 'reservation',
@@ -39,7 +41,6 @@ export class Reservation {
   @Column()
   state: number;
 
-  //.
   // @Column()
   // is_completed: number;
 
@@ -82,4 +83,13 @@ export class Reservation {
 
   // @ManyToOne(() => User, (user) => user.reservations_content)
   // user: Relation<User>;
+
+  @OneToMany(
+    () => UpdateContact,
+    (updatedcontacts) => updatedcontacts.reservation,
+    {
+      onDelete: 'CASCADE',
+    },
+  )
+  updatedcontacts: Relation<UpdateContact>;
 }
