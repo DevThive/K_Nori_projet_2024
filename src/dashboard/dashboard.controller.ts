@@ -25,6 +25,17 @@ export class DashboardController {
     return await this.dashboardService.findReservationCountsByClass(userId);
   }
 
+  //클래스별 예약건수(연도별)
+  @ApiBearerAuth('accessToken')
+  @UseGuards(accessTokenGuard)
+  @Get('countClassesByYear/:year')
+  async findCountClassesByYear(
+    @UserId() userId: number,
+    @Param('year') year: number,
+  ) {
+    return await this.dashboardService.findCountClassesByYear(userId, year);
+  }
+
   // 특정 날짜 예약 건수 조회(일일 예약건수 조회)
   @ApiBearerAuth('accessToken')
   @UseGuards(accessTokenGuard)

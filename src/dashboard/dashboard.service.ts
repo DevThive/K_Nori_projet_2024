@@ -222,6 +222,59 @@ export class DashboardService {
     }
 
     const classes = await this.classService.findallclasses(userId); // 클래스 정보를 가져옴
+    const classReservationCounts = [];
+
+    for (const classInfo of classes) {
+      const classId = classInfo.id;
+      const reservationCount = await this.reservationRepository.count({
+        where: {
+          state: 2,
+          class: Equal(classId), // 클래스 아이디로 필터링
+        },
+      });
+
+      // 진행률 계산
+      const progress =
+        reservationCount > 0 ? Math.min(reservationCount / 100, 1) * 100 : 0;
+
+      // 진행률에 따른 색상 설정
+      let progressColor = '';
+      if (progress < 10) {
+        progressColor = 'error';
+      } else if (progress < 30) {
+        progressColor = 'warning';
+      } else if (progress < 50) {
+        progressColor = 'primary';
+      } else if (progress < 70) {
+        progressColor = 'info';
+      } else {
+        progressColor = 'success';
+      }
+
+      classReservationCounts.push({
+        progress: progress,
+        title: classInfo.title,
+        progressColor: progressColor,
+        imgSrc: classInfo.photo,
+      });
+    }
+
+    return classReservationCounts;
+  }
+
+  //클래스별 예약건수(연도별)
+  async findCountClassesByYear(userId: number, year: number) {
+    const user = await this.userService.findUserById(userId);
+
+    if (user.role !== 1) {
+      throw new BadRequestException('관리자만 조회가 가능합니다.');
+    }
+
+    const formattedYear = year.toString(); // 연도를 문자열로 변환
+    const startDate = new Date(`${formattedYear}-01-01`); // 해당 연도의 시작일
+    const endDate = new Date(`${formattedYear}-12-31`); // 해당 연도의 종료일
+
+    const classes = await this.classService.findallclasses(userId); // 클래스 정보를 가져옴
     const classReservationCounts = {};
 
     for (const classInfo of classes) {
@@ -230,6 +283,7 @@ export class DashboardService {
         where: {
           state: 2,
           class: Equal(classId), // 클래스 아이디로 필터링
+          date: Between(startDate, endDate),
         },
       });
 

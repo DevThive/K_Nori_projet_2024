@@ -27,6 +27,7 @@ import { InvoiceItemModule } from './invoice-item/invoice-item.module';
 import { SmsService } from './sms/sms.service';
 import { SmsModule } from './sms/sms.module';
 import { DashboardModule } from './dashboard/dashboard.module';
+import { UpdateContactModule } from './update-contact/update-contact.module';
 
 @Module({
   imports: [
@@ -56,6 +57,8 @@ import { DashboardModule } from './dashboard/dashboard.module';
     SmsModule,
 
     DashboardModule,
+
+    UpdateContactModule,
   ],
   controllers: [AppController],
   providers: [AppService, ConfigService, AwsService, SmsService],
