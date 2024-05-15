@@ -51,7 +51,7 @@ export class ReservationController {
     return await this.reservationService.findallreservation(userId);
   }
 
-  //예약 완료 리스트 조회..
+  //예약 완료 리스트 조회...
   @ApiBearerAuth('accessToken')
   @UseGuards(accessTokenGuard)
   @Get('adminSuccess')
