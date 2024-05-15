@@ -222,7 +222,7 @@ export class DashboardService {
     }
 
     const classes = await this.classService.findallclasses(userId); // 클래스 정보를 가져옴
-    const classReservationCounts = {};
+    const classReservationCounts = [];
 
     for (const classInfo of classes) {
       const classId = classInfo.id;
@@ -233,10 +233,33 @@ export class DashboardService {
         },
       });
 
-      classReservationCounts[classId] = reservationCount;
+      // 진행률 계산
+      const progress =
+        reservationCount > 0 ? Math.min(reservationCount / 100, 1) * 100 : 0;
+
+      // 진행률에 따른 색상 설정
+      let progressColor = '';
+      if (progress < 10) {
+        progressColor = 'error';
+      } else if (progress < 30) {
+        progressColor = 'warning';
+      } else if (progress < 50) {
+        progressColor = 'primary';
+      } else if (progress < 70) {
+        progressColor = 'info';
+      } else {
+        progressColor = 'success';
+      }
+
+      classReservationCounts.push({
+        progress: progress,
+        title: classInfo.title,
+        progressColor: progressColor,
+        imgSrc: classInfo.photo,
+      });
     }
 
-    return { classReservationCounts };
+    return classReservationCounts;
   }
 
   //예약 미승인건수 조회
