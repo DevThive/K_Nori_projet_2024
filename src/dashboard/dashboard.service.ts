@@ -221,7 +221,7 @@ export class DashboardService {
       throw new BadRequestException('관리자만 조회가 가능합니다.');
     }
 
-    const classes = await this.classService.findallclasses(userId); // 클래스 정보를 가져옴
+    const classes = await this.classService.findallclasses(userId); // 클래스 정보를 가져옴.
     const classReservationCounts = [];
 
     for (const classInfo of classes) {
