@@ -49,6 +49,7 @@ export class UpdateContactService {
         state: 0,
       },
       select: ['id', 'content', 'state', 'contact_reply'],
+      relations: { reservation: true },
     });
 
     return result;
