@@ -116,9 +116,7 @@ export class UpdateContactService {
       throw new BadRequestException('관리자만 수정이 가능합니다.');
     }
 
-    const contact = await this.updateContactRepository.find({
-      where: { id: updatecontactid },
-    });
+    const contact = await this.findcontactbyid(updatecontactid);
     console.log(contact);
 
     if (!contact) {
