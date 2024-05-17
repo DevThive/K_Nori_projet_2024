@@ -17,6 +17,9 @@ export class UpdateContact {
   id: number;
 
   @Column()
+  content_title: string;
+
+  @Column()
   content: string;
 
   @Column()
