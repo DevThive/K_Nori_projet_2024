@@ -87,9 +87,7 @@ export class Reservation {
   @OneToMany(
     () => UpdateContact,
     (updatedcontacts) => updatedcontacts.reservation,
-    {
-      onDelete: 'CASCADE',
-    },
+    { cascade: true },
   )
   updatedcontacts: Relation<UpdateContact>;
 }
