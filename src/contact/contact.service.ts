@@ -195,8 +195,8 @@ export class ContactService {
       const url = contact.id.toString();
       const contentTitle = contact.content_title;
       const content = contact.content;
-
-      const templateId = 'KA01TP240510174001837wcPizu4BcDs';
+      const content_reply = contact.contact_answer;
+      const templateId = 'KA01TP240516155155020muGqtQjM0Hq';
 
       await this.smsService.sendContactAlarm(
         to,
@@ -206,6 +206,7 @@ export class ContactService {
         contentTitle,
         content,
         templateId,
+        content_reply,
       );
     }
     return updatedcontact;

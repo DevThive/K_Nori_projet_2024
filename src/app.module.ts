@@ -28,6 +28,7 @@ import { SmsService } from './sms/sms.service';
 import { SmsModule } from './sms/sms.module';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { UpdateContactModule } from './update-contact/update-contact.module';
+import { GmailModule } from './gmail/gmail.module';
 
 @Module({
   imports: [
@@ -59,6 +60,8 @@ import { UpdateContactModule } from './update-contact/update-contact.module';
     DashboardModule,
 
     UpdateContactModule,
+
+    GmailModule,
   ],
   controllers: [AppController],
   providers: [AppService, ConfigService, AwsService, SmsService],

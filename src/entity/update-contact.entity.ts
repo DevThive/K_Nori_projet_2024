@@ -17,9 +17,12 @@ export class UpdateContact {
   id: number;
 
   @Column()
-  content: string;
+  contact_title: string;
 
   @Column()
+  content: string;
+
+  @Column({ nullable: true })
   contact_reply: string;
 
   @Column()

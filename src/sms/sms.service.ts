@@ -66,6 +66,7 @@ export class SmsService {
     contentTitle: string,
     content: string,
     templateId: string,
+    content_reply: string,
   ) {
     // 발신 번호 설정
     // const from = this.getFromPhoneNumber();
@@ -81,6 +82,7 @@ export class SmsService {
           '#{url}': url,
           '#{문의제목}': contentTitle,
           '#{문의내용}': content,
+          '#{답변내용}': content_reply,
         },
       },
     });
