@@ -22,7 +22,7 @@ export class UpdateContact {
   @Column()
   content: string;
 
-  @Column({ nullable: true })
+  @Column({ type: 'text', default: '' })
   contact_reply: string;
 
   @Column()
