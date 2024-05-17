@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  Patch,
   Post,
   UseGuards,
 } from '@nestjs/common';
@@ -12,6 +13,7 @@ import { CreateUpdatedContactDto } from './dto/create-contact';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { accessTokenGuard } from 'src/auth/guard/access-token.guard';
 import { UserId } from 'src/auth/decorators/userId.decorator';
+import { UpdateContactAnswerDto } from './dto/contact-answer';
 
 @ApiTags('수정문의')
 @Controller('update-contact')
@@ -63,6 +65,23 @@ export class UpdateContactController {
     return await this.updateContactService.deletecontact(
       userId,
       updatedcontactId,
+    );
+  }
+
+  //문의 답글
+  @ApiBearerAuth('accessToken')
+  @UseGuards(accessTokenGuard)
+  @Patch('/reservation/:contactId')
+  async createanswer(
+    @Body() updateContactAnswerDto: UpdateContactAnswerDto,
+    @UserId() userId: number,
+    @Param('contactId') updatecontactid: number,
+    // @Param('reservationId') reservationId: number,
+  ) {
+    return await this.updateContactService.admincontactanswer(
+      updateContactAnswerDto,
+      updatecontactid,
+      userId,
     );
   }
 }
