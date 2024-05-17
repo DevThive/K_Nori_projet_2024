@@ -75,7 +75,7 @@ export class UpdateContactController {
   async createanswer(
     @Body() updateContactAnswerDto: UpdateContactAnswerDto,
     @UserId() userId: number,
-    @Param('updatecontactid') updatecontactid: number,
+    @Param('contactId') updatecontactid: number,
     // @Param('reservationId') reservationId: number,
   ) {
     return await this.updateContactService.admincontactanswer(
