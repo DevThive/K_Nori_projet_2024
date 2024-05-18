@@ -4,5 +4,5 @@ import { IsString } from 'class-validator';
 export class UpdateContactAnswerDto {
   @IsString()
   @ApiProperty({ description: '문의 답변' })
-  contact_reply: string;
+  contact_answer: string;
 }
