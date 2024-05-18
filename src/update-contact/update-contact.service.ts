@@ -52,7 +52,7 @@ export class UpdateContactService {
       where: {
         state: 0,
       },
-      select: ['id', 'content', 'state', 'contact_reply', 'createdAt'],
+      select: ['id', 'content', 'state', 'contact_answer', 'createdAt'],
       relations: { reservation: true },
     });
 
@@ -77,7 +77,7 @@ export class UpdateContactService {
       where: {
         id: updatedcontactId,
       },
-      select: ['id', 'content', 'state', 'contact_reply'],
+      select: ['id', 'content', 'state', 'contact_answer'],
     });
 
     return result;
