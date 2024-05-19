@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { ConfigService } from '@nestjs/config';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
@@ -6,6 +6,7 @@ import { SignupUserDto } from './dto/signup-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
 import { accessTokenGuard } from './guard/access-token.guard';
 import { UserId } from './decorators/userId.decorator';
+import { AuthGuard } from '@nestjs/passport';
 // import { SignupAdminDto } from './dto/signup-admin.dto';
 
 @ApiTags('로그인&회원가입')
