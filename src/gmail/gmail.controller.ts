@@ -1,6 +1,16 @@
-import { Controller, Get, Query, Redirect, Req, Res } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Query,
+  Redirect,
+  Req,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
 import { GmailService } from './gmail.service';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { accessTokenGuard } from 'src/auth/guard/access-token.guard';
+import { UserId } from 'src/auth/decorators/userId.decorator';
 
 ApiTags('지메일');
 @Controller('gmail')
@@ -16,4 +26,15 @@ export class GmailController {
   }
 
   // Google로부터 리디렉션 받아 인증 코드를 처리
+  @ApiBearerAuth('accessToken')
+  @Get('/oauth2callback')
+  @UseGuards(accessTokenGuard)
+  async oauth2callback(@UserId() user_id: number, @Query('code') code: string) {
+    console.log(code);
+
+    const oauth2Client = await this.gmailService.getOAuth2Client(user_id, code);
+    // 인증 후 처리 로직 (예: 토큰 저장)
+    console.log(oauth2Client);
+    return oauth2Client;
+  }
 }
