@@ -13,6 +13,7 @@ import { JwtService } from '@nestjs/jwt';
 import { SignupUserDto } from './dto/signup-user.dto';
 import * as bcrypt from 'bcrypt';
 import { LoginUserDto } from './dto/login-user.dto';
+import { google } from 'googleapis';
 
 @Injectable()
 export class AuthService {
@@ -23,6 +24,12 @@ export class AuthService {
     private readonly usersRepository: Repository<User>,
     private readonly jwtService: JwtService,
   ) {}
+
+  private oauth2Client = new google.auth.OAuth2(
+    this.configService.get<string>('GOOGLE_CLIENT_ID'),
+    this.configService.get<string>('GOOGLE_CLIENT_SECRET'),
+    this.configService.get<string>('GOOGLE_CALLBACK_URL'),
+  );
   /// 유저 회원가입
   async signup(singupUserDto: SignupUserDto) {
     const { checkPassword, ...createUserDto } = singupUserDto;
@@ -122,5 +129,34 @@ export class AuthService {
     const user = await this.userService.findUserById(userid);
 
     return user;
+  }
+
+  // 사용자 인증 URL 생성
+  getAuthenticationUrl() {
+    const scopes = ['email', 'profile', 'https://mail.google.com/'];
+
+    return this.oauth2Client.generateAuthUrl({
+      access_type: 'offline',
+      scope: scopes,
+    });
+  }
+
+  // 인증 코드를 사용하여 토큰 교환 및 id_token 디코딩
+  async getOAuth2Client(code: string) {
+    const { tokens } = await this.oauth2Client.getToken(code);
+    this.oauth2Client.setCredentials(tokens);
+
+    const idToken = tokens.id_token;
+    if (idToken) {
+      const ticket = await this.oauth2Client.verifyIdToken({
+        idToken,
+        audience: this.configService.get<string>('GOOGLE_CLIENT_ID'),
+      });
+
+      const payload = ticket.getPayload();
+      console.log('User profile:', payload);
+    }
+
+    return this.oauth2Client;
   }
 }
