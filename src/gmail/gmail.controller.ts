@@ -18,7 +18,7 @@ export class GmailController {
   constructor(private readonly gmailService: GmailService) {}
 
   // 사용자를 Google OAuth2 인증 페이지로 리디렉션
-  @Get('/auth')
+  @Get('/google/auth')
   @Redirect()
   getAuth(@Res() res) {
     console.log(res);

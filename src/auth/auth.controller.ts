@@ -1,4 +1,14 @@
-import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Query,
+  Redirect,
+  Req,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { ConfigService } from '@nestjs/config';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
@@ -38,5 +48,39 @@ export class AuthController {
   @Get('me')
   async authme(@UserId() userId: number) {
     return await this.authService.authme(userId);
+  }
+
+  // 사용자를 Google OAuth2 인증 페이지로 리디렉션
+  // @Get('/google')
+  // @Redirect()
+  // async googleAuth(@Res() res) {
+  //   const authUrl = this.authService.getAuthenticationUrl();
+  //   // Google 로그인 페이지로 리다이렉트 됩니다.
+  //   return { url: authUrl };
+  // }
+
+  // @Get('google/oauth2callback')
+  // // @UseGuards(AuthGuard('google'))
+  // async googleAuthRedirect(@Query('code') code: string) {
+  //   // This method will be called when the Google login is successfully completed.
+  //   // The user information is stored in req.user.
+  //   const user = await this.authService.getOAuth2Client(code);
+
+  //   // console.log(req);
+  //   return user; // Return the user information or process it as desired.
+  // }
+
+  @Get('/google')
+  @UseGuards(AuthGuard('google'))
+  async googleAuth(@Req() req) {
+    // GoogleStrategy에 의해 처리
+  }
+
+  @Get('google/oauth2callback')
+  @UseGuards(AuthGuard('google'))
+  async googleAuthRedirect(@Req() req) {
+    // 사용자 정보와 토큰은 req.user에 저장됨
+    console.log(req);
+    return req.user;
   }
 }

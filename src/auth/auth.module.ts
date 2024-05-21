@@ -11,6 +11,7 @@ import { refreshTokenGuard } from './guard/refresh-token.guard';
 import { refreshTokenStrategy } from './strategy/refresh-token.strategy';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
+import { GoogleStrategy } from './strategy/google.strategy';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { AuthController } from './auth.controller';
       inject: [ConfigService],
     }),
     PassportModule.register({ defaultStrategy: 'jwt', session: false }),
+    PassportModule, // PassportModule을 다시 추가하여 Google Strategy를 포함할 수 있게 함
   ],
   exports: [
     accessTokenGuard,
@@ -42,6 +44,7 @@ import { AuthController } from './auth.controller';
     accessTokenStrategy,
     refreshTokenGuard,
     refreshTokenStrategy,
+    GoogleStrategy, // GoogleStrategy 추가
   ],
 })
 export class AuthModule {}
