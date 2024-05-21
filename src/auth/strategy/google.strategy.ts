@@ -11,9 +11,15 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
       clientSecret: configService.get<string>('GOOGLE_CLIENT_SECRET'),
       callbackURL: configService.get<string>('GOOGLE_CALLBACK_URL'),
       scope: ['email', 'profile', 'https://mail.google.com/'],
-      accessType: 'offline', // 장기간 인증을 위해 필요
-      prompt: 'consent', // 사용자에게 리프레시 토큰 발급 동의를 받음
     });
+  }
+
+  // refreshToken을 얻고 싶다면 해당 메서드 설정 필수
+  authorizationParams(): { [key: string]: string } {
+    return {
+      access_type: 'offline',
+      prompt: 'select_account',
+    };
   }
 
   async validate(
