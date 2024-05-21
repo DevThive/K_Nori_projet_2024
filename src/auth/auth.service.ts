@@ -130,33 +130,4 @@ export class AuthService {
 
     return user;
   }
-
-  // 사용자 인증 URL 생성
-  getAuthenticationUrl() {
-    const scopes = ['email', 'profile', 'https://mail.google.com/'];
-
-    return this.oauth2Client.generateAuthUrl({
-      access_type: 'offline',
-      scope: scopes,
-    });
-  }
-
-  // 인증 코드를 사용하여 토큰 교환 및 id_token 디코딩
-  async getOAuth2Client(code: string) {
-    const { tokens } = await this.oauth2Client.getToken(code);
-    this.oauth2Client.setCredentials(tokens);
-
-    const idToken = tokens.id_token;
-    if (idToken) {
-      const ticket = await this.oauth2Client.verifyIdToken({
-        idToken,
-        audience: this.configService.get<string>('GOOGLE_CLIENT_ID'),
-      });
-
-      const payload = ticket.getPayload();
-      console.log('User profile:', payload);
-    }
-
-    return this.oauth2Client;
-  }
 }
