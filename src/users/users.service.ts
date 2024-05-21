@@ -18,30 +18,30 @@ export class UsersService {
     private readonly configService: ConfigService,
   ) {}
 
-  async updateUserTokens(
-    userId: number,
-    tokenData: {
-      googleAccessToken: string;
-      googleRefreshToken: string;
-      googleAccessTokenExpires: Date;
-    },
-  ): Promise<void> {
-    await this.userRepository.update(userId, {
-      googleAccessToken: tokenData.googleAccessToken,
-      googleRefreshToken: tokenData.googleRefreshToken,
-      googleAccessTokenExpires: tokenData.googleAccessTokenExpires,
-    });
-  }
+  // async updateUserTokens(
+  //   userId: number,
+  //   tokenData: {
+  //     googleAccessToken: string;
+  //     googleRefreshToken: string;
+  //     googleAccessTokenExpires: Date;
+  //   },
+  // ): Promise<void> {
+  //   await this.userRepository.update(userId, {
+  //     googleAccessToken: tokenData.googleAccessToken,
+  //     googleRefreshToken: tokenData.googleRefreshToken,
+  //     googleAccessTokenExpires: tokenData.googleAccessTokenExpires,
+  //   });
+  // }
 
-  async updateAccessToken(
-    userId: number,
-    tokenData: { googleAccessToken: string; googleAccessTokenExpires: Date },
-  ): Promise<void> {
-    await this.userRepository.update(userId, {
-      googleAccessToken: tokenData.googleAccessToken,
-      googleAccessTokenExpires: tokenData.googleAccessTokenExpires,
-    });
-  }
+  // async updateAccessToken(
+  //   userId: number,
+  //   tokenData: { googleAccessToken: string; googleAccessTokenExpires: Date },
+  // ): Promise<void> {
+  //   await this.userRepository.update(userId, {
+  //     googleAccessToken: tokenData.googleAccessToken,
+  //     googleAccessTokenExpires: tokenData.googleAccessTokenExpires,
+  //   });
+  // }
 
   //유저 회원가입
   async create(createUserDto: CreateUserDto) {

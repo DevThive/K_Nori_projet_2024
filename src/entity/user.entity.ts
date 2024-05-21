@@ -47,15 +47,5 @@ export class User {
   @OneToMany(() => Notice, (notice) => notice.user)
   notices_content: Relation<Notice>;
 
-  // Google OAuth를 위한 컬럼 추가
-  @Column({ nullable: true })
-  googleAccessToken?: string;
-
-  @Column({ nullable: true })
-  googleRefreshToken?: string;
-
-  @Column({ nullable: true, name: 'google_access_token_expires' })
-  googleAccessTokenExpires?: Date;
-
   // 기타 필요한 OneToMany 관계
 }
