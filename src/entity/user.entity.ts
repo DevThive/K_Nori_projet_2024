@@ -47,9 +47,5 @@ export class User {
   @OneToMany(() => Notice, (notice) => notice.user)
   notices_content: Relation<Notice>;
 
-  // @OneToMany(() => Reservation, (reservations) => reservations.user)
-  // reservations_content: Relation<Reservation>;
-
-  // @OneToMany(() => Gallery, (galleries) => galleries.user)
-  // galleries_content: Relation<Gallery>;
+  // 기타 필요한 OneToMany 관계
 }

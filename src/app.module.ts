@@ -28,6 +28,8 @@ import { SmsService } from './sms/sms.service';
 import { SmsModule } from './sms/sms.module';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { UpdateContactModule } from './update-contact/update-contact.module';
+import { GmailController } from './gmail/gmail.controller';
+import { GmailService } from './gmail/gmail.service';
 import { GmailModule } from './gmail/gmail.module';
 
 @Module({
@@ -63,8 +65,8 @@ import { GmailModule } from './gmail/gmail.module';
 
     GmailModule,
   ],
-  controllers: [AppController],
-  providers: [AppService, ConfigService, AwsService, SmsService],
+  controllers: [AppController, GmailController],
+  providers: [AppService, ConfigService, AwsService, SmsService, GmailService],
   exports: [ConfigService],
 })
 export class AppModule {}
