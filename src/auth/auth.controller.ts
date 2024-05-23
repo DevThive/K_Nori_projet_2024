@@ -89,7 +89,7 @@ export class AuthController {
   @UseGuards(AuthGuard('google'))
   async googleAuthRedirect(@Req() req, @Res() res) {
     // 여기에서 @Res()를 추가했습니다.
-    // 사용자 정보와 토큰은 req.user에 저장됨
+    // 사용자 정보와 토큰은 req.user에 저장됨.
     const user = req.user;
 
     // 사용자 정보를 UsersService를 통해 생성 또는 업데이트
@@ -106,11 +106,14 @@ export class AuthController {
 
     console.log(savedUser);
 
+    const googleLogin = await this.authService.googlelogin(user.email);
+
     // 프론트엔드 URL을 ConfigService를 통해 가져옴.
     const frontendUrl = this.configService.get<string>('FRONTEND_URL');
 
-    // 프론트엔드로 리다이렉트.
-    return res.redirect(`${frontendUrl}/auth-success?userId=${savedUser.id}`); // 여기에서 res.redirect를 사용합니다.
-    // return savedUser;
+    // 프론트엔드로 리다이렉트하면서 토큰을 쿼리 파라미터로 전달
+    return res.redirect(
+      `${frontendUrl}/login/AuthRedirect?token=${googleLogin.accessToken}`,
+    );
   }
 }
