@@ -20,7 +20,7 @@ export class User {
   @Column({ unique: true })
   email: string;
 
-  @Column()
+  @Column({ nullable: true })
   password: string;
 
   @Column({ nullable: true })
@@ -34,6 +34,9 @@ export class User {
 
   @Column({ nullable: true })
   phone?: string;
+
+  @Column({ nullable: true })
+  googleId: string;
 
   @Column({ type: 'enum', enum: Role, default: Role.User })
   role: Role;

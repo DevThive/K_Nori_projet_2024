@@ -17,6 +17,7 @@ import { LoginUserDto } from './dto/login-user.dto';
 import { accessTokenGuard } from './guard/access-token.guard';
 import { UserId } from './decorators/userId.decorator';
 import { AuthGuard } from '@nestjs/passport';
+import { UsersService } from 'src/users/users.service';
 // import { SignupAdminDto } from './dto/signup-admin.dto';
 
 @ApiTags('로그인&회원가입')
@@ -24,6 +25,7 @@ import { AuthGuard } from '@nestjs/passport';
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
+    private readonly usersService: UsersService,
     private readonly configService: ConfigService,
   ) {}
 
@@ -45,6 +47,7 @@ export class AuthController {
 
   @ApiBearerAuth('accessToken')
   @UseGuards(accessTokenGuard)
+  // @UseGuards(AuthGuard('google'))
   @Get('me')
   async authme(@UserId() userId: number) {
     return await this.authService.authme(userId);
@@ -70,6 +73,12 @@ export class AuthController {
   //   return user; // Return the user information or process it as desired.
   // }
 
+  @Get('profile')
+  @UseGuards(AuthGuard('google'))
+  async getProfile(@Req() req) {
+    return req.user; // Passport는 사용자 정보를 req.user에 저장합니다.
+  }
+
   @Get('/google')
   @UseGuards(AuthGuard('google'))
   async googleAuth(@Req() req) {
@@ -78,9 +87,30 @@ export class AuthController {
 
   @Get('google/oauth2callback')
   @UseGuards(AuthGuard('google'))
-  async googleAuthRedirect(@Req() req) {
+  async googleAuthRedirect(@Req() req, @Res() res) {
+    // 여기에서 @Res()를 추가했습니다.
     // 사용자 정보와 토큰은 req.user에 저장됨
-    console.log(req);
-    return req.user;
+    const user = req.user;
+
+    // 사용자 정보를 UsersService를 통해 생성 또는 업데이트
+    const createUserDto = {
+      email: user.email,
+      googleId: user.googleId,
+      nickname: user.lastName + user.firstName,
+      photo: user.photo,
+      currentRefreshToken: user.refreshToken,
+    };
+
+    const savedUser =
+      await this.usersService.createOrUpdateGoogleUser(createUserDto);
+
+    console.log(savedUser);
+
+    // 프론트엔드 URL을 ConfigService를 통해 가져옴.
+    const frontendUrl = this.configService.get<string>('FRONTEND_URL');
+
+    // 프론트엔드로 리다이렉트.
+    return res.redirect(`${frontendUrl}/auth-success?userId=${savedUser.id}`); // 여기에서 res.redirect를 사용합니다.
+    // return savedUser;
   }
 }
