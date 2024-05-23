@@ -68,7 +68,11 @@ export class AuthService {
     }
 
     //TODO: 함수로 따로 빼기
-    const accessToken = this.generateAccessToken(user.id, user.nickname);
+    const accessToken = this.generateAccessToken(
+      user.id,
+      user.nickname,
+      user.email,
+    );
     const refreshToken = this.generateRefreshToken(user.id);
 
     await this.userService.update(user.id, {
@@ -87,7 +91,7 @@ export class AuthService {
   async refresh(id: number) {
     const user = await this.userService.findUserById(id);
 
-    const accessToken = this.generateAccessToken(id, user.nickname);
+    const accessToken = this.generateAccessToken(id, user.nickname, user.email);
 
     return accessToken;
   }
@@ -102,8 +106,8 @@ export class AuthService {
   }
 
   /// access 토큰 발급 (private)
-  private generateAccessToken(id: number, name: string) {
-    const payload = { userId: id, userName: name };
+  private generateAccessToken(id: number, name: string, email: string) {
+    const payload = { userId: id, userName: name, email: email };
 
     const accessToken = this.jwtService.sign(payload, {
       secret: this.configService.get<string>('JWT_ACCESS_TOKEN_SECRET'),
