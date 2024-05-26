@@ -68,7 +68,11 @@ export class AuthService {
     }
 
     //TODO: 함수로 따로 빼기
-    const accessToken = this.generateAccessToken(user.id, user.nickname);
+    const accessToken = this.generateAccessToken(
+      user.id,
+      user.nickname,
+      user.email,
+    );
     const refreshToken = this.generateRefreshToken(user.id);
 
     await this.userService.update(user.id, {
@@ -87,7 +91,7 @@ export class AuthService {
   async refresh(id: number) {
     const user = await this.userService.findUserById(id);
 
-    const accessToken = this.generateAccessToken(id, user.nickname);
+    const accessToken = this.generateAccessToken(id, user.nickname, user.email);
 
     return accessToken;
   }
@@ -102,8 +106,8 @@ export class AuthService {
   }
 
   /// access 토큰 발급 (private)
-  private generateAccessToken(id: number, name: string) {
-    const payload = { userId: id, userName: name };
+  private generateAccessToken(id: number, name: string, email: string) {
+    const payload = { userId: id, userName: name, email: email };
 
     const accessToken = this.jwtService.sign(payload, {
       secret: this.configService.get<string>('JWT_ACCESS_TOKEN_SECRET'),
@@ -129,34 +133,5 @@ export class AuthService {
     const user = await this.userService.findUserById(userid);
 
     return user;
-  }
-
-  // 사용자 인증 URL 생성
-  getAuthenticationUrl() {
-    const scopes = ['email', 'profile', 'https://mail.google.com/'];
-
-    return this.oauth2Client.generateAuthUrl({
-      access_type: 'offline',
-      scope: scopes,
-    });
-  }
-
-  // 인증 코드를 사용하여 토큰 교환 및 id_token 디코딩
-  async getOAuth2Client(code: string) {
-    const { tokens } = await this.oauth2Client.getToken(code);
-    this.oauth2Client.setCredentials(tokens);
-
-    const idToken = tokens.id_token;
-    if (idToken) {
-      const ticket = await this.oauth2Client.verifyIdToken({
-        idToken,
-        audience: this.configService.get<string>('GOOGLE_CLIENT_ID'),
-      });
-
-      const payload = ticket.getPayload();
-      console.log('User profile:', payload);
-    }
-
-    return this.oauth2Client;
   }
 }
