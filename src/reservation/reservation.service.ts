@@ -19,7 +19,6 @@ import { Calendar } from 'src/entity/calendar.entity';
 import { InvoiceItem } from 'src/entity/invoice-item.entity';
 import { ApproveReservationDto } from './dto/approve-reservation';
 import { SmsService } from 'src/sms/sms.service';
-import { Between } from 'typeorm';
 import { ClassService } from 'src/class/class.service';
 
 @Injectable()
