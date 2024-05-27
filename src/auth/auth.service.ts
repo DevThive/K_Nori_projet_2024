@@ -53,6 +53,31 @@ export class AuthService {
     return userId;
   }
 
+  //구글 로그인
+  async googlelogin(email: string) {
+    const user = await this.userService.findUserByEmail(email);
+
+    if (!user) {
+      throw new NotFoundException('회원가입되지 않은 이메일입니다.');
+    }
+
+    const accessToken = this.generateAccessToken(
+      user.id,
+      user.nickname,
+      user.email,
+    );
+
+    const refreshToken = this.generateRefreshToken(user.id);
+
+    const response = {
+      accessToken,
+      refreshToken,
+      // userData: { ...user, password: undefined },
+    };
+
+    return response;
+  }
+
   /// 로그인
   async login(loginUserDto: LoginUserDto) {
     const { email, password } = loginUserDto;
