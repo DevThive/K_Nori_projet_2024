@@ -20,5 +20,5 @@ export class loginGoogleDto {
 
   @IsString()
   @ApiProperty({ description: 'refreshToken' })
-  currentRefreshToken: string;
+  googleRefreshToken: string;
 }

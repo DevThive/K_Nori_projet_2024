@@ -71,6 +71,7 @@ export class AuthService {
 
     const response = {
       accessToken,
+      refreshToken,
       // userData: { ...user, password: undefined },
     };
 

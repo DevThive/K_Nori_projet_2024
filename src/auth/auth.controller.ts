@@ -91,6 +91,7 @@ export class AuthController {
     // 여기에서 @Res()를 추가했습니다.
     // 사용자 정보와 토큰은 req.user에 저장됨.
     const user = req.user;
+    const googleLogin = await this.authService.googlelogin(user.email);
 
     // 사용자 정보를 UsersService를 통해 생성 또는 업데이트
     const createUserDto = {
@@ -98,15 +99,14 @@ export class AuthController {
       googleId: user.googleId,
       nickname: user.lastName + user.firstName,
       photo: user.photo,
-      currentRefreshToken: user.refreshToken,
+      googleRefreshToken: user.refreshToken,
+      currentRefreshToken: googleLogin.refreshToken,
     };
 
     const savedUser =
       await this.usersService.createOrUpdateGoogleUser(createUserDto);
 
     console.log(savedUser);
-
-    const googleLogin = await this.authService.googlelogin(user.email);
 
     // 프론트엔드 URL을 ConfigService를 통해 가져옴.
     const frontendUrl = this.configService.get<string>('FRONTEND_URL');
