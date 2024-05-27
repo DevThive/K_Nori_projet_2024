@@ -119,6 +119,7 @@ export class UsersService {
         'createdAt',
         'updatedAt',
         'role',
+        'googleRefreshToken',
       ],
     });
   }
