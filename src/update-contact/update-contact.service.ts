@@ -149,7 +149,7 @@ export class UpdateContactService {
       const to = updatecontact.reservation.client_phonenumber;
       const contentTitle = updatecontact.content_title;
       const content = updatecontact.content;
-      const content_reply = updatecontact.contact_answer;
+      const content_reply = updateContactAnswerDto.contact_answer;
       const templateId = 'KA01TP240516154956064XxKInyMSBSZ';
 
       await this.smsService.sendContactAlarm(

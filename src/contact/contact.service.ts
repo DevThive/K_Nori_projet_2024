@@ -194,7 +194,7 @@ export class ContactService {
       const to = contact.user_phone;
       const contentTitle = contact.content_title;
       const content = contact.content;
-      const content_reply = contact.contact_answer;
+      const content_reply = contactAnswerDto.contact_answer;
       const templateId = 'KA01TP240516155155020muGqtQjM0Hq';
 
       await this.smsService.sendContactAlarm(

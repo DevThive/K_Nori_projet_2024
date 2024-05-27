@@ -80,7 +80,7 @@ export class SmsService {
           '#{홍길동}': buyerName,
           '#{문의제목}': contentTitle,
           '#{문의내용}': content,
-          '#{답변내용}': content_reply,
+          '#{문의답변}': content_reply,
         },
       },
     });
