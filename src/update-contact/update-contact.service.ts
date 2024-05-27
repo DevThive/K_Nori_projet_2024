@@ -101,6 +101,7 @@ export class UpdateContactService {
   async findcontactbyid(id: number) {
     return await this.updateContactRepository.find({
       where: { id: id },
+      relations: { reservation: true },
     });
   }
 
@@ -116,51 +117,51 @@ export class UpdateContactService {
       throw new BadRequestException('관리자만 수정이 가능합니다.');
     }
 
-    const contact = await this.findcontactbyid(updatecontactid);
-    console.log(contact);
+    // const updatecontact = await this.findcontactbyid(updatecontactid);
+    // console.log(updatecontact);
 
-    if (!contact) {
+    const updatecontact = await this.updateContactRepository.findOne({
+      where: { id: updatecontactid },
+      relations: ['reservation'], // Ensure the reservation relationship is loaded
+    });
+
+    if (!updatecontact) {
       throw new BadRequestException('해당 문의사항이 존재하지 않습니다.');
     }
-    // console.log('ddsdsd');
 
-    // const resid = contact.reservation;
-
-    // const reservation = await this.reservationRepository.find({
-    //   where: { id: reservationId },
-    // });
-    // if (!reservation) {
-    //   throw new NotFoundException('해당 예약이 없습니다.');
-    // }
-    // console.log(reservation);
+    const reservation = await this.reservationRepository.find({
+      where: { id: updatecontact.reservation.id },
+    });
+    if (!reservation) {
+      throw new NotFoundException('해당 예약이 없습니다.');
+    }
+    console.log(reservation);
 
     const updatedcontact = await this.updateContactRepository.update(
       { id: updatecontactid },
       { ...updateContactAnswerDto },
     );
 
-    // if (updatedcontact) {
-    //   // 알림톡 구매자명과 상품명 설정
-    //   const buyerName = this.smsService.getFromPhoneNumber();
-    //   const from = this.smsService.getFromPhoneNumber();
-    //   const to = this.smsService.getFromPhoneNumber();
-    //   const url = contact.id.toString();
-    //   const contentTitle = contact.contact_title;
-    //   const content = contact.content;
-    //   const content_reply = contact.contact_reply;
-    //   const templateId = 'KA01TP240516154956064XxKInyMSBSZ';
+    if (updatedcontact) {
+      // 알림톡 구매자명과 상품명 설정
+      const buyerName = updatecontact.reservation.client_name;
+      const from = this.smsService.getFromPhoneNumber();
+      const to = updatecontact.reservation.client_phonenumber;
+      const contentTitle = updatecontact.content_title;
+      const content = updatecontact.content;
+      const content_reply = updatecontact.contact_answer;
+      const templateId = 'KA01TP240516154956064XxKInyMSBSZ';
 
-    //   await this.smsService.sendContactAlarm(
-    //     to,
-    //     from,
-    //     buyerName,
-    //     url,
-    //     contentTitle,
-    //     content,
-    //     templateId,
-    //     content_reply,
-    //   );
-    // }
+      await this.smsService.sendContactAlarm(
+        to,
+        from,
+        buyerName,
+        contentTitle,
+        content,
+        templateId,
+        content_reply,
+      );
+    }
     return updatedcontact;
   }
 }
