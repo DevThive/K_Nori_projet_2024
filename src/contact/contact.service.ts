@@ -192,17 +192,15 @@ export class ContactService {
       const buyerName = contact.user_name;
       const from = this.smsService.getFromPhoneNumber();
       const to = contact.user_phone;
-      const url = contact.id.toString();
       const contentTitle = contact.content_title;
       const content = contact.content;
-      const content_reply = contact.contact_answer;
+      const content_reply = contactAnswerDto.contact_answer;
       const templateId = 'KA01TP240516155155020muGqtQjM0Hq';
 
       await this.smsService.sendContactAlarm(
         to,
         from,
         buyerName,
-        url,
         contentTitle,
         content,
         templateId,
