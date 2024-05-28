@@ -9,6 +9,7 @@ import { User } from 'src/entity/user.entity';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { loginGoogleDto } from './dto/login-google.dto';
 
 @Injectable()
 export class UsersService {
@@ -42,6 +43,30 @@ export class UsersService {
   //     googleAccessTokenExpires: tokenData.googleAccessTokenExpires,
   //   });
   // }
+
+  //구글 로그인
+  // Google 사용자 정보로 유저 생성 또는 업데이트
+  async createOrUpdateGoogleUser(loginGoogle: loginGoogleDto) {
+    const { email } = loginGoogle;
+
+    let user = await this.userRepository.findOne({
+      where: { email },
+    });
+
+    if (user) {
+      // 이미 존재하는 이메일이면 Google ID와 사용자 정보 업데이트
+      await this.userRepository.update(user.id, {
+        ...loginGoogle,
+      });
+    } else {
+      // 새 사용자 생성
+      user = await this.userRepository.save({
+        ...loginGoogle,
+      });
+    }
+
+    return user;
+  }
 
   //유저 회원가입
   async create(createUserDto: CreateUserDto) {
@@ -86,6 +111,22 @@ export class UsersService {
   async findUserById(id: number) {
     return await this.userRepository.findOne({
       where: { id },
+      select: [
+        'id',
+        'email',
+        'photo',
+        'nickname',
+        'createdAt',
+        'updatedAt',
+        'role',
+        'googleRefreshToken',
+      ],
+    });
+  }
+
+  async findUserByEmailT(email: string) {
+    return await this.userRepository.findOne({
+      where: { email: email },
       select: [
         'id',
         'email',

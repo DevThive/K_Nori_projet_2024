@@ -62,7 +62,6 @@ export class SmsService {
     to: string,
     from: string,
     buyerName: string,
-    url: string,
     contentTitle: string,
     content: string,
     templateId: string,
@@ -79,10 +78,9 @@ export class SmsService {
         templateId: templateId,
         variables: {
           '#{홍길동}': buyerName,
-          '#{url}': url,
           '#{문의제목}': contentTitle,
           '#{문의내용}': content,
-          '#{답변내용}': content_reply,
+          '#{문의답변}': content_reply,
         },
       },
     });

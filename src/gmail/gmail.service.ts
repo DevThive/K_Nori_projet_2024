@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { google } from 'googleapis';
 import { UsersService } from 'src/users/users.service';
+import axios from 'axios';
+import * as qs from 'qs'; // qs 라이브러리 설치 필요
 
 @Injectable()
 export class GmailService {
@@ -53,5 +55,58 @@ export class GmailService {
     //   });
     // }
     return this.oauth2Client;
+  }
+  async googletoken(userid: number) {
+    const user = await this.userService.findUserById(userid);
+    if (!user) throw new Error('User not found'); // 사용자를 찾을 수 없는 경우 예외 처리
+
+    console.log(user);
+    try {
+      const accessToken = await this.refreshAccessToken(
+        user.googleRefreshToken,
+      );
+      const response = {
+        email: user.email,
+        accessToken: accessToken,
+      };
+      return response;
+    } catch (error) {
+      throw new Error('Failed to refresh access token'); // 토큰 새로고침 실패 처리
+    }
+  }
+
+  async refreshAccessToken(refreshToken: string) {
+    const clientID = this.configService.get<string>('GOOGLE_CLIENT_ID');
+    const clientSecret = this.configService.get<string>('GOOGLE_CLIENT_SECRET');
+
+    console.log(refreshToken);
+    if (!clientID || !clientSecret)
+      throw new Error('Google client ID or secret is not configured'); // 환경 변수 확인
+
+    try {
+      const response = await axios.post(
+        'https://oauth2.googleapis.com/token',
+        qs.stringify({
+          client_id: clientID,
+          client_secret: clientSecret,
+          refresh_token: refreshToken,
+          grant_type: 'refresh_token',
+        }),
+        {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+        },
+      );
+
+      const accessToken = response.data.access_token; // 새로 발급받은 액세스 토큰
+      return accessToken;
+    } catch (error) {
+      console.error(
+        'Error refreshing access token:',
+        error.response?.data || error.message,
+      );
+      throw error; // 오류를 다시 던져 호출자가 처리하도록 함
+    }
   }
 }

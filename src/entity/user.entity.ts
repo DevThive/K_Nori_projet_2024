@@ -20,11 +20,14 @@ export class User {
   @Column({ unique: true })
   email: string;
 
-  @Column()
+  @Column({ nullable: true })
   password: string;
 
   @Column({ nullable: true })
   currentRefreshToken?: string;
+
+  @Column({ nullable: true })
+  googleRefreshToken?: string;
 
   @Column()
   photo: string;
@@ -34,6 +37,9 @@ export class User {
 
   @Column({ nullable: true })
   phone?: string;
+
+  @Column({ nullable: true })
+  googleId: string;
 
   @Column({ type: 'enum', enum: Role, default: Role.User })
   role: Role;

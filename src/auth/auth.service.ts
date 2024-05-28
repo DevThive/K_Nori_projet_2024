@@ -53,6 +53,31 @@ export class AuthService {
     return userId;
   }
 
+  //구글 로그인
+  async googlelogin(email: string) {
+    const user = await this.userService.findUserByEmail(email);
+
+    if (!user) {
+      throw new NotFoundException('회원가입되지 않은 이메일입니다.');
+    }
+
+    const accessToken = this.generateAccessToken(
+      user.id,
+      user.nickname,
+      user.email,
+    );
+
+    const refreshToken = this.generateRefreshToken(user.id);
+
+    const response = {
+      accessToken,
+      refreshToken,
+      // userData: { ...user, password: undefined },
+    };
+
+    return response;
+  }
+
   /// 로그인
   async login(loginUserDto: LoginUserDto) {
     const { email, password } = loginUserDto;
@@ -68,7 +93,11 @@ export class AuthService {
     }
 
     //TODO: 함수로 따로 빼기
-    const accessToken = this.generateAccessToken(user.id, user.nickname);
+    const accessToken = this.generateAccessToken(
+      user.id,
+      user.nickname,
+      user.email,
+    );
     const refreshToken = this.generateRefreshToken(user.id);
 
     await this.userService.update(user.id, {
@@ -87,7 +116,7 @@ export class AuthService {
   async refresh(id: number) {
     const user = await this.userService.findUserById(id);
 
-    const accessToken = this.generateAccessToken(id, user.nickname);
+    const accessToken = this.generateAccessToken(id, user.nickname, user.email);
 
     return accessToken;
   }
@@ -102,8 +131,8 @@ export class AuthService {
   }
 
   /// access 토큰 발급 (private)
-  private generateAccessToken(id: number, name: string) {
-    const payload = { userId: id, userName: name };
+  private generateAccessToken(id: number, name: string, email: string) {
+    const payload = { userId: id, userName: name, email: email };
 
     const accessToken = this.jwtService.sign(payload, {
       secret: this.configService.get<string>('JWT_ACCESS_TOKEN_SECRET'),
