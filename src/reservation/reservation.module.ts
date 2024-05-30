@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { ReservationController } from './reservation.controller';
 import { ReservationService } from './reservation.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -12,6 +12,7 @@ import { InvoiceItem } from 'src/entity/invoice-item.entity';
 import { SmsService } from 'src/sms/sms.service';
 import { ClassService } from 'src/class/class.service';
 import { ClassSchedule } from 'src/entity/class-schedule.entity';
+import { ExpiryModule } from 'src/expiry/expiry.module';
 
 @Module({
   imports: [
@@ -24,8 +25,10 @@ import { ClassSchedule } from 'src/entity/class-schedule.entity';
       InvoiceItem,
       ClassSchedule,
     ]),
+    forwardRef(() => ExpiryModule), // forwardRef를 사용하여 순환 종속성을 처리합니다.
   ],
   controllers: [ReservationController],
   providers: [ReservationService, UsersService, SmsService, ClassService],
+  exports: [ReservationService], // ReservationService를 export합니다.
 })
 export class ReservationModule {}
