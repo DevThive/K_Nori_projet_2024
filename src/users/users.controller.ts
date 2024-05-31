@@ -1,4 +1,4 @@
-import { Controller, Get, UseGuards } from '@nestjs/common';
+import { Controller, Get, Param, Patch, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { UsersService } from './users.service';
 import { accessTokenGuard } from 'src/auth/guard/access-token.guard';
@@ -14,5 +14,13 @@ export class UsersController {
   @Get('userlist')
   async userlist(@UserId() userId: number) {
     return await this.userService.userlist(userId);
+  }
+
+  //유저 승인처리
+  @ApiBearerAuth('accessToken')
+  @UseGuards(accessTokenGuard)
+  @Patch('approve/:id')
+  async approveUser(@Param('id') id: number, @UserId() userId: number) {
+    return await this.userService.approveUser(id);
   }
 }
