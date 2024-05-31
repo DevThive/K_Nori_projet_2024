@@ -180,7 +180,7 @@ export class UsersService {
     if (approveUserDto.state === 1) {
       user.role = Role.Admin;
     } else {
-      throw new BadRequestException('유효하지 않은 승인 상태입니다.');
+      user.role = Role.User;
     }
     return this.userRepository.save(user);
   }
