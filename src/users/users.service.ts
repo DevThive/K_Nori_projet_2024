@@ -13,6 +13,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { loginGoogleDto } from './dto/login-google.dto';
 import { Role } from './types/userRole.type';
 import { format } from 'date-fns';
+import { ApproveUserDto } from './dto/approve-user';
 
 @Injectable()
 export class UsersService {
@@ -160,7 +161,11 @@ export class UsersService {
     }));
   }
 
-  async approveUser(id: number, userId: number): Promise<User> {
+  async approveUser(
+    id: number,
+    userId: number,
+    approveUserDto: ApproveUserDto,
+  ): Promise<User> {
     const adminuser = await this.findUserById(userId);
 
     if (adminuser.role !== 1) {
@@ -171,7 +176,12 @@ export class UsersService {
     if (!user) {
       throw new Error('유저를 찾을 수 없습니다.');
     }
-    user.role = Role.Admin;
+
+    if (approveUserDto.state === 1) {
+      user.role = Role.Admin;
+    } else {
+      throw new BadRequestException('유효하지 않은 승인 상태입니다.');
+    }
     return this.userRepository.save(user);
   }
 }
