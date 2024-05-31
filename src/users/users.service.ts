@@ -138,4 +138,16 @@ export class UsersService {
       ],
     });
   }
+
+  // 유저정보 조회
+  async userlist(userId: number) {
+    const users = await this.userRepository.find();
+    return users.map((user) => ({
+      id: user.id,
+      email: user.email,
+      createdAt: user.createdAt,
+      role: user.role,
+      nickname: user.nickname,
+    }));
+  }
 }

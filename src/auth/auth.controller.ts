@@ -116,4 +116,31 @@ export class AuthController {
       `${frontendUrl}/login/AuthRedirect?token=${googleLogin.accessToken}`,
     );
   }
+  // @Get('me')
+  // @UseGuards(accessTokenGuard)
+  // async getMe(@Req() req) {
+  //   const user = await this.usersService.findUserById(req.user.id);
+
+  //   if (
+  //     user &&
+  //     this.usersService.isAccessTokenExpired(user.googleAccessTokenExpires)
+  //   ) {
+  //     const tokenData = await this.usersService.refreshGoogleAccessToken(
+  //       user.googleRefreshToken,
+  //     );
+  //     await this.usersService.updateAccessToken(user.id, {
+  //       googleAccessToken: tokenData.access_token,
+  //       googleAccessTokenExpires: new Date(
+  //         Date.now() + tokenData.expires_in * 1000,
+  //       ),
+  //     });
+
+  //     user.googleAccessToken = tokenData.access_token;
+  //     user.googleAccessTokenExpires = new Date(
+  //       Date.now() + tokenData.expires_in * 1000,
+  //     );
+  //   }
+
+  //   return user;
+  // }
 }
