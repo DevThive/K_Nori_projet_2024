@@ -7,6 +7,7 @@ import {
   Relation,
   OneToMany,
   OneToOne,
+  JoinColumn,
 } from 'typeorm';
 // import { Instructor } from './instructor.entity';
 import { Reservation } from './reservation.entity';
@@ -65,6 +66,7 @@ export class Invoice {
   @OneToOne(() => Reservation, (reservation) => reservation.invoice, {
     onDelete: 'CASCADE',
   })
+  @JoinColumn()
   reservation: Relation<Reservation>;
 
   @OneToMany(() => InvoiceItem, (invoiceItems) => invoiceItems.invoice, {

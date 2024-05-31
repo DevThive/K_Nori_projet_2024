@@ -10,6 +10,7 @@ import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { loginGoogleDto } from './dto/login-google.dto';
+import { Role } from './types/userRole.type';
 
 @Injectable()
 export class UsersService {
@@ -137,5 +138,26 @@ export class UsersService {
         'role',
       ],
     });
+  }
+
+  // 유저정보 조회
+  async userlist(userId: number) {
+    const users = await this.userRepository.find();
+    return users.map((user) => ({
+      id: user.id,
+      email: user.email,
+      createdAt: user.createdAt,
+      role: user.role,
+      nickname: user.nickname,
+    }));
+  }
+
+  async approveUser(id: number): Promise<User> {
+    const user = await this.userRepository.findOne({ where: { id: id } });
+    if (!user) {
+      throw new Error('유저를 찾을 수 없습니다.');
+    }
+    user.role = Role.Admin;
+    return this.userRepository.save(user);
   }
 }

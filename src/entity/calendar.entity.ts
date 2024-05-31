@@ -6,6 +6,7 @@ import {
   UpdateDateColumn,
   OneToOne,
   BeforeInsert,
+  JoinColumn,
 } from 'typeorm';
 // import { Instructor } from './instructor.entity';
 import { Reservation } from './reservation.entity';
@@ -57,5 +58,6 @@ export class Calendar {
   @OneToOne(() => Reservation, (reservation) => reservation.calendar, {
     onDelete: 'CASCADE',
   })
+  @JoinColumn()
   reservation: Reservation;
 }

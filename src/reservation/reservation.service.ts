@@ -20,13 +20,14 @@ import { InvoiceItem } from 'src/entity/invoice-item.entity';
 import { ApproveReservationDto } from './dto/approve-reservation';
 import { SmsService } from 'src/sms/sms.service';
 import { ClassService } from 'src/class/class.service';
+import { ExpiryService } from 'src/expiry/expiry.service';
 
 @Injectable()
 export class ReservationService {
   constructor(
     private readonly userService: UsersService,
     private readonly smsService: SmsService,
-    private readonly classService: ClassService,
+    private readonly expiryService: ExpiryService,
 
     @InjectRepository(Reservation)
     private reservationRepository: Repository<Reservation>,
@@ -424,5 +425,10 @@ export class ReservationService {
     });
 
     return result;
+  }
+
+  // 예약 만료 데이터 삭제
+  async removeExpiredReservations() {
+    await this.expiryService.removeExpiredReservations();
   }
 }
