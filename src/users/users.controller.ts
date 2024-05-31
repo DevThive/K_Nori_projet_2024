@@ -21,6 +21,6 @@ export class UsersController {
   @UseGuards(accessTokenGuard)
   @Patch('approve/:id')
   async approveUser(@Param('id') id: number, @UserId() userId: number) {
-    return await this.userService.approveUser(id);
+    return await this.userService.approveUser(id, userId);
   }
 }
