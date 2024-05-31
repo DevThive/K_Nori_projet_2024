@@ -68,17 +68,17 @@ export class Reservation {
   class: Relation<Class>;
 
   @OneToOne(() => Invoice, (invoice) => invoice.reservation, {
-    // cascade: true,
+    cascade: true,
     onDelete: 'CASCADE',
   })
-  @JoinColumn()
+  // @JoinColumn()
   invoice: Relation<Invoice>;
 
   @OneToOne(() => Calendar, (calendar) => calendar.reservation, {
-    // cascade: true,
+    cascade: true,
     onDelete: 'CASCADE',
   })
-  @JoinColumn()
+  // @JoinColumn()
   calendar: Relation<Calendar>;
 
   // @ManyToOne(() => User, (user) => user.reservations_content)
