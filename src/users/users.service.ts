@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   ConflictException,
   Injectable,
   NotFoundException,
@@ -11,6 +12,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { loginGoogleDto } from './dto/login-google.dto';
 import { Role } from './types/userRole.type';
+import { format } from 'date-fns';
 
 @Injectable()
 export class UsersService {
@@ -142,18 +144,30 @@ export class UsersService {
 
   // 유저정보 조회
   async userlist(userId: number) {
+    const user = await this.findUserById(userId);
+
+    if (user.role !== 1) {
+      throw new BadRequestException('관리자만 수정이 가능합니다.');
+    }
+
     const users = await this.userRepository.find();
     return users.map((user) => ({
       id: user.id,
       email: user.email,
-      createdAt: user.createdAt,
+      date: format(new Date(user.createdAt), 'yyyy-MM-dd'),
       role: user.role,
-      nickname: user.nickname,
+      name: user.nickname,
     }));
   }
 
-  async approveUser(id: number): Promise<User> {
-    const user = await this.userRepository.findOne({ where: { id: id } });
+  async approveUser(id: number, userId: number): Promise<User> {
+    const adminuser = await this.findUserById(userId);
+
+    if (adminuser.role !== 1) {
+      throw new BadRequestException('관리자만 수정이 가능합니다.');
+    }
+
+    const user = await this.userRepository.findOne({ where: { id } });
     if (!user) {
       throw new Error('유저를 찾을 수 없습니다.');
     }
