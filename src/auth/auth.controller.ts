@@ -44,7 +44,8 @@ export class AuthController {
   async authme(@Req() req, @UserId() userId: number, @Res() res) {
     const token = req.headers.authorization.split(' ')[1];
     try {
-      const user = await this.authService.validateAccessToken(token);
+      const decodedToken = await this.authService.validateAccessToken(token);
+      const user = await this.usersService.findUserById(decodedToken.userId);
       return res.json(user);
     } catch (error) {
       if (error instanceof UnauthorizedException) {
@@ -56,7 +57,12 @@ export class AuthController {
         const newTokens = await this.authService.refresh(refreshToken);
         res.setHeader('x-access-token', newTokens.accessToken);
         res.setHeader('x-refresh-token', newTokens.refreshToken);
-        return res.json({ accessToken: newTokens.accessToken });
+
+        const decodedToken = await this.authService.validateAccessToken(
+          newTokens.accessToken,
+        );
+        const user = await this.usersService.findUserById(decodedToken.userId);
+        return res.json({ accessToken: newTokens.accessToken, user });
       }
       throw error;
     }
