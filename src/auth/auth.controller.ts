@@ -35,24 +35,34 @@ export class AuthController {
     return this.authService.signup(singupUserDto);
   }
 
-  //admin 로그인은 실질적으로 ui에서 구현될일은 없음
-  //   @Post('signup/admin')
-  //   adminsignup(@Body() signupadminDto: SignupAdminDto) {
-  //     return this.authService.adminsignup(signupadminDto);
-  //   }
-
   @Post('login')
   login(@Body() loginUserDto: LoginUserDto) {
     return this.authService.login(loginUserDto);
   }
 
-  // @ApiBearerAuth('accessToken')
-  // @UseGuards(accessTokenGuard)
-  // // @UseGuards(AuthGuard('google'))
-  // @Get('me')
-  // async authme(@UserId() userId: number) {
-  //   return await this.authService.authme(userId);
-  // }
+  @ApiBearerAuth('accessToken')
+  @UseGuards(accessTokenGuard)
+  @Get('me')
+  async authme(@Req() req, @UserId() userId: number, @Res() res) {
+    const token = req.headers.authorization.split(' ')[1];
+    try {
+      const user = await this.authService.validateAccessToken(token);
+      return res.json(user);
+    } catch (error) {
+      if (error instanceof UnauthorizedException) {
+        const refreshToken = req.headers['x-refresh-token'];
+        if (!refreshToken) {
+          throw new UnauthorizedException('Refresh token is missing');
+        }
+
+        const newTokens = await this.authService.refresh(refreshToken);
+        res.setHeader('x-access-token', newTokens.access_token);
+        res.setHeader('x-refresh-token', newTokens.refresh_token);
+        return res.json({ accessToken: newTokens.access_token });
+      }
+      throw error;
+    }
+  }
 
   @Get('profile')
   @UseGuards(AuthGuard('google'))
@@ -72,17 +82,14 @@ export class AuthController {
     const user = req.user;
     const googleLogin = await this.authService.googlelogin(user.email);
 
-    // 사용자 정보를 UsersService를 통해 생성 또는 업데이트
     const createUserDto: loginGoogleDto = {
       email: user.email,
       googleId: user.googleId,
       nickname: user.lastName + user.firstName,
       photo: user.photo,
       googleRefreshToken: user.refreshToken,
-      googleAccessToken: googleLogin.accessToken, // AccessToken 추가
-      googleAccessTokenExpires: new Date(
-        Date.now() + 3600 * 1000, // expires_in 대신 1시간 (3600초)으로 설정
-      ), // AccessToken 만료 시간 추가
+      googleAccessToken: googleLogin.access_token,
+      googleAccessTokenExpires: new Date(Date.now() + 3600 * 1000),
     };
 
     const savedUser =
@@ -90,64 +97,10 @@ export class AuthController {
 
     console.log(savedUser);
 
-    // 프론트엔드 URL을 ConfigService를 통해 가져옴.
     const frontendUrl = this.configService.get<string>('FRONTEND_URL');
 
-    // 프론트엔드로 리다이렉트하면서 토큰을 쿼리 파라미터로 전달
     return res.redirect(
-      `${frontendUrl}/login/AuthRedirect?token=${googleLogin.accessToken}`,
+      `${frontendUrl}/login/AuthRedirect?token=${googleLogin.access_token}`,
     );
   }
-
-  @ApiBearerAuth('accessToken')
-  @UseGuards(accessTokenGuard)
-  @Get('me')
-  async authme(@Req() req, @UserId() userId: number, @Res() res) {
-    const token = req.headers.authorization.split(' ')[1];
-    try {
-      const user = await this.authService.validateAccessToken(token);
-      return res.json(user);
-    } catch (error) {
-      if (error instanceof UnauthorizedException) {
-        const refreshToken = req.headers['x-refresh-token'];
-        if (!refreshToken) {
-          throw new UnauthorizedException('Refresh token is missing');
-        }
-
-        const newTokens = await this.authService.refreshToken(refreshToken);
-        res.setHeader('x-access-token', newTokens.accessToken);
-        res.setHeader('x-refresh-token', newTokens.refreshToken);
-        return res.json({ accessToken: newTokens.accessToken });
-      }
-      throw error;
-    }
-  }
-
-  // @Get('me')
-  // @UseGuards(accessTokenGuard)
-  // async getMe(@Req() req) {
-  //   const user = await this.usersService.findUserById(req.user.id);
-
-  //   if (
-  //     user &&
-  //     this.usersService.isAccessTokenExpired(user.googleAccessTokenExpires)
-  //   ) {
-  //     const tokenData = await this.usersService.refreshGoogleAccessToken(
-  //       user.googleRefreshToken,
-  //     );
-  //     await this.usersService.updateAccessToken(user.id, {
-  //       googleAccessToken: tokenData.access_token,
-  //       googleAccessTokenExpires: new Date(
-  //         Date.now() + tokenData.expires_in * 1000,
-  //       ),
-  //     });
-
-  //     user.googleAccessToken = tokenData.access_token;
-  //     user.googleAccessTokenExpires = new Date(
-  //       Date.now() + tokenData.expires_in * 1000,
-  //     );
-  //   }
-
-  //   return user;
-  // }
 }
