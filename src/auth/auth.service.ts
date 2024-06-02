@@ -70,7 +70,11 @@ export class AuthService {
       currentRefreshToken: refreshToken,
     });
 
-    return { accessToken, refreshToken };
+    const response = {
+      accessToken,
+      userData: { ...user, password: undefined },
+    };
+    return response;
   }
 
   async refresh(refreshToken: string) {
