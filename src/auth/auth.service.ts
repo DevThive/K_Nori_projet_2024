@@ -13,7 +13,6 @@ import { JwtService } from '@nestjs/jwt';
 import { SignupUserDto } from './dto/signup-user.dto';
 import * as bcrypt from 'bcrypt';
 import { LoginUserDto } from './dto/login-user.dto';
-import { google } from 'googleapis';
 
 @Injectable()
 export class AuthService {
@@ -25,12 +24,6 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  private oauth2Client = new google.auth.OAuth2(
-    this.configService.get<string>('GOOGLE_CLIENT_ID'),
-    this.configService.get<string>('GOOGLE_CLIENT_SECRET'),
-    this.configService.get<string>('GOOGLE_CALLBACK_URL'),
-  );
-  /// 유저 회원가입
   async signup(singupUserDto: SignupUserDto) {
     const { checkPassword, ...createUserDto } = singupUserDto;
 
@@ -53,32 +46,6 @@ export class AuthService {
     return userId;
   }
 
-  //구글 로그인
-  async googlelogin(email: string) {
-    const user = await this.userService.findUserByEmail(email);
-
-    if (!user) {
-      throw new NotFoundException('회원가입되지 않은 이메일입니다.');
-    }
-
-    const accessToken = this.generateAccessToken(
-      user.id,
-      user.nickname,
-      user.email,
-    );
-
-    const refreshToken = this.generateRefreshToken(user.id);
-
-    const response = {
-      accessToken,
-      refreshToken,
-      // userData: { ...user, password: undefined },
-    };
-
-    return response;
-  }
-
-  /// 로그인
   async login(loginUserDto: LoginUserDto) {
     const { email, password } = loginUserDto;
 
@@ -92,7 +59,6 @@ export class AuthService {
       throw new UnauthorizedException('비밀번호가 일치하지 않습니다.');
     }
 
-    //TODO: 함수로 따로 빼기
     const accessToken = this.generateAccessToken(
       user.id,
       user.nickname,
@@ -104,24 +70,37 @@ export class AuthService {
       currentRefreshToken: refreshToken,
     });
 
-    const response = {
-      accessToken,
-      userData: { ...user, password: undefined },
-    };
-
-    return response;
+    return { accessToken, refreshToken };
   }
 
-  /// 토큰 재발급
-  async refresh(id: number) {
-    const user = await this.userService.findUserById(id);
+  async refresh(refreshToken: string) {
+    try {
+      const decoded = this.jwtService.verify(refreshToken, {
+        secret: this.configService.get<string>('JWT_REFRESH_TOKEN_SECRET'),
+      });
 
-    const accessToken = this.generateAccessToken(id, user.nickname, user.email);
+      const user = await this.userService.findUserById(decoded.userId);
+      if (!user || user.currentRefreshToken !== refreshToken) {
+        throw new UnauthorizedException('Invalid refresh token');
+      }
 
-    return accessToken;
+      const newAccessToken = this.generateAccessToken(
+        user.id,
+        user.nickname,
+        user.email,
+      );
+      const newRefreshToken = this.generateRefreshToken(user.id);
+
+      await this.userService.update(user.id, {
+        currentRefreshToken: newRefreshToken,
+      });
+
+      return { accessToken: newAccessToken, refreshToken: newRefreshToken };
+    } catch (error) {
+      throw new UnauthorizedException('Invalid refresh token');
+    }
   }
 
-  /// 로그아웃
   async logout(id: number) {
     await this.userService.update(id, {
       currentRefreshToken: null,
@@ -130,33 +109,58 @@ export class AuthService {
     return true;
   }
 
-  /// access 토큰 발급 (private)
+  async validateAccessToken(token: string): Promise<any> {
+    try {
+      return this.jwtService.verify(token, {
+        secret: this.configService.get<string>('JWT_ACCESS_TOKEN_SECRET'),
+      });
+    } catch (e) {
+      throw new UnauthorizedException('Invalid access token');
+    }
+  }
+
   private generateAccessToken(id: number, name: string, email: string) {
     const payload = { userId: id, userName: name, email: email };
 
-    const accessToken = this.jwtService.sign(payload, {
+    return this.jwtService.sign(payload, {
       secret: this.configService.get<string>('JWT_ACCESS_TOKEN_SECRET'),
       expiresIn: this.configService.get<string>('JWT_ACCESS_TOKEN_EXP'),
     });
-
-    return accessToken;
   }
 
-  /// refresh 토큰 발급 (private)
   private generateRefreshToken(id: number) {
     const payload = { userId: id };
 
-    const refreshToken = this.jwtService.sign(payload, {
+    return this.jwtService.sign(payload, {
       secret: this.configService.get<string>('JWT_REFRESH_TOKEN_SECRET'),
       expiresIn: this.configService.get<string>('JWT_REFRESH_TOKEN_EXP'),
     });
-
-    return refreshToken;
   }
 
   async authme(userid: number) {
     const user = await this.userService.findUserById(userid);
-
     return user;
+  }
+
+  //구글 로그인
+  async googlelogin(email: string) {
+    const user = await this.userService.findUserByEmail(email);
+    if (!user) {
+      throw new NotFoundException('회원가입되지 않은 이메일입니다.');
+    }
+    const accessToken = this.generateAccessToken(
+      user.id,
+      user.nickname,
+      user.email,
+    );
+    const refreshToken = this.generateRefreshToken(user.id);
+
+    const response = {
+      accessToken,
+      refreshToken,
+      // userData: { ...user, password: undefined },
+    };
+
+    return response;
   }
 }

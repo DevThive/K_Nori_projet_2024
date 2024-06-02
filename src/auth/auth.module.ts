@@ -10,8 +10,8 @@ import { accessTokenStrategy } from './strategy/access-token.strategy';
 import { refreshTokenGuard } from './guard/refresh-token.guard';
 import { refreshTokenStrategy } from './strategy/refresh-token.strategy';
 import { AuthService } from './auth.service';
-import { AuthController } from './auth.controller';
 import { GoogleStrategy } from './strategy/google.strategy';
+import { AuthController } from './auth.controller';
 
 @Module({
   imports: [
