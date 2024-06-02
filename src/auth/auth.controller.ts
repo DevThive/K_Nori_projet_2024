@@ -44,7 +44,8 @@ export class AuthController {
   async authme(@Req() req, @UserId() userId: number, @Res() res) {
     const token = req.headers.authorization.split(' ')[1];
     try {
-      const user = await this.authService.validateAccessToken(token);
+      const decodedToken = await this.authService.validateAccessToken(token);
+      const user = await this.usersService.findUserById(decodedToken.userId);
       return res.json(user);
     } catch (error) {
       if (error instanceof UnauthorizedException) {
@@ -52,21 +53,31 @@ export class AuthController {
         if (!refreshToken) {
           throw new UnauthorizedException('Refresh token is missing');
         }
-
         const newTokens = await this.authService.refresh(refreshToken);
         res.setHeader('x-access-token', newTokens.accessToken);
         res.setHeader('x-refresh-token', newTokens.refreshToken);
-        return res.json({ accessToken: newTokens.accessToken });
+        const decodedToken = await this.authService.validateAccessToken(
+          newTokens.accessToken,
+        );
+        const user = await this.usersService.findUserById(decodedToken.userId);
+        return res.json({ accessToken: newTokens.accessToken, user });
       }
       throw error;
     }
   }
-
   @Get('profile')
   @UseGuards(AuthGuard('google'))
   async getProfile(@Req() req) {
     return req.user; // Passport는 사용자 정보를 req.user에 저장합니다.
   }
+
+  // @ApiBearerAuth('accessToken')
+  // @UseGuards(accessTokenGuard)
+  // // @UseGuards(AuthGuard('google'))
+  // @Get('me')
+  // async authme1(@UserId() userId: number) {
+  //   return await this.authService.authme(userId);
+  // }
 
   @Get('/google')
   @UseGuards(AuthGuard('google'))
