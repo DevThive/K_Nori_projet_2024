@@ -159,4 +159,43 @@ export class AuthService {
 
     return user;
   }
+
+  async validateAccessToken(token: string): Promise<any> {
+    try {
+      return this.jwtService.verify(token, {
+        secret: this.configService.get<string>('JWT_ACCESS_TOKEN_SECRET'),
+      });
+    } catch (e) {
+      throw new UnauthorizedException('Invalid access token');
+    }
+  }
+
+  async refreshToken(refreshToken: string): Promise<any> {
+    try {
+      const decoded = this.jwtService.verify(refreshToken, {
+        secret: this.configService.get<string>('JWT_REFRESH_TOKEN_SECRET'),
+      });
+      const user = await this.userService.findUserById(decoded.userId);
+      if (!user || user.currentRefreshToken !== refreshToken) {
+        throw new UnauthorizedException('Invalid refresh token');
+      }
+
+      const newAccessToken = this.generateAccessToken(
+        user.id,
+        user.nickname,
+        user.email,
+      );
+      const newRefreshToken = this.generateRefreshToken(user.id);
+      await this.userService.update(user.id, {
+        currentRefreshToken: newRefreshToken,
+      });
+
+      return {
+        accessToken: newAccessToken,
+        refreshToken: newRefreshToken,
+      };
+    } catch (e) {
+      throw new UnauthorizedException('Invalid refresh token');
+    }
+  }
 }

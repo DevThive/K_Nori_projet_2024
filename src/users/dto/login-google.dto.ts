@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString } from 'class-validator';
+import { IsDate, IsString } from 'class-validator';
 
 export class loginGoogleDto {
   @IsString()
@@ -21,4 +21,12 @@ export class loginGoogleDto {
   @IsString()
   @ApiProperty({ description: 'refreshToken' })
   googleRefreshToken: string;
+
+  @IsString()
+  @ApiProperty({ description: 'accessToken' })
+  googleAccessToken: string; // 추가된 부분
+
+  @IsDate()
+  @ApiProperty({ description: 'googleAccessTokenExpires' })
+  googleAccessTokenExpires: Date;
 }
