@@ -29,6 +29,12 @@ export class User {
   @Column({ nullable: true })
   googleRefreshToken?: string;
 
+  @Column({ nullable: true })
+  googleAccessToken: string;
+
+  @Column({ nullable: true, type: 'timestamp' })
+  googleAccessTokenExpires: Date;
+
   @Column()
   photo: string;
 
