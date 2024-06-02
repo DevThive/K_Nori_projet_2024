@@ -3,8 +3,6 @@ import {
   Controller,
   Get,
   Post,
-  Query,
-  Redirect,
   Req,
   Res,
   UnauthorizedException,
@@ -17,9 +15,7 @@ import { SignupUserDto } from './dto/signup-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
 import { accessTokenGuard } from './guard/access-token.guard';
 import { UserId } from './decorators/userId.decorator';
-import { AuthGuard } from '@nestjs/passport';
 import { UsersService } from 'src/users/users.service';
-import { loginGoogleDto } from 'src/users/dto/login-google.dto';
 
 @ApiTags('로그인&회원가입')
 @Controller('auth')
@@ -56,51 +52,11 @@ export class AuthController {
         }
 
         const newTokens = await this.authService.refresh(refreshToken);
-        res.setHeader('x-access-token', newTokens.access_token);
-        res.setHeader('x-refresh-token', newTokens.refresh_token);
-        return res.json({ accessToken: newTokens.access_token });
+        res.setHeader('x-access-token', newTokens.accessToken);
+        res.setHeader('x-refresh-token', newTokens.refreshToken);
+        return res.json({ accessToken: newTokens.accessToken });
       }
       throw error;
     }
-  }
-
-  @Get('profile')
-  @UseGuards(AuthGuard('google'))
-  async getProfile(@Req() req) {
-    return req.user; // Passport는 사용자 정보를 req.user에 저장합니다.
-  }
-
-  @Get('/google')
-  @UseGuards(AuthGuard('google'))
-  async googleAuth(@Req() req) {
-    // GoogleStrategy에 의해 처리
-  }
-
-  @Get('google/oauth2callback')
-  @UseGuards(AuthGuard('google'))
-  async googleAuthRedirect(@Req() req, @Res() res) {
-    const user = req.user;
-    const googleLogin = await this.authService.googlelogin(user.email);
-
-    const createUserDto: loginGoogleDto = {
-      email: user.email,
-      googleId: user.googleId,
-      nickname: user.lastName + user.firstName,
-      photo: user.photo,
-      googleRefreshToken: user.refreshToken,
-      googleAccessToken: googleLogin.access_token,
-      googleAccessTokenExpires: new Date(Date.now() + 3600 * 1000),
-    };
-
-    const savedUser =
-      await this.usersService.createOrUpdateGoogleUser(createUserDto);
-
-    console.log(savedUser);
-
-    const frontendUrl = this.configService.get<string>('FRONTEND_URL');
-
-    return res.redirect(
-      `${frontendUrl}/login/AuthRedirect?token=${googleLogin.access_token}`,
-    );
   }
 }
