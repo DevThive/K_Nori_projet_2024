@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   Post,
+  Query,
   Req,
   Res,
   UnauthorizedException,
@@ -16,6 +17,7 @@ import { LoginUserDto } from './dto/login-user.dto';
 import { accessTokenGuard } from './guard/access-token.guard';
 import { UserId } from './decorators/userId.decorator';
 import { UsersService } from 'src/users/users.service';
+import { AuthGuard } from '@nestjs/passport';
 
 @ApiTags('로그인&회원가입')
 @Controller('auth')
@@ -58,5 +60,51 @@ export class AuthController {
       }
       throw error;
     }
+  }
+
+  @Get('profile')
+  @UseGuards(AuthGuard('google'))
+  async getProfile(@Req() req) {
+    return req.user; // Passport는 사용자 정보를 req.user에 저장합니다.
+  }
+
+  @Get('/google')
+  @UseGuards(AuthGuard('google'))
+  async googleAuth(@Req() req) {
+    // GoogleStrategy에 의해 처리
+  }
+
+  @Get('google/oauth2callback')
+  @UseGuards(AuthGuard('google'))
+  async googleAuthRedirect(@Req() req, @Res() res) {
+    // 여기에서 @Res()를 추가했습니다.
+    // 사용자 정보와 토큰은 req.user에 저장됨.
+    const user = req.user;
+
+    // 사용자 정보를 UsersService를 통해 생성 또는 업데이트
+    const createUserDto = {
+      email: user.email,
+      googleId: user.googleId,
+      nickname: user.lastName + user.firstName,
+      photo: user.photo,
+      googleRefreshToken: user.refreshToken,
+      googleAccessToken: user.accessToken,
+      googleAccessTokenExpires: new Date(Date.now() + 3600 * 1000), // Assuming access token expires in 1 hour
+    };
+
+    const savedUser =
+      await this.usersService.createOrUpdateGoogleUser(createUserDto);
+
+    console.log(savedUser);
+
+    const googleLogin = await this.authService.googlelogin(user.email);
+
+    // 프론트엔드 URL을 ConfigService를 통해 가져옴.
+    const frontendUrl = this.configService.get<string>('FRONTEND_URL');
+
+    // 프론트엔드로 리다이렉트하면서 토큰을 쿼리 파라미터로 전달
+    return res.redirect(
+      `${frontendUrl}/login/AuthRedirect?token=${googleLogin.accessToken}`,
+    );
   }
 }
