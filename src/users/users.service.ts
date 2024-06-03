@@ -33,17 +33,27 @@ export class UsersService {
     params.append('refresh_token', refreshToken);
     params.append('grant_type', 'refresh_token');
 
-    const response = await axios.post(
-      'https://oauth2.googleapis.com/token',
-      params,
-      {
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
+    try {
+      console.log('Sending request to Google OAuth token endpoint');
+      const response = await axios.post(
+        'https://oauth2.googleapis.com/token',
+        params,
+        {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
         },
-      },
-    );
-
-    return response.data;
+      );
+      console.log('Response received:', response.data);
+      return response.data;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.error('Axios error:', error.response?.data);
+      } else {
+        console.error('Unexpected error:', error);
+      }
+      throw error;
+    }
   }
 
   private isAccessTokenExpired(expiryDate: Date): boolean {
