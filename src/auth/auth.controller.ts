@@ -39,7 +39,6 @@ export class AuthController {
   }
 
   @ApiBearerAuth('accessToken')
-  @UseGuards(accessTokenGuard)
   @Get('me')
   async authme(@Req() req, @UserId() userId: number, @Res() res) {
     const token = req.headers.authorization.split(' ')[1];
@@ -50,19 +49,36 @@ export class AuthController {
     } catch (error) {
       if (error instanceof UnauthorizedException) {
         const refreshToken = req.headers['x-refresh-token'];
-        if (!refreshToken) {
+        const googleRefreshToken = req.headers['x-google-refresh-token'];
+        if (!refreshToken && !googleRefreshToken) {
           throw new UnauthorizedException('Refresh token is missing');
         }
-
-        const newTokens = await this.authService.refresh(refreshToken);
-        res.setHeader('x-access-token', newTokens.accessToken);
-        res.setHeader('x-refresh-token', newTokens.refreshToken);
-
-        const decodedToken = await this.authService.validateAccessToken(
-          newTokens.accessToken,
-        );
+        let newAccessToken: string;
+        let newRefreshToken: string;
+        const expiresIn = 3600; // 1시간 * 60분 * 60초
+        if (googleRefreshToken) {
+          const newGoogleTokens =
+            await this.authService.refresh(googleRefreshToken);
+          const user = await this.usersService.findUserById(userId);
+          user.googleAccessToken = newGoogleTokens.accessToken;
+          user.googleAccessTokenExpires = new Date(
+            Date.now() + expiresIn * 1000,
+          );
+          await this.usersService.update(user.id, user);
+          newAccessToken = newGoogleTokens.accessToken;
+          res.setHeader('x-google-access-token', newGoogleTokens.accessToken);
+        }
+        if (refreshToken) {
+          const newTokens = await this.authService.refresh(refreshToken);
+          newAccessToken = newTokens.accessToken;
+          newRefreshToken = newTokens.refreshToken;
+          res.setHeader('x-access-token', newAccessToken);
+          res.setHeader('x-refresh-token', newRefreshToken);
+        }
+        const decodedToken =
+          await this.authService.validateAccessToken(newAccessToken);
         const user = await this.usersService.findUserById(decodedToken.userId);
-        return res.json({ accessToken: newTokens.accessToken, user });
+        return res.json({ accessToken: newAccessToken, user });
       }
       throw error;
     }
