@@ -39,7 +39,6 @@ export class AuthController {
   }
 
   @ApiBearerAuth('accessToken')
-  @UseGuards(accessTokenGuard)
   @Get('me')
   async authme(@Req() req, @UserId() userId: number, @Res() res) {
     const token = req.headers.authorization.split(' ')[1];
