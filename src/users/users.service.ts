@@ -36,6 +36,11 @@ export class UsersService {
     const response = await axios.post(
       'https://oauth2.googleapis.com/token',
       params,
+      {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+      },
     );
 
     return response.data;
