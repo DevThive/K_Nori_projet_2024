@@ -20,6 +20,7 @@ import { CreateClassDto } from './dto/create-class';
 import { UpdateClassDto } from './dto/update-class';
 import { HideClassDto } from './dto/hide-class';
 import { AwsService } from 'src/aws/aws.service';
+import { UpdateClassPriceDto } from './dto/update-price';
 // import { UpdateClassScheduleDto } from './dto/update-schedule';
 
 @ApiTags('클래스')
@@ -135,6 +136,22 @@ export class ClassController {
     @Param('classId') classId: number,
   ) {
     return await this.classService.updateclass(updateClassDto, userId, classId);
+  }
+
+  //가격 수정
+  @ApiBearerAuth('accessToken')
+  @Put('price/:classId')
+  @UseGuards(accessTokenGuard)
+  async priceupdate(
+    @Body() updatePriceDto: UpdateClassPriceDto,
+    @UserId() userId: number,
+    @Param('classId') classId: number,
+  ) {
+    return await this.classService.updateClassPrice(
+      updatePriceDto,
+      userId,
+      classId,
+    );
   }
 
   // //클래스 스케줄 수정
