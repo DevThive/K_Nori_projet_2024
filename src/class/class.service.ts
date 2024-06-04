@@ -39,7 +39,7 @@ export class ClassService {
   async findclasses() {
     const classList = await this.classRepository.find({
       where: { state: 0 },
-      select: ['id', 'title', 'photo', 'content', 'createdAt'],
+      select: ['id', 'title', 'price', 'photo', 'content', 'createdAt'],
       relations: { classschedules_content: true },
     });
 
