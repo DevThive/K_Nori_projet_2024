@@ -41,6 +41,7 @@ export class AuthController {
   @ApiBearerAuth('accessToken')
   @Get('me')
   async authme(@Req() req, @UserId() userId: number, @Res() res) {
+    console.log(req.headers);
     const token = req.headers.authorization.split(' ')[1];
     try {
       const decodedToken = await this.authService.validateAccessToken(token);

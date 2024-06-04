@@ -23,27 +23,32 @@ export class UsersService {
     private readonly userRepository: Repository<User>,
     private readonly configService: ConfigService,
   ) {}
-  private async refreshGoogleAccessToken(refreshToken: string) {
-    const clientId = this.configService.get<string>('GOOGLE_CLIENT_ID');
-    const clientSecret = this.configService.get<string>('GOOGLE_CLIENT_SECRET');
+  // private async refreshGoogleAccessToken(refreshToken: string) {
+  //   const clientId = this.configService.get<string>('GOOGLE_CLIENT_ID');
+  //   const clientSecret = this.configService.get<string>('GOOGLE_CLIENT_SECRET');
 
-    const params = new URLSearchParams();
-    params.append('client_id', clientId);
-    params.append('client_secret', clientSecret);
-    params.append('refresh_token', refreshToken);
-    params.append('grant_type', 'refresh_token');
+  //   const params = new URLSearchParams();
+  //   params.append('client_id', clientId);
+  //   params.append('client_secret', clientSecret);
+  //   params.append('refresh_token', refreshToken);
+  //   params.append('grant_type', 'refresh_token');
 
-    const response = await axios.post(
-      'https://oauth2.googleapis.com/token',
-      params,
-    );
+  //   const response = await axios.post(
+  //     'https://oauth2.googleapis.com/token',
+  //     params,
+  //     {
+  //       headers: {
+  //         'Content-Type': 'application/x-www-form-urlencoded',
+  //       },
+  //     },
+  //   );
 
-    return response.data;
-  }
+  //   return response.data;
+  // }
 
-  private isAccessTokenExpired(expiryDate: Date): boolean {
-    return new Date() > new Date(expiryDate);
-  }
+  // private isAccessTokenExpired(expiryDate: Date): boolean {
+  //   return new Date() > new Date(expiryDate);
+  // }
 
   // async updateUserTokens(
   //   userId: number,
@@ -73,30 +78,21 @@ export class UsersService {
   //구글 로그인
   // Google 사용자 정보로 유저 생성 또는 업데이트
   async createOrUpdateGoogleUser(loginGoogle: loginGoogleDto) {
-    const { email, googleAccessTokenExpires, googleRefreshToken } = loginGoogle;
-
+    const { email } = loginGoogle;
     let user = await this.userRepository.findOne({
       where: { email },
     });
-
     if (user) {
-      if (this.isAccessTokenExpired(user.googleAccessTokenExpires)) {
-        const tokenData =
-          await this.refreshGoogleAccessToken(googleRefreshToken);
-        loginGoogle.googleAccessToken = tokenData.access_token;
-        loginGoogle.googleAccessTokenExpires = new Date(
-          Date.now() + tokenData.expires_in * 1000,
-        );
-      }
+      // 이미 존재하는 이메일이면 Google ID와 사용자 정보 업데이트
       await this.userRepository.update(user.id, {
         ...loginGoogle,
       });
     } else {
+      // 새 사용자 생성
       user = await this.userRepository.save({
         ...loginGoogle,
       });
     }
-
     return user;
   }
 
