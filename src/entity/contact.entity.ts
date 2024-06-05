@@ -4,7 +4,10 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  ManyToOne,
+  Relation,
 } from 'typeorm';
+import { User } from './user.entity';
 
 // import { noticeRole } from 'src/notice/types/Notice.type';
 
@@ -57,4 +60,7 @@ export class Contact {
 
   @UpdateDateColumn({ type: 'timestamp', name: 'updated_at' })
   updatedAt: Date;
+
+  @ManyToOne(() => User, (user) => user.contacts, {})
+  user: Relation<User>;
 }
