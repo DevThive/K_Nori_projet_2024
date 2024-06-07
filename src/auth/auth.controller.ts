@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  Param,
   Post,
   Query,
   Req,
@@ -18,6 +19,7 @@ import { accessTokenGuard } from './guard/access-token.guard';
 import { UserId } from './decorators/userId.decorator';
 import { UsersService } from 'src/users/users.service';
 import { AuthGuard } from '@nestjs/passport';
+import { RefreshTokenDto } from './dto/refresh-token.dto';
 
 @ApiTags('로그인&회원가입')
 @Controller('auth')
@@ -83,6 +85,11 @@ export class AuthController {
       }
       throw error;
     }
+  }
+
+  @Post('refreshtoken')
+  async refreshtoken(@Body() refreshTokendto: RefreshTokenDto) {
+    return await this.authService.refresh(refreshTokendto.refreshToken);
   }
 
   @Get('profile')
