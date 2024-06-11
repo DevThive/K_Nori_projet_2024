@@ -118,6 +118,7 @@ export class AuthController {
     // 여기에서 @Res()를 추가했습니다.
     // 사용자 정보와 토큰은 req.user에 저장됨.
     const user = req.user;
+    console.log(user);
 
     // 사용자 정보를 UsersService를 통해 생성 또는 업데이트
     const createUserDto = {
