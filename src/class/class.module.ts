@@ -9,6 +9,7 @@ import { UsersService } from 'src/users/users.service';
 import { AwsService } from 'src/aws/aws.service';
 import { User } from 'src/entity/user.entity';
 import { ClassSchedule } from 'src/entity/class-schedule.entity';
+// import { SlackService } from 'src/slack/slack.service';
 
 @Module({
   imports: [

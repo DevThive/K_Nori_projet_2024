@@ -19,11 +19,15 @@ import { accessTokenGuard } from 'src/auth/guard/access-token.guard';
 import { CheckReservationDto } from './dto/check-reservation';
 import { UpdateReservationDto } from './dto/update-reservation';
 import { ApproveReservationDto } from './dto/approve-reservation';
+import { SlackService } from 'src/slack/slack.service';
 
 @ApiTags('클래스 예약')
 @Controller('reservation')
 export class ReservationController {
-  constructor(private readonly reservationService: ReservationService) {}
+  constructor(
+    private readonly reservationService: ReservationService,
+    private readonly slackNotificationService: SlackService,
+  ) {}
 
   //핸드폰번호로만 예약조회
   @Get('findbyphonenumber/:phonenumber')
@@ -37,10 +41,16 @@ export class ReservationController {
     @Body() createReservationDto: CreateReservationDto,
     @Param('classId') classId: number,
   ) {
-    return await this.reservationService.classreservation(
+    const reservation = await this.reservationService.classreservation(
       createReservationDto,
       classId,
     );
+
+    // 예약이 성공적으로 처리된 후 슬랙 알림 보내기
+    const message = `새로운 예약이 들어왔습니다! \n예약자 이름: ${createReservationDto.client_name}\n클래스 ID: ${classId}\n예약 시간: ${new Date().toLocaleString()}`;
+    await this.slackNotificationService.sendNotification(message);
+
+    return reservation;
   }
 
   //클래스 예약 전체 조회(관리자)

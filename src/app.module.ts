@@ -27,6 +27,8 @@ import { GmailController } from './gmail/gmail.controller';
 import { GmailService } from './gmail/gmail.service';
 import { GmailModule } from './gmail/gmail.module';
 import { ExpiryModule } from './expiry/expiry.module';
+import { SlackService } from './slack/slack.service';
+import { SlackModule } from './slack/slack.module';
 
 @Module({
   imports: [
@@ -53,9 +55,10 @@ import { ExpiryModule } from './expiry/expiry.module';
     UpdateContactModule,
     GmailModule,
     forwardRef(() => ExpiryModule),
+    SlackModule,
   ],
   controllers: [AppController, GmailController],
-  providers: [AppService, ConfigService, AwsService, SmsService, GmailService],
+  providers: [AppService, ConfigService, AwsService, SmsService, GmailService, SlackService],
   exports: [ConfigService],
 })
 export class AppModule {}
