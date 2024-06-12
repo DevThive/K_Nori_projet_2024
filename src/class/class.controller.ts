@@ -21,6 +21,7 @@ import { UpdateClassDto } from './dto/update-class';
 import { HideClassDto } from './dto/hide-class';
 import { AwsService } from 'src/aws/aws.service';
 import { UpdateClassPriceDto } from './dto/update-price';
+import { SlackService } from 'src/slack/slack.service';
 // import { UpdateClassScheduleDto } from './dto/update-schedule';
 
 @ApiTags('클래스')
@@ -29,6 +30,7 @@ export class ClassController {
   constructor(
     private readonly awsService: AwsService,
     private readonly classService: ClassService,
+    // private readonly slackNotificationService: SlackService,
   ) {}
 
   //클래스 리스트 조회(유저)
@@ -43,7 +45,16 @@ export class ClassController {
   @UseGuards(accessTokenGuard)
   @Get('/admin')
   async adminclasses(@UserId() userId: number) {
-    return await this.classService.findallclasses(userId);
+    const classes = await this.classService.findallclasses(userId);
+
+    // console.log(classes);
+    // // 클래스가 조회된 후 슬랙 알림 보내기
+    // if (classes.length > 0) {
+    //   const message = `관리자가 클래스 리스트를 조회했습니다. 조회된 클래스 수: ${classes.length}`;
+    //   await this.slackNotificationService.sendNotification(message);
+    // }
+
+    return classes;
   }
 
   //클래스 등록
