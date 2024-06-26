@@ -14,6 +14,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { UpdateClassScheduleDto } from './dto/update-schedule';
 import { ClassSchedule } from 'src/entity/class-schedule.entity';
 import { UpdateClassPriceDto } from './dto/update-price';
+import { UpdateClassEtcPriceDto } from './dto/update-etcprice';
 @Injectable()
 export class ClassService {
   constructor(
@@ -105,6 +106,30 @@ export class ClassService {
     const updatedPrice = await this.classRepository.update(
       { id: classId },
       { price: updatePriceDto.price },
+    );
+    return updatedPrice;
+  }
+
+  //클래스 가격 수정
+  async updateClassEtcPrice(
+    updatePriceDto: UpdateClassEtcPriceDto,
+    userId: number,
+    classId: number,
+  ) {
+    const user = await this.userService.findUserById(userId);
+
+    if (user.role !== 1) {
+      throw new BadRequestException('관리자만 수정이 가능합니다.');
+    }
+
+    const Class = this.findclassbyid(classId);
+    if (!Class) {
+      throw new BadRequestException('해당 클래스가 존재하지 않습니다.');
+    }
+
+    const updatedPrice = await this.classRepository.update(
+      { id: classId },
+      { etcprice: updatePriceDto.etcprice },
     );
     return updatedPrice;
   }
