@@ -1,4 +1,4 @@
-<img src="./assets/url/booksurfing_mainposter.jpg">
+<img src="./assets/mainpage.png">
 
 <div align=left>
 
@@ -166,7 +166,6 @@
 ### **해결방안 및 의사결정**
 
 1. **선택1. Photo 엔티티 추가**
-   - AWS-SDK 대신 S3 버킷 전용 라이브러리를 도입하여 메모리 부족 현상을 해결.
 2. **선택2. 배열 자료형을 문자열로 변환해 저장**
 
    - 갤러리의 이미지는 갤러리와만 연결되어 있기 때문에 굳이 테이블을 추가해서 DB의 성능을 떨어뜨리는 것보다 역 정규화를 통해 단순히 배열 그대로 테이블에 집어넣는 방식인 2번을 선택.
@@ -175,7 +174,7 @@
    </details>
 
 <details>
-  <summary> 트러블슈팅2: <b>Redis</b> (👈 Click)</summary>
+  <summary> 트러블슈팅2: <b>Gmail API</b> (👈 Click)</summary>
 <br />
 
 ### **문제점**
