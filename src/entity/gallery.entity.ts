@@ -34,9 +34,6 @@ export class Gallery {
   @UpdateDateColumn({ type: 'timestamp', name: 'updated_at' })
   updatedAt: Date;
 
-  // @ManyToOne(() => User, (user) => user.galleries_content)
-  // user: Relation<User>;
-
-  //   @ManyToOne(() => Class, (class) => class.reservations_content)
-  //   user: Relation<Class>;
+  @ManyToOne(() => User, (user) => user.galleries)
+  user: Relation<User>;
 }
