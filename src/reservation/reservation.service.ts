@@ -175,7 +175,7 @@ export class ReservationService {
     return result;
   }
 
-  //클래스 예약수정
+  //고객예약수정
   async updatereservation(
     checkReservationDto: CheckReservationDto,
     updateReservationDto: UpdateReservationDto,
@@ -212,6 +212,30 @@ export class ReservationService {
       where: { id: id },
       relations: ['class', 'invoice', 'calendar'],
     });
+  }
+
+  //관리자 예약수정
+  async adminupdatereservation(
+    updateReservationDto: UpdateReservationDto,
+    reservationId: number,
+  ) {
+    const reservation = await this.findreservationbyid(reservationId);
+    if (!reservation) {
+      throw new BadRequestException('해당 예약내역이 존재하지 않습니다.');
+    }
+
+    // totalPeople이 20을 넘으면 ClientType을 Group으로 설정
+    const clientType =
+      updateReservationDto.totalPeople > 20
+        ? ClientType.Group
+        : ClientType.Individual;
+
+    const updatedreservation = await this.reservationRepository.update(
+      { id: reservationId },
+      { ...updateReservationDto, client_type: clientType },
+    );
+
+    return updatedreservation;
   }
 
   // //이전 예약 상태 변경
