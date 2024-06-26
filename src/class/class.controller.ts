@@ -22,6 +22,7 @@ import { HideClassDto } from './dto/hide-class';
 import { AwsService } from 'src/aws/aws.service';
 import { UpdateClassPriceDto } from './dto/update-price';
 import { SlackService } from 'src/slack/slack.service';
+import { UpdateClassEtcPriceDto } from './dto/update-etcprice';
 // import { UpdateClassScheduleDto } from './dto/update-schedule';
 
 @ApiTags('클래스')
@@ -159,6 +160,22 @@ export class ClassController {
     @Param('classId') classId: number,
   ) {
     return await this.classService.updateClassPrice(
+      updatePriceDto,
+      userId,
+      classId,
+    );
+  }
+
+  //단체가격 수정
+  @ApiBearerAuth('accessToken')
+  @Put('etcprice/:classId')
+  @UseGuards(accessTokenGuard)
+  async etcpriceupdate(
+    @Body() updatePriceDto: UpdateClassEtcPriceDto,
+    @UserId() userId: number,
+    @Param('classId') classId: number,
+  ) {
+    return await this.classService.updateClassEtcPrice(
       updatePriceDto,
       userId,
       classId,
