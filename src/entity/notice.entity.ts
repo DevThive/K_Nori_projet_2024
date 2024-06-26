@@ -20,7 +20,7 @@ export class Notice {
   @Column({ unique: true })
   content_name: string;
 
-  @Column()
+  @Column({ type: 'text' })
   content: string;
 
   @Column()

@@ -148,6 +148,7 @@ export class UsersService {
         'updatedAt',
         'role',
         'googleRefreshToken',
+        'currentRefreshToken',
         'googleAccessTokenExpires',
       ],
     });

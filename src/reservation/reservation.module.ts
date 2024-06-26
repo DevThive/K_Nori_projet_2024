@@ -13,6 +13,7 @@ import { SmsService } from 'src/sms/sms.service';
 import { ClassService } from 'src/class/class.service';
 import { ClassSchedule } from 'src/entity/class-schedule.entity';
 import { ExpiryModule } from 'src/expiry/expiry.module';
+import { SlackService } from 'src/slack/slack.service';
 
 @Module({
   imports: [
@@ -28,7 +29,13 @@ import { ExpiryModule } from 'src/expiry/expiry.module';
     forwardRef(() => ExpiryModule), // forwardRef를 사용하여 순환 종속성을 처리합니다.
   ],
   controllers: [ReservationController],
-  providers: [ReservationService, UsersService, SmsService, ClassService],
+  providers: [
+    ReservationService,
+    UsersService,
+    SmsService,
+    ClassService,
+    SlackService,
+  ],
   exports: [ReservationService], // ReservationService를 export합니다.
 })
 export class ReservationModule {}

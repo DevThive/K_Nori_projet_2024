@@ -31,6 +31,9 @@ export class Class {
   price: number;
 
   @Column()
+  etcprice: string;
+
+  @Column()
   photo: string;
 
   @Column()

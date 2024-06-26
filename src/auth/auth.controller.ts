@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  Param,
   Post,
   Query,
   Req,
@@ -18,6 +19,7 @@ import { accessTokenGuard } from './guard/access-token.guard';
 import { UserId } from './decorators/userId.decorator';
 import { UsersService } from 'src/users/users.service';
 import { AuthGuard } from '@nestjs/passport';
+import { RefreshTokenDto } from './dto/refresh-token.dto';
 
 @ApiTags('로그인&회원가입')
 @Controller('auth')
@@ -85,6 +87,11 @@ export class AuthController {
     }
   }
 
+  @Post('refreshtoken')
+  async refreshtoken(@Body() refreshTokendto: RefreshTokenDto) {
+    return await this.authService.refresh(refreshTokendto.refreshToken);
+  }
+
   @Get('profile')
   @UseGuards(AuthGuard('google'))
   async getProfile(@Req() req) {
@@ -103,6 +110,8 @@ export class AuthController {
     // 여기에서 @Res()를 추가했습니다.
     // 사용자 정보와 토큰은 req.user에 저장됨.
     const user = req.user;
+    console.log(user);
+    const googleLogin = await this.authService.googlelogin(user.email);
 
     // 사용자 정보를 UsersService를 통해 생성 또는 업데이트
     const createUserDto = {
@@ -119,8 +128,6 @@ export class AuthController {
       await this.usersService.createOrUpdateGoogleUser(createUserDto);
 
     console.log(savedUser);
-
-    const googleLogin = await this.authService.googlelogin(user.email);
 
     // 프론트엔드 URL을 ConfigService를 통해 가져옴.
     const frontendUrl = this.configService.get<string>('FRONTEND_URL');
