@@ -98,14 +98,6 @@ export class AuthController {
     return req.user; // Passport는 사용자 정보를 req.user에 저장합니다.
   }
 
-  // @ApiBearerAuth('accessToken')
-  // @UseGuards(accessTokenGuard)
-  // // @UseGuards(AuthGuard('google'))
-  // @Get('me')
-  // async authme1(@UserId() userId: number) {
-  //   return await this.authService.authme(userId);
-  // }
-
   @Get('/google')
   @UseGuards(AuthGuard('google'))
   async googleAuth(@Req() req) {

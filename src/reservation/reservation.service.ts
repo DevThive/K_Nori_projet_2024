@@ -306,17 +306,17 @@ export class ReservationService {
       await this.reservationRepository.update(reservationId, { state: 0 });
 
       const templateId = 'KA01TP2405030940220466fA6dv2lF6x';
-      // await this.smsService.sendMMS(
-      //   to,
-      //   from,
-      //   buyerName,
-      //   url,
-      //   classTitle,
-      //   totalPeople,
-      //   date,
-      //   time,
-      //   templateId,
-      // );
+      await this.smsService.sendMMS(
+        to,
+        from,
+        buyerName,
+        url,
+        classTitle,
+        totalPeople,
+        date,
+        time,
+        templateId,
+      );
     } else if (approveReservationDto.state === 1) {
       // 예약 승인
 
@@ -369,17 +369,17 @@ export class ReservationService {
       await this.invoiceItemRepository.save(invoiceItem);
 
       const templateId = 'KA01TP2405030935577648jHHuySDCMv';
-      // await this.smsService.sendMMS(
-      //   to,
-      //   from,
-      //   buyerName,
-      //   url,
-      //   classTitle,
-      //   totalPeople,
-      //   date,
-      //   time,
-      //   templateId,
-      // );
+      await this.smsService.sendMMS(
+        to,
+        from,
+        buyerName,
+        url,
+        classTitle,
+        totalPeople,
+        date,
+        time,
+        templateId,
+      );
     }
     return result;
   }

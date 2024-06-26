@@ -9,6 +9,8 @@ import {
   Relation,
 } from 'typeorm';
 import { Notice } from './notice.entity';
+import { Contact } from './contact.entity';
+import { Gallery } from './gallery.entity';
 
 @Entity({
   name: 'users', // 데이터베이스 테이블의 이름
@@ -58,6 +60,12 @@ export class User {
 
   @OneToMany(() => Notice, (notice) => notice.user)
   notices_content: Relation<Notice>;
+
+  @OneToMany(() => Contact, (contacts) => contacts.user)
+  contacts: Relation<Contact>;
+
+  @OneToMany(() => Gallery, (galleries) => galleries.user)
+  galleries: Relation<Gallery>;
 
   // 기타 필요한 OneToMany 관계
 }
