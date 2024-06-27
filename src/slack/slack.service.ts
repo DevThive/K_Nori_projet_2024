@@ -1,19 +1,26 @@
 import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import axios from 'axios';
-
+//
 @Injectable()
 export class SlackService {
-  private readonly slackWebhookUrl =
-    'https://hooks.slack.com/services/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';
+  private readonly slackWebhookUrl: string;
+
+  constructor(private configService: ConfigService) {
+    this.slackWebhookUrl = this.configService.get<string>('SLACK_WEBHOOK_URL');
+  }
 
   async sendNotification(message: string): Promise<void> {
     try {
-      await axios.post(this.slackWebhookUrl, {
+      const response = await axios.post(this.slackWebhookUrl, {
         text: message,
       });
-      console.log('전송 성공');
+      console.log('전송 성공', response.data);
     } catch (error) {
-      console.error('Error sending Slack notification:', error);
+      console.error(
+        'Error sending Slack notification:',
+        error.response?.data || error.message,
+      );
     }
   }
 }
