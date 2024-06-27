@@ -95,7 +95,7 @@ export class ReservationController {
     );
   }
 
-  //클래스 예약수정
+  //고객 예약수정
   @Put(':reservationId')
   async updatereservation(
     @Body() checkReservationDto: CheckReservationDto,
@@ -104,6 +104,18 @@ export class ReservationController {
   ) {
     return await this.reservationService.updatereservation(
       checkReservationDto,
+      updateReservationDto,
+      reservationId,
+    );
+  }
+
+  //관리자 예약수정
+  @Put('admin/:reservationId')
+  async adminupdatereservation(
+    @Body() updateReservationDto: UpdateReservationDto,
+    @Param('reservationId') reservationId: number,
+  ) {
+    return await this.reservationService.adminupdatereservation(
       updateReservationDto,
       reservationId,
     );
