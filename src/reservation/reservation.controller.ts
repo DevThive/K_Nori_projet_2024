@@ -49,7 +49,7 @@ export class ReservationController {
     console.log(reservation);
 
     // 예약이 성공적으로 처리된 후 슬랙 알림 보내기
-    const message = `새로운 예약이 들어왔습니다! \n예약 기관: ${reservation.agency} \n예약자 이름: ${createReservationDto.client_name} \n예약자 번호: ${reservation.client_phonenumber} \n클래스 ID: ${reservation.class.title}\n예약 시간: ${new Date().toLocaleString()}`;
+    const message = `새로운 예약이 들어왔습니다! \n예약 기관: ${reservation.agency} \n예약자 이름: ${createReservationDto.client_name}\n인원수 : ${reservation.totalPeople} \n예약자 번호: ${reservation.client_phonenumber} \n클래스 ID: ${reservation.class.title}\n예약 시간: ${new Date().toLocaleString()}`;
     await this.slackNotificationService.sendNotification(message);
 
     return reservation;
