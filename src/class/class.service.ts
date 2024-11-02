@@ -14,6 +14,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { UpdateClassScheduleDto } from './dto/update-schedule';
 import { ClassSchedule } from 'src/entity/class-schedule.entity';
 import { UpdateClassPriceDto } from './dto/update-price';
+// import { UpdeteClassSecondPriceDto } from './dto/update-price2';
 import { UpdateClassEtcPriceDto } from './dto/update-etcprice';
 @Injectable()
 export class ClassService {
@@ -107,17 +108,46 @@ export class ClassService {
       throw new BadRequestException('관리자만 수정이 가능합니다.');
     }
 
-    const Class = this.findclassbyid(classId);
+    const Class = await this.findclassbyid(classId);
     if (!Class) {
       throw new BadRequestException('해당 클래스가 존재하지 않습니다.');
     }
 
+    // 가격과 가격2 모두 업데이트
     const updatedPrice = await this.classRepository.update(
       { id: classId },
-      { price: updatePriceDto.price },
+      {
+        price: updatePriceDto.price,
+        price2: updatePriceDto.price2, // price2 추가
+      },
     );
+
     return updatedPrice;
   }
+
+  // //클래스 가격 수정
+  // async updateClassPrice2(
+  //   updatePriceDto: UpdeteClassSecondPriceDto,
+  //   userId: number,
+  //   classId: number,
+  // ) {
+  //   const user = await this.userService.findUserById(userId);
+
+  //   if (user.role !== 1) {
+  //     throw new BadRequestException('관리자만 수정이 가능합니다.');
+  //   }
+
+  //   const Class = this.findclassbyid(classId);
+  //   if (!Class) {
+  //     throw new BadRequestException('해당 클래스가 존재하지 않습니다.');
+  //   }
+
+  //   const updatedPrice = await this.classRepository.update(
+  //     { id: classId },
+  //     { price2: updatePriceDto.price2 },
+  //   );
+  //   return updatedPrice;
+  // }
 
   //클래스 가격 수정
   async updateClassEtcPrice(
