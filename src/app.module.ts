@@ -58,7 +58,14 @@ import { SlackModule } from './slack/slack.module';
     SlackModule,
   ],
   controllers: [AppController, GmailController],
-  providers: [AppService, ConfigService, AwsService, SmsService, GmailService, SlackService],
+  providers: [
+    AppService,
+    ConfigService,
+    AwsService,
+    SmsService,
+    GmailService,
+    SlackService,
+  ],
   exports: [ConfigService],
 })
 export class AppModule {}
