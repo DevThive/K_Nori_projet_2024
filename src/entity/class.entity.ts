@@ -30,6 +30,9 @@ export class Class {
   @Column({ default: 18000 })
   price: number;
 
+  @Column({ default: 25000 })
+  price2: number;
+
   @Column()
   etcprice: string;
 
