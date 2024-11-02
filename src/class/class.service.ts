@@ -45,6 +45,7 @@ export class ClassService {
         'id',
         'title',
         'price',
+        'price2',
         'etcprice',
         'photo',
         'content',

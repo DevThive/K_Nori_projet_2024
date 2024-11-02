@@ -21,7 +21,7 @@ import { UpdateClassDto } from './dto/update-class';
 import { HideClassDto } from './dto/hide-class';
 import { AwsService } from 'src/aws/aws.service';
 import { UpdateClassPriceDto } from './dto/update-price';
-import { SlackService } from 'src/slack/slack.service';
+// import { SlackService } from 'src/slack/slack.service';
 import { UpdateClassEtcPriceDto } from './dto/update-etcprice';
 // import { UpdateClassScheduleDto } from './dto/update-schedule';
 
