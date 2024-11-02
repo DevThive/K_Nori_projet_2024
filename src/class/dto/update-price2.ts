@@ -1,12 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNumber } from 'class-validator';
 
-export class UpdateClassPriceDto {
+export class UpdeteClassSecondPriceDto {
   @IsNumber()
   @ApiProperty({ description: '가격' })
-  price: number;
-
-  @IsNumber()
-  @ApiProperty({ description: '가격2' })
-  price2: number; // price2 추가
+  price2: number;
 }

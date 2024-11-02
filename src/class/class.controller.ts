@@ -21,6 +21,7 @@ import { UpdateClassDto } from './dto/update-class';
 import { HideClassDto } from './dto/hide-class';
 import { AwsService } from 'src/aws/aws.service';
 import { UpdateClassPriceDto } from './dto/update-price';
+// import { UpdeteClassSecondPriceDto } from './dto/update-price2';
 // import { SlackService } from 'src/slack/slack.service';
 import { UpdateClassEtcPriceDto } from './dto/update-etcprice';
 // import { UpdateClassScheduleDto } from './dto/update-schedule';
@@ -150,7 +151,6 @@ export class ClassController {
     return await this.classService.updateclass(updateClassDto, userId, classId);
   }
 
-  //가격 수정
   @ApiBearerAuth('accessToken')
   @Put('price/:classId')
   @UseGuards(accessTokenGuard)
@@ -165,6 +165,22 @@ export class ClassController {
       classId,
     );
   }
+
+  //가격 수정2
+  // @ApiBearerAuth('accessToken')
+  // @Put('price2/:classId')
+  // @UseGuards(accessTokenGuard)
+  // async priceupdate2(
+  //   @Body() updatePriceDto: UpdeteClassSecondPriceDto,
+  //   @UserId() userId: number,
+  //   @Param('classId') classId: number,
+  // ) {
+  //   return await this.classService.updateClassPrice2(
+  //     updatePriceDto,
+  //     userId,
+  //     classId,
+  //   );
+  // }
 
   //단체가격 수정
   @ApiBearerAuth('accessToken')
